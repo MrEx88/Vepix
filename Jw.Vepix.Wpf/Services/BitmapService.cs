@@ -13,11 +13,14 @@ namespace Jw.Vepix.Wpf.Services
         public static BitmapImage ConvertByteArrayToBitmapImage(Byte[] bytes)
         {
             var image = new BitmapImage();
-            var stream = new MemoryStream(bytes);
-            stream.Seek(0, SeekOrigin.Begin);
-            image.BeginInit();
-            image.StreamSource = stream;
-            image.EndInit();
+            using (var stream = new MemoryStream(bytes))
+            {
+                stream.Seek(0, SeekOrigin.Begin);
+                image.BeginInit();
+                image.StreamSource = stream;
+                image.CacheOption = BitmapCacheOption.OnLoad;
+                image.EndInit();
+            }
 
             return image;
         }

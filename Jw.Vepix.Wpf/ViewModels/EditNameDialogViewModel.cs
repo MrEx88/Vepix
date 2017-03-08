@@ -1,7 +1,8 @@
 ﻿using Jw.Data;
-using Jw.Vepix.Wpf.Messages;
+using Jw.Vepix.Wpf.Events;
 using Jw.Vepix.Wpf.Services;
 using Jw.Vepix.Wpf.Utilities;
+using Prism.Events;
 using System.ComponentModel;
 using System.Windows;
 
@@ -22,21 +23,23 @@ namespace Jw.Vepix.Wpf.ViewModels
             }
         }
 
-        public EditNameDialogViewModel()
+        public EditNameDialogViewModel(IEventAggregator eventAggregator)
         {
             if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))
                 return;
 
             _pictureRepo = new PictureRepository();
-
-            Messenger.Default.Register<Picture>(this, pic =>
-            {
-                _editPicture = pic;
-                EditPictureName = pic.ImageName;
-            });
+            _eventAggregator = eventAggregator;
+            _eventAggregator.GetEvent<EditPictureNameEvent>().Subscribe(OnNewEditPictureName);
 
             OkCommand = new RelayCommand<Window>(OnOk);
             CancelCommand = new RelayCommand<Window>(OnCancel);
+        }
+
+        private void OnNewEditPictureName(Picture picture)
+        {
+            _editPicture = picture;
+            EditPictureName = picture.ImageName;
         }
 
         public void ShowDialog(string pictureName)
@@ -48,17 +51,25 @@ namespace Jw.Vepix.Wpf.ViewModels
         public RelayCommand<Window> OkCommand { get; private set; }
         public RelayCommand<Window> CancelCommand { get; private set; }
 
+        public bool? DialogResult
+        {
+            get
+            {
+                return true;
+            }
+        }
+
         private void OnOk(Window window)
         {
             // todo: check if context(3rd parameter) is needed here.
             if (_pictureRepo.TryChangePictureName(_editPicture, EditPictureName))
             {
-                Messenger.Default.Send<UpdatePictureNameMessage>(new UpdatePictureNameMessage(EditPictureName), "NameChange");
+                _eventAggregator.GetEvent<UpdatePictureNameEvent>().Publish(EditPictureName);
                 window.Close();
             }
             else
             {
-                // invalid file name or file name already exists
+                MessageBox.Show("Invalid file name or file name already exists", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -70,5 +81,6 @@ namespace Jw.Vepix.Wpf.ViewModels
         private IPictureRepository _pictureRepo;
         private string _editPictureName;
         private Picture _editPicture;
+        private IEventAggregator _eventAggregator;
     }
 }

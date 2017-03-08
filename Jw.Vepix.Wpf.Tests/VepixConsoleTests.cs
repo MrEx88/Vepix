@@ -7,7 +7,7 @@ namespace Jw.Vepix.Wpf.Tests
     [TestClass]
     public class VepixConsoleTests
     {
-        // <MethodNameUnderTest>_<StateUnderTest>_<ExpectedBehavior>()
+        // <MethodNameUnderTest>_Should<ExpectedResult> _When<Condition>()
         // Arrange.
         // Act.
         // Assert.
@@ -17,14 +17,14 @@ namespace Jw.Vepix.Wpf.Tests
         string validSearchPattern = "*.jpg";
 
         [TestMethod]
-        public void Parse_HelpSwitch_Valid()
+        public void Parse_ShouldReturnFalse_WhenHelpSwitchIsUsed()
         {
             string[] args = { "-?" };
             Assert.IsFalse(_console.Parse(args));
         }
 
         [TestMethod]
-        public void Parse_TopDirAndSearchPatternSwitches_Valid()
+        public void Parse_ShouldPopulateListsCorrectly_WhenTopDirAndPatternSwitchIsUsed()
         {
             string[] args = { "-d", _validPath, "-p", validSearchPattern };
             
@@ -35,7 +35,7 @@ namespace Jw.Vepix.Wpf.Tests
         }
 
         [TestMethod]
-        public void Parse_TopDirSearchPatternAndAllDirSwitches_Valid()
+        public void Parse_ShouldPopulateListsCorrectly_WhenTopDirAllDirAndPatternSwitchIsUsed()
         { 
             var docsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             string[] args = { "-d", _validPath, "-a", docsFolder,"-p", validSearchPattern };
@@ -48,7 +48,7 @@ namespace Jw.Vepix.Wpf.Tests
         }
 
         [TestMethod]
-        public void Parse_2TopDirAnd2SearchPatternSwitches_Valid()
+        public void Parse_ShouldPopulateListsCorrectly_When2TopDirsAnd1PatternSwitchIsUsed()
         {
             string[] args = { "-d", _validPath, "C:\\", "-p", validSearchPattern, "1*.png" };
             
@@ -62,7 +62,7 @@ namespace Jw.Vepix.Wpf.Tests
         }
 
         [TestMethod]
-        public void Parse_2AllDirAnd2SearchPatternSwitches_Valid()
+        public void Parse_ShouldPopulateListsCorrectly_When2AllDirsAnd1PatternSwitchIsUsed()
         {
             string[] args = { "-a", _validPath, "C:\\", "-p", validSearchPattern, "1*.png" };
             
@@ -77,7 +77,7 @@ namespace Jw.Vepix.Wpf.Tests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void Parse_InvalidTopDirArgument_ThrowsException()
+        public void Parse_ShouldThrowInvalidArgumentException_WhenInvalidTopDirSwitchIsUsed()
         {
             string[] args = { "-d", "C\\%&^", "-p", validSearchPattern, "1*.png" };
 
@@ -86,7 +86,7 @@ namespace Jw.Vepix.Wpf.Tests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void Parse_InvalidAllDirArgument_ThrowsException()
+        public void Parse_ShouldThrowInvalidArgumentException_WhenInvalidAllDirSwitchIsUsed()
         {
             string[] args = { "-a", "C\\%&^", "-p", validSearchPattern, "1*.png" };
 
@@ -95,7 +95,7 @@ namespace Jw.Vepix.Wpf.Tests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void Parse_InvalidSearchPatternArgument_ThrowsException()
+        public void Parse_ShouldThrowInvalidArgumentException_WhenInvalidSearchPatternSwitchIsUsed()
         {
             string[] args = { "-a", _validPath, "-f", validSearchPattern, "1*png" };
 
@@ -104,7 +104,7 @@ namespace Jw.Vepix.Wpf.Tests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void Parse_InvalidSwitches_ThrowsException()
+        public void Parse_ShouldThrowArgumentException_WhenInvalidSwitchesAreUsed()
         {
             string[] args = { "dh", _validPath, "-p", "*.jpg" };
 

@@ -1,24 +1,24 @@
 ﻿using Jw.Data;
-using Jw.Vepix.Wpf.Utilities;
 using Jw.Vepix.Wpf.Services;
+using Jw.Vepix.Wpf.Utilities;
+using Prism.Events;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
-using Jw.Vepix.Wpf.Messages;
 using System.Windows.Forms;
 
 namespace Jw.Vepix.Wpf.ViewModels
 {
     public class VepixWindowViewModel : ViewModelBase
     {
-        public VepixWindowViewModel()
+        public IEventAggregator _eventAggregator;
+        public VepixWindowViewModel(IEventAggregator eventAggregator)
         {
             if (DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
                 return;
 
             _pictureRepo = new PictureRepository();
-
+            _eventAggregator = eventAggregator;
             OpenFolderCommand = new RelayCommand<SearchOption>(OnOpenFolder);
             OpenFilesCommand = new RelayCommand<object>(OnOpenFiles);
             SearchCommand = new RelayCommand<string>(OnSearch);
@@ -38,7 +38,7 @@ namespace Jw.Vepix.Wpf.ViewModels
             if (folderDialog.ShowDialog() == DialogResult.OK)
             {
                 List<Picture> pictures = await (_pictureRepo.GetPicturesFromFolderAsync(folderDialog.SelectedPath, option));
-                Messenger.Default.Send(new ObservableCollection<Picture>(pictures));
+                _eventAggregator.GetEvent<Events.NewPicturesCollectionEvent>().Publish(pictures);
             }
         }
 
@@ -52,13 +52,13 @@ namespace Jw.Vepix.Wpf.ViewModels
             if (fileDialog.ShowDialog() == DialogResult.OK)
             {
                 List<Picture> pictures = await (_pictureRepo.GetPicturesAsync(fileDialog.FileNames));
-                Messenger.Default.Send(new ObservableCollection<Picture>(pictures));
+                _eventAggregator.GetEvent<Events.NewPicturesCollectionEvent>().Publish(pictures);
             }
         }
 
         private void OnSearch(string filterString)
         {
-            Messenger.Default.Send(new SearchFilterMessage(filterString), "SearchFilter");
+            _eventAggregator.GetEvent<Events.SearchFilterEvent>().Publish(filterString);
         }
 
         private void OnAbout()
@@ -77,7 +77,7 @@ namespace Jw.Vepix.Wpf.ViewModels
         private async void CheckCommandLine()
         {
             List<Picture> pictures = await _pictureRepo.GetPicturesFromCommandLineAsync();
-            Messenger.Default.Send(new ObservableCollection<Picture>(pictures));
+            _eventAggregator.GetEvent<Events.NewPicturesCollectionEvent>().Publish(pictures);
         }
 
         private IPictureRepository _pictureRepo;

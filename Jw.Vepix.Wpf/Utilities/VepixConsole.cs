@@ -19,7 +19,7 @@ namespace Jw.Vepix.Wpf.Utilities
         public static string AllDirectoriesHelp =>
             "-dd\t\tDirectories and Subdirectories to search in.";
         public static string SearchPatternHelp =>
-            "-p\t\tFile Filters. The file filters to search with (e.g. \"*.jpg\", \"*2*.png\").";
+            "-p\t\tSearch Patterns. The pattern to search with (e.g. \"*.jpg\", \"*2*.png\").";
         public static string CommandLineHelp =>
                 new StringBuilder()
             .AppendLine().AppendLine()

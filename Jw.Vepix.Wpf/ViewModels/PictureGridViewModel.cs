@@ -1,28 +1,34 @@
 ﻿using Jw.Data;
-using Jw.Vepix.Wpf.Messages;
+using Jw.Vepix.Wpf.Events;
 using Jw.Vepix.Wpf.Services;
 using Jw.Vepix.Wpf.Utilities;
+using Prism.Events;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 
 namespace Jw.Vepix.Wpf.ViewModels
 {
-    public class ThumbnailGridViewModel : ViewModelBase
+    public class PictureGridViewModel : ViewModelBase
     {
         public ObservableCollection<Picture> Pictures
         {
             get
             {
-                if (_filterOn)
-                {
-                    return new ObservableCollection<Picture>(
-                        _pictures.Where(pic => pic.ImageName.Contains(_searchFilter)).ToList());
-                }
-                else
-                {
-                    return _pictures;
-                }
+                return _filterOn ?
+                    new ObservableCollection<Picture>(
+                        _pictures.Where(pic => pic.ImageName.Contains(_searchFilter)).ToList())
+                        : _pictures;
+                //if (_filterOn)
+                //{
+                //    return new ObservableCollection<Picture>(
+                //        _pictures.Where(pic => pic.ImageName.Contains(_searchFilter)).ToList());
+                //}
+                //else
+                //{
+                //    return _pictures;
+                //}
             }
             set
             {
@@ -33,7 +39,8 @@ namespace Jw.Vepix.Wpf.ViewModels
 
         public Picture SelectedPicture { get; private set; }
 
-        public ThumbnailGridViewModel(IDialogService modalDialog)
+        public IEventAggregator _eventAggregator;
+        public PictureGridViewModel(IMessageDialogService modalDialog, IEventAggregator eventAggregator)
         {
             if (DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
                 return;
@@ -44,17 +51,16 @@ namespace Jw.Vepix.Wpf.ViewModels
             _pictureRepo = new PictureRepository();
             _modalDialog = modalDialog;
 
+            _eventAggregator = eventAggregator;
+
             EditImageNameCommand = new RelayCommand<Picture>(OnEditImageName);
             CropImageCommand = new RelayCommand<Picture>(OnCropImage);
             DeleteImageCommand = new RelayCommand<Picture>(OnDeleteImage);
             CloseImageCommand = new RelayCommand<Picture>(OnCloseImage);
 
-            Messenger.Default.Register<ObservableCollection<Picture>>(this, OnPicturesLoaded);
-            // todo: find out how to properly register multiple messages. Does having more than one Register
-            //       need a context (3rd parameter?)
-            // without it, the message will not be added to the Messenger Dictionary.
-            Messenger.Default.Register<UpdatePictureNameMessage>(this, OnPictureNameChanged, "NameChange");
-            Messenger.Default.Register<SearchFilterMessage>(this, OnSearchFilter, "SearchFilter");
+            _eventAggregator.GetEvent<NewPicturesCollectionEvent>().Subscribe(OnPicturesLoaded);
+            _eventAggregator.GetEvent<SearchFilterEvent>().Subscribe(OnSearchFilter);
+            _eventAggregator.GetEvent<UpdatePictureNameEvent>().Subscribe(OnPictureNameChanged);
         }
 
         public RelayCommand<Picture> EditImageNameCommand { get; private set; }
@@ -65,19 +71,26 @@ namespace Jw.Vepix.Wpf.ViewModels
         private void OnEditImageName(Picture picture)
         {
             SelectedPicture = picture;
-            Messenger.Default.Send<Picture>(picture);
+            // todo: find another way to handle dialogs
+            _eventAggregator.GetEvent<EditPictureNameEvent>().Publish(picture);
             _modalDialog.ShowVepixDialog(new Views.EditNameDialogView());
         }
 
         private void OnCropImage(Picture picture)
         {
             System.Windows.MessageBox.Show("Crop: " + picture.FullFileName);
+            // maybe do this instead of what I have above. Also need to do IoC here
+            // todo: This works for me. 
+            //          Implement in OnEditImageName()
+            //          Implement in VepixWindowViewModel::OnAbout()
+            ICollectionDialogService ds = new PictureViewerDialogService();
+            ds.ShowVepixDialog(Pictures.ToList(), Pictures.IndexOf(picture));
         }
 
         private void OnDeleteImage(Picture picture)
         {
             if (System.Windows.MessageBox.Show(
-                string.Format("Are you sure you want to delete this image:\n\n\"{0}\"\n", picture.FullFileName), 
+                $"Are you sure you want to delete this image:\n\n\"{picture.FullFileName}\"\n", 
                 "Delete Image?", 
                 System.Windows.MessageBoxButton.YesNo) == System.Windows.MessageBoxResult.Yes)
             {
@@ -91,25 +104,16 @@ namespace Jw.Vepix.Wpf.ViewModels
             Pictures.Remove(picture);
         }
 
-        private void OnPicturesLoaded(ObservableCollection<Picture> pictures)
+
+        private void OnPicturesLoaded(List<Picture> pictures)
         {
-            Pictures = pictures;
+            //pictures.ForEach(pic => Pictures.Add(pic));
+            Pictures = new ObservableCollection<Picture>(pictures);
         }
 
-        private void OnPictureNameChanged(UpdatePictureNameMessage newPictureName)
+        private void OnSearchFilter(string searchFilterMessage)
         {
-            // is there a better way of doing this? maybe just pass in the object instead.
-            var index = _pictures.IndexOf(SelectedPicture);
-            _pictures.RemoveAt(index);
-            SelectedPicture.FullFileName = 
-                SelectedPicture.FolderPath + newPictureName.NewName + SelectedPicture.FileExtension;
-            _pictures.Insert(index, SelectedPicture);
-            NotifyPropertyChanged("Pictures");
-        }
-
-        private void OnSearchFilter(SearchFilterMessage searchFilterMessage)
-        {
-            if (searchFilterMessage.Text == string.Empty)
+            if (searchFilterMessage == string.Empty)
             {
                 _filterOn = false;
                 Pictures = _pictures;
@@ -117,15 +121,25 @@ namespace Jw.Vepix.Wpf.ViewModels
             else
             {
                 _filterOn = true;
-                _searchFilter = searchFilterMessage.Text;
+                _searchFilter = searchFilterMessage;
                 NotifyPropertyChanged("Pictures");
             }
+        }
+
+        private void OnPictureNameChanged(string newName)
+        {
+            var index = _pictures.IndexOf(SelectedPicture);
+            _pictures.RemoveAt(index);
+            SelectedPicture.FullFileName =
+                SelectedPicture.FolderPath + newName + SelectedPicture.FileExtension;
+            _pictures.Insert(index, SelectedPicture);
+            NotifyPropertyChanged("Pictures");
         }
 
         private ObservableCollection<Picture> _pictures;
         private bool _filterOn;
         private string _searchFilter;
         private IPictureRepository _pictureRepo;
-        private IDialogService _modalDialog;
+        private IMessageDialogService _modalDialog;
     }
 }

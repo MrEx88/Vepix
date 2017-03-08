@@ -1,5 +1,4 @@
-﻿using CommandLine;
-using Jw.Vepix.Wpf.Utilities;
+﻿using Jw.Vepix.Wpf.Utilities;
 using System;
 using System.Linq;
 using System.Windows;
@@ -37,6 +36,7 @@ namespace Jw.Vepix.Wpf
                 }
             }
 
+            //new Bootstrapper().Bootstrap().Resolve<VepixWindow>().Show();
             base.OnStartup(e);
         }
     }

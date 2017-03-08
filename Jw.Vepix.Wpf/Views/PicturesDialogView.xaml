@@ -1,16 +1,15 @@
-﻿<UserControl x:Class="Jw.Vepix.Wpf.Views.ThumbnailView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:viewModel="clr-namespace:Jw.Vepix.Wpf.ViewModels"
-             mc:Ignorable="d" 
-             d:DesignHeight="175" d:DesignWidth="175"
-             DataContext="{Binding Source={StaticResource viewModelLocator}, Path=ThumbnailViewModel}">
-    
+﻿<Window x:Class="Jw.Vepix.Wpf.Views.PicturesDialogView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:viewModel="clr-namespace:Jw.Vepix.Wpf.ViewModels"
+        mc:Ignorable="d" 
+        Title="vepix" Height="630" Width="1120">
+
     <Border BorderBrush="Black" BorderThickness="2">
         <Grid>
-            <Image x:Name="imgPictureCell" Source="{Binding BitmapImage}" />
+            <Image x:Name="imgPictureCell" Source="{Binding ViewingPicture.BitmapImage}" />
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="15" />
@@ -33,4 +32,4 @@
             </DockPanel>
         </Grid>
     </Border>
-</UserControl>
+</Window>

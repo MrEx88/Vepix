@@ -42,7 +42,7 @@
         <Button Content="About"
                 Command="{Binding AboutCommand}"
                 Grid.Column="1" />
-        <view:ThumbnailGridView  Grid.Row="1"
+        <view:PictureGridView  Grid.Row="1"
                                  Grid.Column="0"
                                  Grid.ColumnSpan="2" />
     </Grid>

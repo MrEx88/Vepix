@@ -3,11 +3,11 @@
 namespace Jw.Vepix.Wpf.Views
 {
     /// <summary>
-    /// Interaction logic for ThumbnailGridView.xaml
+    /// Interaction logic for PictureGridView.xaml
     /// </summary>
-    public partial class ThumbnailGridView : UserControl
+    public partial class PictureGridView : UserControl
     {
-        public ThumbnailGridView()
+        public PictureGridView()
         {
             InitializeComponent();
         }

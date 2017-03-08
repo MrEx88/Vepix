@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Jw.Vepix.Wpf.Views.ThumbnailGridView"
+﻿<UserControl x:Class="Jw.Vepix.Wpf.Views.PictureGridView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -7,12 +7,12 @@
              xmlns:vm="clr-namespace:Jw.Vepix.Wpf.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
-             DataContext="{Binding Source={StaticResource viewModelLocator}, Path=ThumbnailGridViewModel}">
+             DataContext="{Binding Source={StaticResource viewModelLocator}, Path=PictureGridViewModel}">
 
     <Grid>
-        <ScrollViewer>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
             <ItemsControl x:Name="imageList"
-                          ItemsSource="{Binding Path=Pictures, IsAsync=True}"
+                          ItemsSource="{Binding Path=Pictures}"
                           BorderBrush="#FFA90606"
                           Background="#FFA90606">
                 <ItemsControl.ItemsPanel>
@@ -27,7 +27,7 @@
                         <Border BorderBrush="Black"
                                 BorderThickness="2">
                             <Grid>
-                                <Image Source="{Binding Path=BitmapImage, IsAsync=True}" />
+                                <Image Source="{Binding Path=BitmapImage}" />
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="15" />
@@ -40,28 +40,28 @@
                                         <ColumnDefinition Width="15" />
                                     </Grid.ColumnDefinitions>
                                     <TextBlock x:Name="txtImageName" 
-                                           Text="{Binding ImageName, IsAsync=True}"
+                                           Text="{Binding ImageName}"
                                            Grid.Column="0" />
                                     <Button x:Name="btnEditName"
-                                            Command="{Binding ElementName=imageList, Path=DataContext.EditImageNameCommand, IsAsync=True}"
+                                            Command="{Binding ElementName=imageList, Path=DataContext.EditImageNameCommand}"
                                             CommandParameter="{Binding}"
                                             Content="E"
                                             Grid.Column="1"
                                             FontSize="10" />
                                     <Button x:Name="btnCropImage"
-                                            Command="{Binding ElementName=imageList, Path=DataContext.CropImageCommand, IsAsync=True}"
+                                            Command="{Binding ElementName=imageList, Path=DataContext.CropImageCommand}"
                                             CommandParameter="{Binding}"
                                             Content="C"
                                             Grid.Column="2"
                                             FontSize="10" />
                                     <Button x:Name="btnDeleteImage"
-                                            Command="{Binding ElementName=imageList, Path=DataContext.DeleteImageCommand, IsAsync=True}"
+                                            Command="{Binding ElementName=imageList, Path=DataContext.DeleteImageCommand}"
                                             CommandParameter="{Binding}"
                                             Content="D"
                                             Grid.Column="3"
                                             FontSize="10" />
                                     <Button x:Name="btnCloseImage"
-                                            Command="{Binding ElementName=imageList, Path=DataContext.CloseImageCommand, IsAsync=True}"
+                                            Command="{Binding ElementName=imageList, Path=DataContext.CloseImageCommand}"
                                             CommandParameter="{Binding}"
                                             Content="X"
                                             Grid.Column="4"

@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Jw.Vepix.Wpf.Tests
 {
     [TestClass]
-    public class ThumbnailViewModelTests
+    public class PictureViewModelTests
     {
         [TestMethod]
         public void TestMethod1()

@@ -2,7 +2,7 @@
 
 namespace Jw.Vepix.Wpf.Services
 {
-    public interface IDialogService
+    public interface IMessageDialogService
     {
         void ShowVepixDialog(Window window);
         void CloseVepixDialog();

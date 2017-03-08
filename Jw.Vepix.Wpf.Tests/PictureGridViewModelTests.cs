@@ -1,11 +1,17 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace Jw.Vepix.Wpf.Tests
 {
     [TestClass]
-    public class ThumbnailGridViewModelTests
+    public class PictureGridViewModelTests
     {
+        // <MethodNameUnderTest>_Should<ExpectedResult> _When<Condition>()
+        // Arrange.
+        // Act.
+        // Assert.
+
         [TestMethod]
         public void TestMethod1()
         {
