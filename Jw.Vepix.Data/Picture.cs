@@ -2,12 +2,11 @@
 using System.IO;
 using System.Windows.Media.Imaging;
 
-namespace Jw.Data
+namespace Jw.Vepix.Data
 {
     public class Picture
     {
         public BitmapImage BitmapImage { get; set; }
-        public Guid Guid { get; }
         public string FullFileName { get; set; } //? should this be set publically. Also what about moving the file to another folder??
         public string ImageName => Path.GetFileNameWithoutExtension(FullFileName);
         public string FolderPath => Path.GetDirectoryName(FullFileName) + "\\";
@@ -20,7 +19,6 @@ namespace Jw.Data
         public Picture(BitmapImage bitmapImage, string fullFileName)
         {
             BitmapImage = bitmapImage;
-            Guid = new Guid();
             FullFileName = fullFileName;
         }
     }

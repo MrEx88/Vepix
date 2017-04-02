@@ -7,9 +7,9 @@ namespace Jw.Vepix.Wpf.Utilities
 {
     public class ViewModelLocator
     {
-        public VepixWindowViewModel VepixWindowViewModel { get; }
-        public PictureGridViewModel PictureGridViewModel {get;}
         public EditNameDialogViewModel EditNameDialogViewModel { get; }
+        public PictureGridViewModel PictureGridViewModel { get; }
+        public VepixWindowViewModel VepixWindowViewModel { get; }
 
         public ViewModelLocator()
         {
@@ -18,11 +18,12 @@ namespace Jw.Vepix.Wpf.Utilities
             container.RegisterType<IFileService, FileService>();
             container.RegisterType<IMessageDialogService, MessageDialogService>();
             container.RegisterType<IPictureRepository, PictureRepository>();
+
             container.RegisterType<IEventAggregator, EventAggregator>(new ContainerControlledLifetimeManager());
 
-            VepixWindowViewModel = container.Resolve<VepixWindowViewModel>();
-            PictureGridViewModel = container.Resolve<PictureGridViewModel>();
             EditNameDialogViewModel = container.Resolve<EditNameDialogViewModel>();
+            PictureGridViewModel = container.Resolve<PictureGridViewModel>();
+            VepixWindowViewModel = container.Resolve<VepixWindowViewModel>();
         }
     }
 }

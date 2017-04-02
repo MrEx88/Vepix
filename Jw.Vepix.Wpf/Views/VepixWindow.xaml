@@ -29,7 +29,7 @@
                     Command="{Binding OpenFolderCommand}" 
                     CommandParameter="{x:Static sys:SearchOption.AllDirectories}" />
             <Button x:Name="btnOpenFiles"
-                    Content="Open Files"
+                    Content="Open File(s)"
                     Command="{Binding OpenFilesCommand}" />
             <TextBox x:Name="txtPictureSearch"
                      Width="700">

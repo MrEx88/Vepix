@@ -1,5 +1,4 @@
-﻿using Jw.Data;
-using Prism.Events;
+﻿using Prism.Events;
 
 namespace Jw.Vepix.Wpf.Events
 {

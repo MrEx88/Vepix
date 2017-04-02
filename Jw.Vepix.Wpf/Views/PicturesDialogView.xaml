@@ -5,31 +5,40 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:viewModel="clr-namespace:Jw.Vepix.Wpf.ViewModels"
         mc:Ignorable="d" 
-        Title="vepix" Height="630" Width="1120">
+        Title="vepix: Viewer/Editor" Height="630" Width="1120">
 
-    <Border BorderBrush="Black" BorderThickness="2">
-        <Grid>
-            <Image x:Name="imgPictureCell" Source="{Binding ViewingPicture.BitmapImage}" />
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="15" />
-                </Grid.RowDefinitions>
-                <Grid Grid.Row="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="15" />
-                        <ColumnDefinition Width="15" />
-                        <ColumnDefinition Width="15" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock x:Name="txtImageName" Grid.Column="0" />
-                    <Button x:Name="btnEditName" Content="E" Grid.Column="1" FontSize="10" />
-                    <Button x:Name="btnCropImage" Content="C" Grid.Column="2"  FontSize="10" />
-                    <Button x:Name="btnDeleteImage" Content="X" Grid.Column="3"  FontSize="10" />
-                </Grid>
-            </Grid>
-            <DockPanel LastChildFill="False">
-                <TextBlock DockPanel.Dock="Bottom" x:Name="lblDimensions" Text="100x100" Background="Beige" />
-            </DockPanel>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="15" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="30" />
+                <ColumnDefinition Width="40" />
+                <ColumnDefinition Width="15" />
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Name="txtImageName" 
+                       Grid.Column="0" />
+            <Button Content="Save"
+                    Command="{Binding SaveCommand}"
+                    Grid.Column="1" 
+                    FontSize="10" />
+            <Button Content="Save As"
+                    Command="{Binding SaveAsCommand}"
+                    Grid.Column="2"
+                    FontSize="10" />
         </Grid>
-    </Border>
+        <!-- Image gets added to CropCanvas in VM -->
+        <Border BorderBrush="Black" 
+                BorderThickness="2"
+                Grid.Row="1">
+            <ScrollViewer Content="{Binding CropCanvas}"
+                                  VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Auto">
+                <!--<Image x:Name="imgPictureCell" Source="{Binding ViewingPicture.BitmapImage}" /> -->
+            </ScrollViewer>
+        </Border>
+    </Grid>
 </Window>

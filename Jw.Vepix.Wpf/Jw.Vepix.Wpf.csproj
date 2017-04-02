@@ -76,6 +76,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -95,6 +96,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Events\CropAreaDrawnEvent.cs" />
     <Compile Include="Events\EditPictureNameEvent.cs" />
     <Compile Include="Events\NewPicturesCollectionEvent.cs" />
     <Compile Include="Events\SearchFilterEvent.cs" />
@@ -103,6 +105,7 @@
     <Compile Include="Services\IFileService.cs" />
     <Compile Include="Services\PictureViewerDialogService.cs" />
     <Compile Include="Utilities\CmdOptions.cs" />
+    <Compile Include="Utilities\CropSelectionCanvas.cs" />
     <Compile Include="Utilities\RelayCommand.cs" />
     <Compile Include="Utilities\VepixConsole.cs" />
     <Compile Include="Utilities\ViewModelLocator.cs" />
@@ -115,7 +118,7 @@
     <Compile Include="ViewModels\EditNameDialogViewModel.cs" />
     <Compile Include="ViewModels\IDialogViewModel.cs" />
     <Compile Include="ViewModels\PictureGridViewModel.cs" />
-    <Compile Include="ViewModels\PictureViewModel.cs" />
+    <Compile Include="ViewModels\PictureDialogViewModel.cs" />
     <Compile Include="ViewModels\VepixWindowViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\EditNameDialogView.xaml.cs">
@@ -126,9 +129,6 @@
     </Compile>
     <Compile Include="Views\PicturesDialogView.xaml.cs">
       <DependentUpon>PicturesDialogView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\PictureView.xaml.cs">
-      <DependentUpon>PictureView.xaml</DependentUpon>
     </Compile>
     <Page Include="Utilities\StyleLibrary.xaml">
       <SubType>Designer</SubType>
@@ -155,10 +155,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\PictureGridView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\PictureView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

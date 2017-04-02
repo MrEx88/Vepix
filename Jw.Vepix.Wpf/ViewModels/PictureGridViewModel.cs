@@ -1,4 +1,4 @@
-﻿using Jw.Data;
+﻿using Jw.Vepix.Data;
 using Jw.Vepix.Wpf.Events;
 using Jw.Vepix.Wpf.Services;
 using Jw.Vepix.Wpf.Utilities;
@@ -78,13 +78,12 @@ namespace Jw.Vepix.Wpf.ViewModels
 
         private void OnCropImage(Picture picture)
         {
-            System.Windows.MessageBox.Show("Crop: " + picture.FullFileName);
             // maybe do this instead of what I have above. Also need to do IoC here
-            // todo: This works for me. 
+            // todo: 
             //          Implement in OnEditImageName()
             //          Implement in VepixWindowViewModel::OnAbout()
-            ICollectionDialogService ds = new PictureViewerDialogService();
-            ds.ShowVepixDialog(Pictures.ToList(), Pictures.IndexOf(picture));
+            ICollectionDialogService dialog = new PictureViewerDialogService();
+            dialog.ShowVepixDialog(_eventAggregator, Pictures.ToList(), Pictures.IndexOf(picture));
         }
 
         private void OnDeleteImage(Picture picture)
@@ -103,7 +102,6 @@ namespace Jw.Vepix.Wpf.ViewModels
         {
             Pictures.Remove(picture);
         }
-
 
         private void OnPicturesLoaded(List<Picture> pictures)
         {

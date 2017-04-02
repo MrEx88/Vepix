@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Jw.Data;
+﻿using Jw.Vepix.Data;
 using Jw.Vepix.Wpf.ViewModels;
 using Jw.Vepix.Wpf.Views;
+using Prism.Events;
+using System;
+using System.Collections.Generic;
 
 namespace Jw.Vepix.Wpf.Services
 {
@@ -16,9 +14,9 @@ namespace Jw.Vepix.Wpf.Services
             throw new NotImplementedException();
         }
 
-        public void ShowVepixDialog(List<Picture> pictures, int picIndex = -1) //-1 means do not select a picture. In this case just go to the first picture
+        public void ShowVepixDialog(IEventAggregator eventAggregator, List<Picture> pictures, int picIndex = -1) //-1 means do not select a picture. In this case just go to the first picture
         {
-            var vm = new PictureViewModel(pictures, picIndex);
+            var vm = new PictureDialogViewModel(eventAggregator, pictures, picIndex);
             var dialog = new PicturesDialogView();
             dialog.DataContext = vm;
             dialog.Show();
