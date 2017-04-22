@@ -71,6 +71,10 @@
     <Compile Include="VepixConsoleTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Jw.Vepix.Data\Jw.Vepix.Data.csproj">
+      <Project>{9682ff8c-3e2e-4451-b167-86db83e15d52}</Project>
+      <Name>Jw.Vepix.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Jw.Vepix.Wpf\Jw.Vepix.Wpf.csproj">
       <Project>{5368412b-c556-4b96-8fb4-b6ad51676959}</Project>
       <Name>Jw.Vepix.Wpf</Name>

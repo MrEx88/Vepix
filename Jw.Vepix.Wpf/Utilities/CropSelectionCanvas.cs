@@ -53,8 +53,8 @@ namespace Jw.Vepix.Wpf.Utilities
                 var height = Math.Abs(_mouseDownPoint.Y - currentPoint.Y);
                 var left = _pointBoundaries.GetXPointWithinBoundary(Math.Min(_mouseDownPoint.X,
                     currentPoint.X));
-                var top = _pointBoundaries.GetXPointWithinBoundary(Math.Min(_mouseDownPoint.X,
-                    currentPoint.X));
+                var top = _pointBoundaries.GetXPointWithinBoundary(Math.Min(_mouseDownPoint.Y,
+                    currentPoint.Y));
 
                 _cropDimensions = new Int32Rect()
                 {

@@ -19,6 +19,11 @@ namespace Jw.Vepix.Wpf.Services
 
     public static class BitmapService
     {
+        /// <summary>
+        /// Converts byte array to a BitmapImage.
+        /// </summary>
+        /// <param name="bytes">byte array of image</param>
+        /// <returns>Instance of BitmapImage</returns>
         public static BitmapImage ConvertByteArrayToBitmapImage(byte[] bytes)
         {
             var image = new BitmapImage();
@@ -34,6 +39,11 @@ namespace Jw.Vepix.Wpf.Services
             return image;
         }
 
+        /// <summary>
+        /// Converts Dictionary of filenames and byte arrays of images to a List of Picture
+        /// </summary>
+        /// <param name="files">Dictionary of key filename and value byte arrays</param>
+        /// <returns>List of Picture</returns>
         public static async Task<List<Picture>> ConvertBytesListToPictureList(Dictionary<string, byte[]> files)
         {
             var pictures = new List<Picture>();
@@ -59,13 +69,20 @@ namespace Jw.Vepix.Wpf.Services
             return pictures;
         }
 
+        /// <summary>
+        /// Crops a picture to the specified size and encoder.
+        /// </summary>
+        /// <param name="picture">The picture to crop</param>
+        /// <param name="rect">The size to crop the image to</param>
+        /// <param name="encoderType">The encoder type</param>
+        /// <returns>The cropped Image</returns>
         public static BitmapImage CropPreview(Picture picture, Int32Rect rect, BitmapEncoderType encoderType)
         {
             var croppedImage = new CroppedBitmap(picture.BitmapImage, rect);
             return ConvertCroppedBitmapToBitMapImage(croppedImage, encoderType);
         }
 
-        private static BitmapImage ConvertCroppedBitmapToBitMapImage(BitmapSource croppedImage,BitmapEncoderType encoderType)
+        private static BitmapImage ConvertCroppedBitmapToBitMapImage(BitmapSource croppedImage, BitmapEncoderType encoderType)
         {
             var encoder = CreateBitmapEncoder(encoderType);
             

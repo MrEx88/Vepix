@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Picture.cs" />
+    <Compile Include="PicturesFolderPayload.cs" />
     <Compile Include="PointBoundaries.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

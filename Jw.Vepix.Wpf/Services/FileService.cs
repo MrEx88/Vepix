@@ -26,7 +26,39 @@ namespace Jw.Vepix.Wpf.Services
                         files.AddRange(Directory.GetFiles(path, sp, option))));
             }
 
+            //test
+            //var tests = new List<bool>();
+            //var folders = new List<string>();
+            //files.ForEach(file => {
+            //    if (!folders.Contains(Path.GetDirectoryName(file)))
+            //    {
+            //        folders.Add(Path.GetDirectoryName(file));
+            //    }
+            //});
+            //folders.ForEach(folder => tests.Add(folder.IsSubDirectoryOf(folders[0])));
+            //end test\\
+
             return await ReadBytesFromFilesAsync(files);
+        }
+
+        /// <summary>
+        /// Gets the image file paths that have matched the criteria of the parameters.
+        /// </summary>
+        /// <param name="path">The path to search in</param>
+        /// <param name="searchPattern">The file pattern to use (i.e. "*.jpg")</param>
+        /// <param name="option">The SearchOption Enum to use</param>
+        /// <returns>A List of the image file paths</returns>
+        public async Task<List<string>> GetFilesAndBytesFromDirectoryAsync2(string path, List<string> searchPattern, SearchOption option)
+        {
+            var files = new List<string>();
+            if (Directory.Exists(path))
+            {
+                await Task.Factory.StartNew(() =>
+                    searchPattern.ForEach(sp =>
+                       files.AddRange(Directory.GetFiles(path, sp, option))));
+            }
+
+            return files;
         }
 
         /// <summary>
@@ -67,10 +99,10 @@ namespace Jw.Vepix.Wpf.Services
             SaveFileDialog saveDialog = new SaveFileDialog()
             {
                 Title = "Vepix: Save Image As...",
-                Filter = "JPeg Image|*.jpg|Bitmap Image|*.bmp|Gif Image|*.gif",
+                Filter = "Jpeg Image|*.jpg|Bitmap Image|*.bmp|Gif Image|*.gif",
             };
             saveDialog.ShowDialog();
-            if (saveDialog.FileName != null)
+            if (saveDialog.FileName != null && saveDialog.FileName != "")
             {
                 var encoder = BitmapService.CreateBitmapEncoder(encoderType);
                 encoder.Frames.Add(BitmapFrame.Create(bitmapImage));

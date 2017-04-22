@@ -13,12 +13,16 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="120" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
+        
+        <!-- Main Buttons and Search Bar -->
+        <!-- todo: maybe switch to grid instead of stackpanel so i can adjust size -->
         <StackPanel Grid.Row="0"
                     Grid.Column="0"
-                    Grid.ColumnSpan="1"
+                    Grid.ColumnSpan="3"
                     Orientation="Horizontal">
             <Button x:Name="btnOpenDirectory"
                     Content="Open Directory"
@@ -31,19 +35,52 @@
             <Button x:Name="btnOpenFiles"
                     Content="Open File(s)"
                     Command="{Binding OpenFilesCommand}" />
-            <TextBox x:Name="txtPictureSearch"
-                     Width="700">
-                <TextBox.InputBindings>
-                    <KeyBinding Command="{Binding SearchCommand}" Key="Enter"
-                                CommandParameter="{Binding Text, ElementName=txtPictureSearch}"/>
-                </TextBox.InputBindings>
-            </TextBox>
+            <Button Content="About"
+                    Command="{Binding AboutCommand}" 
+                    Margin="600 0 0 0"/><!-- need to change this later -->
         </StackPanel>
-        <Button Content="About"
-                Command="{Binding AboutCommand}"
-                Grid.Column="1" />
-        <view:PictureGridView  Grid.Row="1"
-                                 Grid.Column="0"
-                                 Grid.ColumnSpan="2" />
+        
+        <!-- Navigation Tree View -->
+        <view:PictureFolderTreeView DataContext="{Binding PictureFolderTreeViewModel}" Grid.Row="1"
+                                   Grid.Column="0" />
+
+        <!-- PictureGridView Tabs -->
+        <TabControl ItemsSource="{Binding PictureGridViewModels}"
+                    SelectedItem="{Binding SelectedPictureGridViewModel, Mode=TwoWay}"
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Grid.ColumnSpan="2">
+            <TabControl.ItemContainerStyle>
+                <Style TargetType="TabItem" BasedOn="{StaticResource {x:Type TabItem}}">
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="FontWeight" Value="Bold" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </TabControl.ItemContainerStyle>
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding FolderName}"
+                                   Margin="5 0 20 0" />
+                        <Button Content="X"
+                                Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabControl}}, Path=DataContext.CloseFolderTabCommand}"
+                                CommandParameter="{Binding}"
+                                Width="20"
+                                Height="20"
+                                FontWeight="Bold"
+                                FontSize="12"
+                                Padding="0" />
+                    </StackPanel>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <view:PictureGridView />
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
+        
     </Grid>
 </Window>

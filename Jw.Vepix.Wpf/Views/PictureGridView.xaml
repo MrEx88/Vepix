@@ -6,11 +6,33 @@
              xmlns:local="clr-namespace:Jw.Vepix.Wpf.Views"
              xmlns:vm="clr-namespace:Jw.Vepix.Wpf.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300"
-             DataContext="{Binding Source={StaticResource viewModelLocator}, Path=PictureGridViewModel}">
+             d:DesignHeight="300" d:DesignWidth="300">
 
     <Grid>
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <!-- Search -->
+        <StackPanel Orientation="Horizontal"
+                    Width="Auto"
+                    HorizontalAlignment="Center"
+                    Margin="5 0 0 5">
+            <TextBlock Text="Search: " />
+            <TextBox  x:Name="txtPictureSearch"
+                      Width="100">
+                <TextBox.InputBindings>
+                    <KeyBinding Command="{Binding SearchCommand}"
+                                Key="Enter"
+                                CommandParameter="{Binding Text, ElementName=txtPictureSearch}"/>
+                </TextBox.InputBindings>
+            </TextBox>
+        </StackPanel>
+        
+        <!-- Grid of Pictures -->
+        <ScrollViewer VerticalScrollBarVisibility="Auto"
+                      Grid.Row="1">
             <ItemsControl x:Name="imageList"
                           ItemsSource="{Binding Path=Pictures}"
                           BorderBrush="#FFA90606"

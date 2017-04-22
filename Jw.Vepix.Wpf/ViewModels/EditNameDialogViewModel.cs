@@ -61,7 +61,6 @@ namespace Jw.Vepix.Wpf.ViewModels
 
         private void OnOk(Window window)
         {
-            // todo: check if context(3rd parameter) is needed here.
             if (_pictureRepo.TryChangePictureName(_editPicture, EditPictureName))
             {
                 _eventAggregator.GetEvent<UpdatePictureNameEvent>().Publish(EditPictureName);
@@ -78,9 +77,9 @@ namespace Jw.Vepix.Wpf.ViewModels
             window.Close();
         }
 
+        private IEventAggregator _eventAggregator;
         private IPictureRepository _pictureRepo;
         private string _editPictureName;
         private Picture _editPicture;
-        private IEventAggregator _eventAggregator;
     }
 }

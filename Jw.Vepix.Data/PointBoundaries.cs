@@ -10,6 +10,11 @@ namespace Jw.Vepix.Data
         public double MaxX { get; }
         public double MaxY { get; }
 
+        public PointBoundaries(Point maxPoint)
+            : this(new Point(0.0, 0.0), maxPoint)
+        {
+        }
+
         public PointBoundaries(Point minPoint, Point maxPoint)
         {
             MinX = minPoint.X;

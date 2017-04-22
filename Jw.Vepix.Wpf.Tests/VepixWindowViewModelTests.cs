@@ -3,6 +3,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Jw.Vepix.Wpf.ViewModels;
 using Prism.Events;
+using Jw.Vepix.Wpf.Services;
+using Jw.Vepix.Data;
 
 namespace Jw.Vepix.Wpf.Tests
 {
@@ -15,19 +17,22 @@ namespace Jw.Vepix.Wpf.Tests
         // Act.
         // Assert.
 
-        private VepixWindowViewModel _viewModel;
         private Mock<IEventAggregator> _eventAggregator;
+        private Mock<IPictureRepository> _pictureRepo;
+        private Mock<VepixWindowViewModel> _viewModel;
 
-        public VepixWindowViewModelTests()
+        [TestInitialize]
+        public void Initialize()
         {
             _eventAggregator = new Mock<IEventAggregator>();
-            _viewModel = new VepixWindowViewModel(_eventAggregator.Object);
+            _pictureRepo = new Mock<IPictureRepository>();
+            _viewModel = new Mock<VepixWindowViewModel>( _eventAggregator.Object, _pictureRepo.Object);
         }
 
         [TestMethod]
         public void Constructor_ShouldCallCheckCommandLine_WhenInvoked()
         {
-
+              
         }
     }
 }

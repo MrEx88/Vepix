@@ -12,7 +12,7 @@ namespace Jw.Vepix.Wpf.ViewModels
     public class PictureDialogViewModel
     {
         public Picture ViewingPicture { get; set; }
-        public System.Windows.Controls.Image Imagesrc { get; set; }
+        public System.Windows.Controls.Image FullImage { get; set; }
         public CropSelectionCanvas CropCanvas { get; set; }
         public RelayCommand<object> SaveCommand { get; set; }
         public RelayCommand<object> SaveAsCommand { get; set; }
@@ -53,11 +53,15 @@ namespace Jw.Vepix.Wpf.ViewModels
 
         private void SetupCanvas(IEventAggregator eventAggregator, Picture picture)
         {
-            Imagesrc = new System.Windows.Controls.Image();
-            Imagesrc.Source = picture.BitmapImage;
-            CropCanvas = new CropSelectionCanvas(eventAggregator, /*new Point(picture.Width, picture.Height)*/
+            FullImage = new System.Windows.Controls.Image()
+            {
+                Source = picture.BitmapImage,
+                Height = picture.Height,
+                Width = picture.Width
+            };
+            CropCanvas = new CropSelectionCanvas(eventAggregator, 
                 new PointBoundaries(new Point(0.0,0.0), new Point(picture.Width, picture.Height)));
-            CropCanvas.Children.Add(Imagesrc);
+            CropCanvas.Children.Add(FullImage);
             CropCanvas.Height = Convert.ToDouble(picture.Height);
             CropCanvas.Width = Convert.ToDouble(picture.Width);
         }

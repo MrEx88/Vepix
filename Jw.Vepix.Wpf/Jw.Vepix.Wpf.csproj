@@ -98,8 +98,7 @@
     </ApplicationDefinition>
     <Compile Include="Events\CropAreaDrawnEvent.cs" />
     <Compile Include="Events\EditPictureNameEvent.cs" />
-    <Compile Include="Events\NewPicturesCollectionEvent.cs" />
-    <Compile Include="Events\SearchFilterEvent.cs" />
+    <Compile Include="Events\OpenPicturesFromFolderEvent.cs" />
     <Compile Include="Events\UpdatePictureNameEvent.cs" />
     <Compile Include="Services\ICollectionDialogService.cs" />
     <Compile Include="Services\IFileService.cs" />
@@ -107,6 +106,7 @@
     <Compile Include="Utilities\CmdOptions.cs" />
     <Compile Include="Utilities\CropSelectionCanvas.cs" />
     <Compile Include="Utilities\RelayCommand.cs" />
+    <Compile Include="Utilities\StringExtensions.cs" />
     <Compile Include="Utilities\VepixConsole.cs" />
     <Compile Include="Utilities\ViewModelLocator.cs" />
     <Compile Include="Services\BitmapService.cs" />
@@ -117,8 +117,13 @@
     <Compile Include="Services\PictureRepository.cs" />
     <Compile Include="ViewModels\EditNameDialogViewModel.cs" />
     <Compile Include="ViewModels\IDialogViewModel.cs" />
-    <Compile Include="ViewModels\PictureGridViewModel.cs" />
+    <Compile Include="ViewModels\IPictureFolderTreeItemViewModel.cs" />
+    <Compile Include="ViewModels\IPictureGridViewModel.cs" />
+    <Compile Include="ViewModels\IPictureFolderTreeViewModel.cs" />
+    <Compile Include="ViewModels\PictureFolderTreeItemViewModel.cs" />
     <Compile Include="ViewModels\PictureDialogViewModel.cs" />
+    <Compile Include="ViewModels\PictureGridViewModel.cs" />
+    <Compile Include="ViewModels\PictureFolderTreeViewModel.cs" />
     <Compile Include="ViewModels\VepixWindowViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\EditNameDialogView.xaml.cs">
@@ -138,6 +143,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\PictureFolderTreeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\VepixWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -145,6 +154,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\PictureFolderTreeView.xaml.cs">
+      <DependentUpon>PictureFolderTreeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\VepixWindow.xaml.cs">
       <DependentUpon>VepixWindow.xaml</DependentUpon>
