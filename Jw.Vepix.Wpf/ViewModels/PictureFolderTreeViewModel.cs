@@ -28,9 +28,9 @@ namespace Jw.Vepix.Wpf.ViewModels
             }
         }
 
-        public void Load(List<string> folders)
+        public void Load(string folder)
         {
-            var dirInfo = new DirectoryInfo(folders.First());
+            var dirInfo = new DirectoryInfo(folder);
 
             _rootFolder = new PictureFolderTreeItemViewModel(dirInfo, _eventAggregator);
 

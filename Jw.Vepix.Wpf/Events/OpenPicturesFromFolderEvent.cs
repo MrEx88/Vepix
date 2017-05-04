@@ -3,7 +3,7 @@ using Prism.Events;
 
 namespace Jw.Vepix.Wpf.Events
 {
-    class OpenPicturesFromFolderEvent : PubSubEvent<PicturesFolderPayload>
+    public class OpenPicturesFromFolderEvent : PubSubEvent<PicturesFolderPayload>
     {
     }
 }

@@ -15,6 +15,12 @@ namespace Jw.Vepix.Wpf.Services
             _modalDialog?.Close();
         }
 
+        public bool ShowQuestion(string message, string title) => (MessageBox.Show(
+                message, title, MessageBoxButton.YesNo) == MessageBoxResult.Yes);
+
+        public void ShowDialog(string message, string title) => MessageBox.Show(
+            message, title);
+
         private Window _modalDialog;
     }
 }

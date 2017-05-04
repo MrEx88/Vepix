@@ -65,7 +65,7 @@ namespace Jw.Vepix.Wpf.Services
 
             await Task.Factory.StartNew(() =>
             {
-                var console = VepixConsole.Instance();
+                var console = VepixConsoleParser.ConsoleInstance();
                 foreach (var dir in console.TopDirectories)
                 {
                     pictures.AddRange(GetPicturesFromFolderAsync(dir, SearchOption.TopDirectoryOnly, console.SearchPatterns.ToArray()).Result);
@@ -115,10 +115,7 @@ namespace Jw.Vepix.Wpf.Services
                 List<Picture> pictures = new List<Picture>();
                 Parallel.ForEach(fileBytes, file =>
                 {
-                    System.Windows.Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        pictures.Add(new Picture(BitmapService.ConvertByteArrayToBitmapImage(file.Value), file.Key));
-                    });
+                    pictures.Add(new Picture(BitmapService.ConvertByteArrayToBitmapImage(file.Value), file.Key));
                 });
                 return pictures;
             });

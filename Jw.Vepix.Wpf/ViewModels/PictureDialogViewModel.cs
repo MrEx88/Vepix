@@ -1,4 +1,5 @@
-﻿using Jw.Vepix.Data;
+﻿using Jw.Vepix.Common;
+using Jw.Vepix.Data;
 using Jw.Vepix.Wpf.Events;
 using Jw.Vepix.Wpf.Services;
 using Jw.Vepix.Wpf.Utilities;
@@ -9,7 +10,7 @@ using System.Windows;
 
 namespace Jw.Vepix.Wpf.ViewModels
 {
-    public class PictureDialogViewModel
+    public class PictureDialogViewModel : ViewModelBase, IPicturesDialogViewModel
     {
         public Picture ViewingPicture { get; set; }
         public System.Windows.Controls.Image FullImage { get; set; }
@@ -17,13 +18,21 @@ namespace Jw.Vepix.Wpf.ViewModels
         public RelayCommand<object> SaveCommand { get; set; }
         public RelayCommand<object> SaveAsCommand { get; set; }
 
-        public PictureDialogViewModel(IEventAggregator eventAggregator, List<Picture> pictures, int picIndex)
+        public List<Picture> Pitcures
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public PictureDialogViewModel(IEventAggregator eventAggregator, List<Picture> pictures)
         {
             // in future, maybe use this viewer to navigate through photos
             //_pictures = pictures;
-            //_picIndex = picIndex;
+            //_selectedPicture = selectedPicture;
 
-            ViewingPicture = pictures[picIndex];
+            ViewingPicture = pictures[0];
             SetupCanvas(eventAggregator, ViewingPicture);
 
             _eventAggregator = eventAggregator;
@@ -60,7 +69,7 @@ namespace Jw.Vepix.Wpf.ViewModels
                 Width = picture.Width
             };
             CropCanvas = new CropSelectionCanvas(eventAggregator, 
-                new PointBoundaries(new Point(0.0,0.0), new Point(picture.Width, picture.Height)));
+                new PointBoundaries(new Point(picture.Width, picture.Height)));
             CropCanvas.Children.Add(FullImage);
             CropCanvas.Height = Convert.ToDouble(picture.Height);
             CropCanvas.Width = Convert.ToDouble(picture.Width);

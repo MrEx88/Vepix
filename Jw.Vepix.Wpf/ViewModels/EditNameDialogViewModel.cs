@@ -3,18 +3,36 @@ using Jw.Vepix.Wpf.Events;
 using Jw.Vepix.Wpf.Services;
 using Jw.Vepix.Wpf.Utilities;
 using Prism.Events;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
 
 namespace Jw.Vepix.Wpf.ViewModels
 {
-    public class EditNameDialogViewModel : ViewModelBase
+    public class EditNameDialogViewModel : ViewModelBase, IPicturesDialogViewModel
     {
+        public EditNameDialogViewModel(IEventAggregator eventAggregator, List<Picture> pictures)
+        {
+            if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+                return;
+
+            _pictureRepo = new PictureRepository();
+            _eventAggregator = eventAggregator;
+
+            EditPictureName = pictures[0].ImageName;
+            _editPicture = pictures[0];
+            _prefix = "";
+            _suffix = "";
+
+            OkCommand = new RelayCommand<Window>(OnOk);
+            CancelCommand = new RelayCommand<Window>(OnCancel);
+        }
+
         public string EditPictureName
         {
             get
             {
-                return _editPictureName;
+                return _prefix + _editPictureName + _suffix;
             }
             set
             {
@@ -23,33 +41,27 @@ namespace Jw.Vepix.Wpf.ViewModels
             }
         }
 
-        public EditNameDialogViewModel(IEventAggregator eventAggregator)
+        public List<Picture> Pitcures
         {
-            if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))
-                return;
+            get
+            {
+                // todo: implement this instead of _editPicture
+                return _pictures;
+            }
+        }        
 
-            _pictureRepo = new PictureRepository();
-            _eventAggregator = eventAggregator;
-            _eventAggregator.GetEvent<EditPictureNameEvent>().Subscribe(OnNewEditPictureName);
+        public string Prefix
+        {
+            get { return _prefix; }
+            set { _prefix = value; NotifyPropertyChanged("EditPictureName"); }
+        }        
 
-            OkCommand = new RelayCommand<Window>(OnOk);
-            CancelCommand = new RelayCommand<Window>(OnCancel);
+        public string Suffix
+        {
+            get { return _suffix; }
+            set { _suffix = value; NotifyPropertyChanged("EditPictureName"); }
         }
 
-        private void OnNewEditPictureName(Picture picture)
-        {
-            _editPicture = picture;
-            EditPictureName = picture.ImageName;
-        }
-
-        public void ShowDialog(string pictureName)
-        {
-            EditPictureName = pictureName;
-            new Views.EditNameDialogView().ShowDialog();
-        }
-
-        public RelayCommand<Window> OkCommand { get; private set; }
-        public RelayCommand<Window> CancelCommand { get; private set; }
 
         public bool? DialogResult
         {
@@ -59,11 +71,18 @@ namespace Jw.Vepix.Wpf.ViewModels
             }
         }
 
+        public RelayCommand<Window> OkCommand { get; private set; }
+        public RelayCommand<Window> CancelCommand { get; private set; }
+        
         private void OnOk(Window window)
         {
             if (_pictureRepo.TryChangePictureName(_editPicture, EditPictureName))
             {
-                _eventAggregator.GetEvent<UpdatePictureNameEvent>().Publish(EditPictureName);
+                _eventAggregator.GetEvent<PictureNameChangedEvent>().Publish(new PictureNameChangePayload()
+                {
+                    Guid = _editPicture.Guid,
+                    PictureName = EditPictureName
+                });
                 window.Close();
             }
             else
@@ -80,6 +99,9 @@ namespace Jw.Vepix.Wpf.ViewModels
         private IEventAggregator _eventAggregator;
         private IPictureRepository _pictureRepo;
         private string _editPictureName;
+        private string _prefix;
+        private string _suffix;
         private Picture _editPicture;
+        private List<Picture> _pictures;
     }
 }

@@ -11,7 +11,7 @@ namespace Jw.Vepix.Wpf.ViewModels
 {
     // maybe I don't need FolderNode class. Just have its properties here. That way
     // I only have to manage one tree, not two.
-    public class PictureFolderTreeItemViewModel : ViewModelBase
+    public class PictureFolderTreeItemViewModel : ViewModelBase, IPictureFolderTreeItemViewModel
     {
         public PictureFolderTreeItemViewModel(DirectoryInfo dirInfo, IEventAggregator eventAggregator)
             : this(dirInfo, parent: null, eventAggregator: eventAggregator)
@@ -28,7 +28,7 @@ namespace Jw.Vepix.Wpf.ViewModels
             _parent = parent;
             _eventAggregator = eventAggregator;
 
-            _children = new ObservableCollection<PictureFolderTreeItemViewModel>(
+            _children = new ObservableCollection<IPictureFolderTreeItemViewModel>(
                 (from child in dirInfo.GetDirectories()
                  select new PictureFolderTreeItemViewModel(child, parent: this, eventAggregator: eventAggregator)).ToList());
 
@@ -41,14 +41,14 @@ namespace Jw.Vepix.Wpf.ViewModels
         }
 
         // todo: figure out how to change parent of tree
-        public PictureFolderTreeItemViewModel Parent
+        public IPictureFolderTreeItemViewModel Parent
         {
             get { return _parent; }
             set { _parent = value; }
         }
 
         //todo: figure out how to update a tree
-        public ObservableCollection<PictureFolderTreeItemViewModel> Children
+        public ObservableCollection<IPictureFolderTreeItemViewModel> Children
         {
             get { return _children; }
             set
@@ -138,8 +138,8 @@ namespace Jw.Vepix.Wpf.ViewModels
             });
         }
 
-        private PictureFolderTreeItemViewModel _parent;
-        private ObservableCollection<PictureFolderTreeItemViewModel> _children;
+        private IPictureFolderTreeItemViewModel _parent;
+        private ObservableCollection<IPictureFolderTreeItemViewModel> _children;
         private IEventAggregator _eventAggregator;
         private string _absolutePath;
         private bool _isExpanded;

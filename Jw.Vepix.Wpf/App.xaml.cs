@@ -16,27 +16,26 @@ namespace Jw.Vepix.Wpf
             {
                 try
                 {
-                    var v = VepixConsole.Instance();
-                    if (!v.Parse(e.Args))
+                    var consoleParser = new VepixConsoleParser();
+                    if (!consoleParser.Parse(e.Args))
                     { 
-                        VepixConsole.AttachConsole();
-                        Console.WriteLine(VepixConsole.CommandLineHelp);
-                        VepixConsole.DetachConsole();
+                        VepixConsoleParser.AttachConsole();
+                        Console.WriteLine(VepixConsoleParser.CommandLineHelp);
+                        VepixConsoleParser.DetachConsole();
                         this.Shutdown();
                         return;
                     }
                 }
                 catch (ArgumentException ae)
                 {
-                    VepixConsole.AttachConsole();
-                    Console.WriteLine(string.Format("{0}\n{1}", ae.Message, VepixConsole.CommandLineHelp));
-                    VepixConsole.DetachConsole();
+                    VepixConsoleParser.AttachConsole();
+                    Console.WriteLine(string.Format("{0}\n{1}", ae.Message, VepixConsoleParser.CommandLineHelp));
+                    VepixConsoleParser.DetachConsole();
                     this.Shutdown();
                     return;
                 }
             }
 
-            //new Bootstrapper().Bootstrap().Resolve<VepixWindow>().Show();
             base.OnStartup(e);
         }
     }

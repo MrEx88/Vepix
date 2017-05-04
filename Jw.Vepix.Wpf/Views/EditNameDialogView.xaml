@@ -7,16 +7,30 @@
         xmlns:local="clr-namespace:Jw.Vepix.Wpf.Views"
         xmlns:vm="clr-namespace:Jw.Vepix.Wpf.ViewModels"
         mc:Ignorable="d"
-        Title="Edit Picture Name" Height="150" Width="300"
+        Title="Edit Picture Name(s)" Height="200" Width="300"
         DataContext="{Binding Source={StaticResource viewModelLocator}, Path=EditNameDialogViewModel}">
     
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="20" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Label Grid.Row="0" />
+        <StackPanel Grid.Row="0"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    Margin="0 20 0 20">
+            <StackPanel Margin="0 0 20 0">
+                <Label Content="Prefix:" />
+                <TextBox Text="{Binding Prefix, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         Width="75" />
+            </StackPanel>
+            <StackPanel>
+                <Label Content="Suffix:" />
+                <TextBox Text="{Binding Suffix, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         Width="75"/>
+            </StackPanel>
+        </StackPanel>
         <TextBox x:Name="txtInputName"
                  Grid.Row="1"
                  Width="200"

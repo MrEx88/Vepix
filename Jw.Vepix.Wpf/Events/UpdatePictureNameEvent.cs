@@ -2,7 +2,7 @@
 
 namespace Jw.Vepix.Wpf.Events
 {
-    class UpdatePictureNameEvent : PubSubEvent<string>
+    public class UpdatePictureNameEvent : PubSubEvent<string>
     {
     }
 }

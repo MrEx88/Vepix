@@ -97,17 +97,20 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Events\CropAreaDrawnEvent.cs" />
-    <Compile Include="Events\EditPictureNameEvent.cs" />
+    <Compile Include="Events\PictureNameChangedEvent.cs" />
     <Compile Include="Events\OpenPicturesFromFolderEvent.cs" />
     <Compile Include="Events\UpdatePictureNameEvent.cs" />
+    <Compile Include="Services\FileExplorerDialogService.cs" />
     <Compile Include="Services\ICollectionDialogService.cs" />
+    <Compile Include="Services\IFileExplorerDialogService.cs" />
     <Compile Include="Services\IFileService.cs" />
-    <Compile Include="Services\PictureViewerDialogService.cs" />
+    <Compile Include="Services\IPictureDialogService.cs" />
+    <Compile Include="Services\PictureDialogService.cs" />
     <Compile Include="Utilities\CmdOptions.cs" />
     <Compile Include="Utilities\CropSelectionCanvas.cs" />
     <Compile Include="Utilities\RelayCommand.cs" />
     <Compile Include="Utilities\StringExtensions.cs" />
-    <Compile Include="Utilities\VepixConsole.cs" />
+    <Compile Include="Utilities\VepixConsoleParser.cs" />
     <Compile Include="Utilities\ViewModelLocator.cs" />
     <Compile Include="Services\BitmapService.cs" />
     <Compile Include="Services\MessageDialogService.cs" />
@@ -116,10 +119,10 @@
     <Compile Include="Services\IPictureRepository.cs" />
     <Compile Include="Services\PictureRepository.cs" />
     <Compile Include="ViewModels\EditNameDialogViewModel.cs" />
-    <Compile Include="ViewModels\IDialogViewModel.cs" />
     <Compile Include="ViewModels\IPictureFolderTreeItemViewModel.cs" />
     <Compile Include="ViewModels\IPictureGridViewModel.cs" />
     <Compile Include="ViewModels\IPictureFolderTreeViewModel.cs" />
+    <Compile Include="ViewModels\IPicturesDialogViewModel.cs" />
     <Compile Include="ViewModels\PictureFolderTreeItemViewModel.cs" />
     <Compile Include="ViewModels\PictureDialogViewModel.cs" />
     <Compile Include="ViewModels\PictureGridViewModel.cs" />
@@ -200,6 +203,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Jw.Vepix.Common\Jw.Vepix.Common.csproj">
+      <Project>{66593704-57C0-4A0C-8E2F-A74F2D4AAE59}</Project>
+      <Name>Jw.Vepix.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Jw.Vepix.Data\Jw.Vepix.Data.csproj">
       <Project>{9682FF8C-3E2E-4451-B167-86DB83E15D52}</Project>
       <Name>Jw.Vepix.Data</Name>

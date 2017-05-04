@@ -1,4 +1,5 @@
-﻿using Jw.Vepix.Wpf.Utilities;
+﻿using Jw.Vepix.Data;
+using Jw.Vepix.Wpf.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
@@ -12,7 +13,8 @@ namespace Jw.Vepix.Wpf.Tests
         // Act.
         // Assert.
 
-        VepixConsole _console = VepixConsole.Instance();
+        VepixConsoleParser _consoleParser = new VepixConsoleParser();
+        VepixConsole _console = VepixConsoleParser.ConsoleInstance();
         string _validPath = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
         string validSearchPattern = "*.jpg";
 
@@ -20,7 +22,7 @@ namespace Jw.Vepix.Wpf.Tests
         public void Parse_ShouldReturnFalse_WhenHelpSwitchIsUsed()
         {
             string[] args = { "-?" };
-            Assert.IsFalse(_console.Parse(args));
+            Assert.IsFalse(_consoleParser.Parse(args));
         }
 
         [TestMethod]
@@ -28,7 +30,7 @@ namespace Jw.Vepix.Wpf.Tests
         {
             string[] args = { "-d", _validPath, "-p", validSearchPattern };
             
-            _console.Parse(args);
+            _consoleParser.Parse(args);
 
             Assert.IsTrue(_validPath == _console.TopDirectories[0]
                 && validSearchPattern == _console.SearchPatterns[0]);
@@ -40,7 +42,7 @@ namespace Jw.Vepix.Wpf.Tests
             var docsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             string[] args = { "-d", _validPath, "-a", docsFolder,"-p", validSearchPattern };
 
-            _console.Parse(args);
+            _consoleParser.Parse(args);
 
             Assert.IsTrue(_validPath == _console.TopDirectories[0]
                 && docsFolder == _console.AllDirectories[0]
@@ -52,7 +54,7 @@ namespace Jw.Vepix.Wpf.Tests
         {
             string[] args = { "-d", _validPath, "C:\\", "-p", validSearchPattern, "1*.png" };
             
-            _console.Parse(args);
+            _consoleParser.Parse(args);
 
             Assert.IsTrue(_validPath == _console.TopDirectories[0]
                 && "C:\\" == _console.TopDirectories[1]
@@ -66,7 +68,7 @@ namespace Jw.Vepix.Wpf.Tests
         {
             string[] args = { "-a", _validPath, "C:\\", "-p", validSearchPattern, "1*.png" };
             
-            _console.Parse(args);
+            _consoleParser.Parse(args);
 
             Assert.IsTrue(_validPath == _console.AllDirectories[0]
                 && "C:\\" == _console.AllDirectories[1]
@@ -81,7 +83,7 @@ namespace Jw.Vepix.Wpf.Tests
         {
             string[] args = { "-d", "C\\%&^", "-p", validSearchPattern, "1*.png" };
 
-            _console.Parse(args);
+            _consoleParser.Parse(args);
         }
 
         [TestMethod]
@@ -90,7 +92,7 @@ namespace Jw.Vepix.Wpf.Tests
         {
             string[] args = { "-a", "C\\%&^", "-p", validSearchPattern, "1*.png" };
 
-            _console.Parse(args);
+            _consoleParser.Parse(args);
         }
 
         [TestMethod]
@@ -99,7 +101,7 @@ namespace Jw.Vepix.Wpf.Tests
         {
             string[] args = { "-a", _validPath, "-f", validSearchPattern, "1*png" };
 
-            _console.Parse(args);
+            _consoleParser.Parse(args);
         }
 
         [TestMethod]
@@ -108,7 +110,7 @@ namespace Jw.Vepix.Wpf.Tests
         {
             string[] args = { "dh", _validPath, "-p", "*.jpg" };
 
-            _console.Parse(args);
+            _consoleParser.Parse(args);
         }
     }
 }

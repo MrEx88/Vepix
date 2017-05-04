@@ -6,6 +6,6 @@ namespace Jw.Vepix.Wpf.ViewModels
     public interface IPictureFolderTreeViewModel
     {
         ObservableCollection<PictureFolderTreeItemViewModel> PictureFolderItemViewModels { get; }
-        void Load(List<string> folders);
+        void Load(string folder);
     }
 }

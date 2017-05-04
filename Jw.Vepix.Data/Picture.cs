@@ -6,10 +6,12 @@ namespace Jw.Vepix.Data
 {
     public class Picture
     {
+        public Guid Guid { get; }
         public BitmapImage BitmapImage { get; set; }
         public string FullFileName { get; set; } //? should this be set publically. Also what about moving the file to another folder??
         public string ImageName => Path.GetFileNameWithoutExtension(FullFileName);
         public string FolderPath => Path.GetDirectoryName(FullFileName) + "\\";
+        public string FolderName => new DirectoryInfo(FolderPath).Name;
         public decimal FileSize => Math.Round((decimal)(new FileInfo(FullFileName).Length / 1024) / 1024, 2);
         public string FileExtension => Path.GetExtension(FullFileName);
         public int Width => BitmapImage.PixelWidth;
@@ -18,6 +20,7 @@ namespace Jw.Vepix.Data
 
         public Picture(BitmapImage bitmapImage, string fullFileName)
         {
+            Guid = Guid.NewGuid();
             BitmapImage = bitmapImage;
             FullFileName = fullFileName;
         }

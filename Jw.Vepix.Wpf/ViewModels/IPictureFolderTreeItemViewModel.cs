@@ -2,11 +2,11 @@
 
 namespace Jw.Vepix.Wpf.ViewModels
 {
-    //todo: test out and implement
     public interface IPictureFolderTreeItemViewModel
     {
-        IPictureFolderTreeItemViewModel Parent { get; }
-        ObservableCollection<IPictureFolderTreeItemViewModel> Children { get; }
+        IPictureFolderTreeItemViewModel Parent { get; set; }
+        ObservableCollection<IPictureFolderTreeItemViewModel> Children { get; set; }
         string FolderName { get; }
+        bool IsExpanded { get; set; }
     }
 }

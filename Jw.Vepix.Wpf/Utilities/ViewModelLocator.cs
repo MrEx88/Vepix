@@ -8,7 +8,7 @@ namespace Jw.Vepix.Wpf.Utilities
     public class ViewModelLocator
     {
         public EditNameDialogViewModel EditNameDialogViewModel { get; }
-        public PictureGridViewModel PictureGridViewModel { get; }
+        //public PictureGridViewModel PictureGridViewModel { get; }
         public PictureFolderTreeViewModel TreePictureFolderViewModel { get; }
         public VepixWindowViewModel VepixWindowViewModel { get; }
 
@@ -16,17 +16,19 @@ namespace Jw.Vepix.Wpf.Utilities
         {
             var container = new UnityContainer();
 
+            container.RegisterType<IFileExplorerDialogService, FileExplorerDialogService>();
             container.RegisterType<IFileService, FileService>();
             container.RegisterType<IMessageDialogService, MessageDialogService>();
             container.RegisterType<IPictureRepository, PictureRepository>();
 
+            container.RegisterType<EditNameDialogViewModel>();
             container.RegisterType<IPictureGridViewModel, PictureGridViewModel>();
             container.RegisterType<IPictureFolderTreeViewModel, PictureFolderTreeViewModel>();
 
             container.RegisterType<IEventAggregator, EventAggregator>(new ContainerControlledLifetimeManager());
 
-            EditNameDialogViewModel = container.Resolve<EditNameDialogViewModel>();
-            PictureGridViewModel = container.Resolve<PictureGridViewModel>();
+            //EditNameDialogViewModel = container.Resolve<EditNameDialogViewModel>();
+            //PictureGridViewModel = container.Resolve<PictureGridViewModel>();
             TreePictureFolderViewModel = container.Resolve<PictureFolderTreeViewModel>();
             VepixWindowViewModel = container.Resolve<VepixWindowViewModel>();
         }

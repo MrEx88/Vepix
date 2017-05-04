@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Jw.Vepix.Data;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -9,7 +10,7 @@ using System.Text.RegularExpressions;
 
 namespace Jw.Vepix.Wpf.Utilities
 {
-    public class VepixConsole
+    public class VepixConsoleParser
     {
         public List<string> TopDirectories { get; private set; }
         public List<string> AllDirectories { get; private set; }
@@ -32,22 +33,17 @@ namespace Jw.Vepix.Wpf.Utilities
             .AppendLine(AllDirectoriesHelp)
             .AppendLine(SearchPatternHelp).ToString();
 
-        public static VepixConsole Instance()
+        public static VepixConsole ConsoleInstance()
         {
-            if (_instance == null)
+            if (_vepixConsole == null)
             {
-                _instance = new VepixConsole()
-                {
-                    TopDirectories = new List<string>(),
-                    AllDirectories = new List<string>(),
-                    SearchPatterns = new List<string>()
-                };
+                _vepixConsole = new VepixConsole(new List<string>(), new List<string>(), new List<string>());
             }
 
-            return _instance;
+            return _vepixConsole;
         }
 
-        private VepixConsole() {}
+        //private VepixConsoleParser() {}
 
         public bool Parse(string[] args)
         {
@@ -63,9 +59,11 @@ namespace Jw.Vepix.Wpf.Utilities
             }
 
             argsList.Add(SWITCH_TOKEN);
-            TopDirectories = GetArgsOf(TOP_DIRECTORY_SWITCH, argsList, ValidateDirectories);
-            AllDirectories = GetArgsOf(ALL_DIRECTORIES_SWITCH, argsList, ValidateDirectories);
-            SearchPatterns = GetArgsOf(SEARCH_PATTERN_SWITCH, argsList, ValidateSearchPattern);
+            var topDirectories = GetArgsOf(TOP_DIRECTORY_SWITCH, argsList, ValidateDirectories);
+            var allDirectories = GetArgsOf(ALL_DIRECTORIES_SWITCH, argsList, ValidateDirectories);
+            var searchPatterns = GetArgsOf(SEARCH_PATTERN_SWITCH, argsList, ValidateSearchPattern);
+
+            _vepixConsole = new VepixConsole(topDirectories, allDirectories, searchPatterns);
 
             return true;
         }
@@ -139,7 +137,7 @@ namespace Jw.Vepix.Wpf.Utilities
         private static extern bool FreeConsole();
         #endregion
 
-        private static VepixConsole _instance;
+        private static VepixConsole _vepixConsole;
         private const string SWITCH_TOKEN = "-";
         private const string TOP_DIRECTORY_SWITCH = "-d";
         private const string ALL_DIRECTORIES_SWITCH = "-a";

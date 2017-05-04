@@ -15,20 +15,24 @@ namespace Jw.Vepix.Wpf.ViewModels
 {
     public class VepixWindowViewModel : ViewModelBase
     {
-        public VepixWindowViewModel(IEventAggregator eventAggregator, IPictureRepository pictureRepo, 
-            IPictureFolderTreeViewModel pictureFolderTreeViewModel, Func<IPictureGridViewModel> pictureGridViewModelCreator)
+        public VepixWindowViewModel(IPictureFolderTreeViewModel pictureFolderTreeViewModel, 
+            Func<IPictureGridViewModel> pictureGridViewModelCreator,
+            IFileExplorerDialogService fileExplorerDialogService,
+            IEventAggregator eventAggregator, IPictureRepository pictureRepo)
         {
             if (DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
                 return;
 
             PictureFolderTreeViewModel = pictureFolderTreeViewModel;
             PictureGridViewModels = new ObservableCollection<IPictureGridViewModel>();
-
-            _pictureRepo = pictureRepo;
             _pictureGridViewModelCreator = pictureGridViewModelCreator;
+
+            _fileExplorerDialogService = fileExplorerDialogService;
 
             _eventAggregator = eventAggregator;
             _eventAggregator.GetEvent<OpenPicturesFromFolderEvent>().Subscribe(OnOpenPicturesFromFolder);
+
+            _pictureRepo = pictureRepo;
 
             OpenFolderCommand = new RelayCommand<SearchOption>(OnOpenFolderCommand);
             OpenFilesCommand = new RelayCommand<object>(OnOpenFilesCommand);
@@ -60,16 +64,16 @@ namespace Jw.Vepix.Wpf.ViewModels
 
         private async void OnOpenFolderCommand(SearchOption option)
         {
-            FolderBrowserDialog folderDialog = new FolderBrowserDialog();
-            if (folderDialog.ShowDialog() == DialogResult.OK)
+            string selectedPath;
+            DialogResult d = _fileExplorerDialogService.ShowFolderBrowserDialog(out selectedPath);
+            if (_fileExplorerDialogService.ShowFolderBrowserDialog(out selectedPath) == DialogResult.OK)
             {
-                List<Picture> pictures = await (_pictureRepo.GetPicturesFromFolderAsync(folderDialog.SelectedPath, option));
                 if (option == SearchOption.AllDirectories)
                 {
-                    //may want to add a single folder to the tree; need to think about it more
-                    PictureFolderTreeViewModel.Load(pictures.Select(pic => pic.FolderPath).ToList());
+                    //may want to also add a single folder to the tree; need to think about it more
+                    PictureFolderTreeViewModel.Load(selectedPath);
                 }
-                // Select the parent folder
+                List<Picture> pictures = await (_pictureRepo.GetPicturesFromFolderAsync(selectedPath, option));
                 SelectedPictureGridViewModel = CreateAndLoadPictureGridViewModel(pictures.Where(pic => pic.FolderPath == pictures[0].FolderPath).ToList());
             }
         }
@@ -84,14 +88,10 @@ namespace Jw.Vepix.Wpf.ViewModels
 
         private async void OnOpenFilesCommand()
         {
-            OpenFileDialog fileDialog = new OpenFileDialog()
+            string[] fileNames;
+            if (_fileExplorerDialogService.ShowOpenFileDialog(out fileNames) == DialogResult.OK)
             {
-                Multiselect = true,
-                Filter = "Image Files|*.jpg;*.jpeg;*.png;*.gif;*.bmp;*.tiff;*.wmp"
-            };
-            if (fileDialog.ShowDialog() == DialogResult.OK)
-            {
-                List<Picture> pictures = await (_pictureRepo.GetPicturesAsync(fileDialog.FileNames));
+                List<Picture> pictures = await (_pictureRepo.GetPicturesAsync(fileNames));
                 SelectedPictureGridViewModel = CreateAndLoadPictureGridViewModel(pictures);
             }
         }
@@ -103,16 +103,14 @@ namespace Jw.Vepix.Wpf.ViewModels
 
         private void OnAboutCommand()
         {
-            System.Windows.MessageBox.Show(
-                new System.Text.StringBuilder()
-                    .Append("Version: ")
-                    .AppendLine(System.Diagnostics.FileVersionInfo.GetVersionInfo(
-                        System.Reflection.Assembly.GetExecutingAssembly().Location).FileVersion)
-                    .AppendLine()
-                    .AppendLine("Author: Jon Wesneski").ToString(),
-                    "vepix - Viewer/editor picture app");
-            // todo:
-            //_modalDialog.ShowVepixDialog(new Views.AboutDialogView());
+            var message = new System.Text.StringBuilder()
+                .Append("Version: ")
+                .AppendLine(System.Diagnostics.FileVersionInfo.GetVersionInfo(
+                    System.Reflection.Assembly.GetExecutingAssembly().Location).FileVersion)
+                .AppendLine()
+                .AppendLine("Author: Jon Wesneski").ToString();
+
+            new MessageDialogService().ShowDialog(message, "vepix - About");
         }
 
         private async void OnOpenPicturesFromFolder(PicturesFolderPayload picturesFolder)
@@ -126,17 +124,28 @@ namespace Jw.Vepix.Wpf.ViewModels
 
         private async void CheckCommandLine()
         {
-            List<Picture> pictures = await _pictureRepo.GetPicturesFromCommandLineAsync();
-            //todo: add logic to get search option
-            //if (option == SearchOption.AllDirectories)
-            //{
-            //    // may want to add a single folder to the tree; need to think about it more
-            //    PictureFolderTreeViewModel.Load(pictures.Select(pic => pic.FolderPath).ToList());
-            //}
-            // Select the parent folder
-            if (pictures.Count > 0)
+            var userInputs = VepixConsoleParser.ConsoleInstance();
+            foreach (var allDir in userInputs.AllDirectories)
             {
-                SelectedPictureGridViewModel = CreateAndLoadPictureGridViewModel(pictures.Where(pic => pic.FolderPath == pictures[0].FolderPath).ToList());
+                PictureFolderTreeViewModel.Load(allDir);
+            }
+
+            var firstLoad = true;
+            foreach (var topDir in userInputs.TopDirectories)
+            {
+                List<Picture> pictures = await (_pictureRepo.GetPicturesFromFolderAsync(topDir, SearchOption.TopDirectoryOnly, userInputs.SearchPatterns.ToArray()));
+                if (pictures.Count > 0)
+                {
+                    if (firstLoad)
+                    {
+                        SelectedPictureGridViewModel = CreateAndLoadPictureGridViewModel(pictures.Where(pic => pic.FolderPath == pictures[0].FolderPath).ToList());
+                        firstLoad = false;
+                    }
+                    else
+                    {
+                         CreateAndLoadPictureGridViewModel(pictures.Where(pic => pic.FolderPath == pictures[0].FolderPath).ToList());
+                    }
+                }
             }
         }
 
@@ -144,5 +153,6 @@ namespace Jw.Vepix.Wpf.ViewModels
         private IPictureRepository _pictureRepo;
         private Func<IPictureGridViewModel> _pictureGridViewModelCreator;
         private IPictureGridViewModel _selectedPictureGridViewModel;
+        private IFileExplorerDialogService _fileExplorerDialogService;
     }
 }

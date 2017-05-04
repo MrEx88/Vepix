@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jw.Vepix.Wpf.Tests", "Jw.Ve
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jw.Vepix.Data", "Jw.Vepix.Data\Jw.Vepix.Data.csproj", "{9682FF8C-3E2E-4451-B167-86DB83E15D52}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jw.Vepix.Common", "Jw.Vepix.Common\Jw.Vepix.Common.csproj", "{66593704-57C0-4A0C-8E2F-A74F2D4AAE59}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{9682FF8C-3E2E-4451-B167-86DB83E15D52}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9682FF8C-3E2E-4451-B167-86DB83E15D52}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9682FF8C-3E2E-4451-B167-86DB83E15D52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66593704-57C0-4A0C-8E2F-A74F2D4AAE59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66593704-57C0-4A0C-8E2F-A74F2D4AAE59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66593704-57C0-4A0C-8E2F-A74F2D4AAE59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66593704-57C0-4A0C-8E2F-A74F2D4AAE59}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
