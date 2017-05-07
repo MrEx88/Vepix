@@ -1,9 +1,11 @@
-﻿using Jw.Vepix.Data;
+﻿using Jw.Vepix.Common;
+using Jw.Vepix.Data;
 using Jw.Vepix.Wpf.Utilities;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 
 namespace Jw.Vepix.Wpf.Services
 {
@@ -14,46 +16,21 @@ namespace Jw.Vepix.Wpf.Services
             _fileService = new FileService();
         }
 
-        /// <summary>
-        /// Gets pictures from an array of files.
-        /// </summary>
-        /// <param name="files">The files to get pictures from</param>
-        /// <returns>A List of pictures</returns>
-        public async Task<List<Picture>> GetPicturesAsync(string[] files)
+        //todo do I need to put async/await keywords here; what is the difference
+        public Task<Picture> GetPictureAsync(string pictureFileName) =>
+            Task.Factory.StartNew(() =>
+                new Picture(BitmapService.ConvertByteArrayToBitmapImage(
+                    _fileService.GetFileBytes(pictureFileName)), pictureFileName));
+
+        public Task<List<Picture>> GetPicturesAsync(string[] pictureFileNames) =>
+            GetPicturesAsync(pictureFileNames.ToList());
+
+        public async Task<List<Picture>> GetPicturesAsync(List<string> pictureFileNames)
         {
-            var fileBytes = await _fileService.ReadBytesFromFilesAsync(files.ToList());
+            var fileBytes = await _fileService.GetFilesBytesAsync(pictureFileNames);
             return await LoadPicturesAsync(fileBytes);
         }
 
-        /// <summary>
-        /// Gets pictures from the selected files in windows explorer.
-        /// </summary>
-        /// <param name="folderPath">The folder to search pictures for</param>
-        /// <param name="option">The SearchOption enum to use</param>
-        /// <returns>A List of pictures</returns>
-        public async Task<List<Picture>> GetPicturesFromFolderAsync(string folderPath, SearchOption option)
-        {
-            var fileBytes = await _fileService.GetFilesAndBytesFromDirectoryAsync(folderPath, _supportedImagesFilterList, option);
-            return await LoadPicturesAsync(fileBytes);
-        }
-
-        /// <summary>
-        /// Gets pictures from a folder.
-        /// </summary>
-        /// <param name="folderPath">The folder to search pictures for</param>
-        /// <param name="option">The SearchOption enum to use</param>
-        /// <param name="searchPattern">File filters to use (e.g "*.jpg")</param>
-        /// <returns>A List of pictures</returns>
-        public async Task<List<Picture>> GetPicturesFromFolderAsync(string folderPath, SearchOption option, string[] searchPattern)
-        {
-            var fileBytes = await _fileService.GetFilesAndBytesFromDirectoryAsync(folderPath, searchPattern.ToList(), option);
-            return await LoadPicturesAsync(fileBytes);
-        }
-        
-        /// <summary>
-        /// Gets pictures from the command line.
-        /// </summary>
-        /// <returns>A List of pictures</returns>
         public async Task<List<Picture>> GetPicturesFromCommandLineAsync()
         {
             // todo: Now I know the difference between file filters and search patterns
@@ -68,60 +45,87 @@ namespace Jw.Vepix.Wpf.Services
                 var console = VepixConsoleParser.ConsoleInstance();
                 foreach (var dir in console.TopDirectories)
                 {
-                    pictures.AddRange(GetPicturesFromFolderAsync(dir, SearchOption.TopDirectoryOnly, console.SearchPatterns.ToArray()).Result);
+                    pictures.AddRange(GetPicturesFromFolderAsync(dir, 
+                        SearchOption.TopDirectoryOnly, console.SearchPatterns.ToArray()).Result);
                 }
                 foreach (var dir in console.AllDirectories)
                 {
-                    pictures.AddRange(GetPicturesFromFolderAsync(dir, SearchOption.AllDirectories, console.SearchPatterns.ToArray()).Result);
+                    pictures.AddRange(GetPicturesFromFolderAsync(dir,
+                        SearchOption.AllDirectories, console.SearchPatterns.ToArray()).Result);
                 }
             });
 
             return pictures;
         }
 
-        /// <summary>
-        /// Trys to change the name of the picture.
-        /// </summary>
-        /// <param name="picture">The picture to be changed</param>
-        /// <param name="newName">The new name of the picture</param>
-        /// <returns>True if name has been changed</returns>
+        public async Task<List<Picture>> GetPicturesFromFolderAsync(string folderPath,
+            SearchOption option = SearchOption.TopDirectoryOnly) =>
+                await GetPicturesFromFolderAsync(folderPath, option,
+                    _supportedImagesFilterList.ToArray());
+
+        public async Task<List<Picture>> GetPicturesFromFolderAsync(string folderPath,
+            SearchOption option = SearchOption.TopDirectoryOnly, params string[] searchPattern)
+        {
+            var fileBytes = await _fileService.GetFilesBytesFromDirectoryAsync(folderPath,
+                searchPattern.ToList(), option);
+            return await LoadPicturesAsync(fileBytes);
+        }
+
+        public async Task<List<string>> GetFileNamesAsync(string folderPath, 
+            SearchOption option = SearchOption.TopDirectoryOnly) =>
+                await _fileService.GetFileNamesFromDirectoryAsync(folderPath,
+                                            _supportedImagesFilterList, option);
+
         public bool TryChangePictureName(Picture picture, string newName)
         {
             //todo: handle exceptions
-            bool result = false;
-            _fileService.ChangeFileName(picture.FullFileName, picture.FolderPath + newName + picture.FileExtension);
-            result = true;
+            bool result = true;
+            _fileService.ChangeFileName(picture.FullFileName, 
+                picture.FolderPath + newName + picture.FileExtension);
             return result;
         }
 
-        /// <summary>
-        /// Trys to delete the specified picture.
-        /// </summary>
-        /// <param name="picture">The picture to delete</param>
-        /// <returns>True if name has been changed</returns>
-        public bool TryDelete(Picture picture)
+        public bool TryDelete(string fileName)
         {
             //todo: handle exceptions
-            bool result = false;
-            _fileService.DeleteFile(picture.FullFileName);
-            result = true;
+            bool result = true;
+            _fileService.DeleteFile(fileName);
             return result;
         }
 
-        private Task<List<Picture>> LoadPicturesAsync(Dictionary<string, byte[]> fileBytes)
+        public bool TryOverWrite(BitmapImage croppedImage, string fullFileName,
+            BitmapEncoderType encoderType)
+        {
+            //todo: handle exceptions
+            bool result = true;
+            if (TryDelete(fullFileName))
+            {
+                var bitmap = Bitmapper.ConvertBitmapImageToBitmap(croppedImage, encoderType);
+                bitmap.Save(fullFileName);
+                //_fileService.SaveImage(croppedImage, fullFileName, encoderType);
+            }
+
+            return result;
+        }
+
+        private Task<List<Picture>> LoadPicturesAsync(List<FileBytes> fileBytes)
         {
             return Task.Factory.StartNew<List<Picture>>(() =>
             {
                 List<Picture> pictures = new List<Picture>();
                 Parallel.ForEach(fileBytes, file =>
                 {
-                    pictures.Add(new Picture(BitmapService.ConvertByteArrayToBitmapImage(file.Value), file.Key));
+                    pictures.Add(new Picture(BitmapService.ConvertByteArrayToBitmapImage(file.Bytes),
+                                             file.FullFileName));
                 });
                 return pictures;
             });
         }
 
         private IFileService _fileService;
-        private List<string> _supportedImagesFilterList = new List<string> { "*.jpg", "*.png", "*.gif" };
+        private readonly List<string> _supportedImagesFilterList = new List<string>
+        {
+            "*.jpg", "*.png", "*.gif", "*.bmp", "*.wmp", "*.tiff"
+        };
     }
 }

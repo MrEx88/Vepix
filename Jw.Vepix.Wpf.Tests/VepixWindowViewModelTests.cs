@@ -42,14 +42,13 @@ namespace Jw.Vepix.Wpf.Tests
                 Returns(_openPicturesFromFolderEvent);
              _mockPictureRepo = new Mock<IPictureRepository>();
             _mockVepixWindowviewModel = new VepixWindowViewModel(_mockPictureFolderTreeViewModel.Object,
-                CreatePictureGridViewModel, _mockFileExplorerDialogService.Object, _mockEventAggregator.Object, 
-                _mockPictureRepo.Object);
+                CreatePictureGridViewModel, _mockFileExplorerDialogService.Object, _mockEventAggregator.Object);
         }
 
         private IPictureGridViewModel CreatePictureGridViewModel()
         {
             var mockPictureGridViewModel = new Mock<IPictureGridViewModel>();
-            mockPictureGridViewModel.Setup(vm => vm.Load(It.IsAny<List<Picture>>()))
+            mockPictureGridViewModel.Setup(vm => vm.Load(It.IsAny<List<string>>()))
                 .Callback<List<Picture>>(pictures =>
                 {
                     mockPictureGridViewModel.Setup(vm => vm.FolderName)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.IO;
 using System.Windows;
 using System.Windows.Media.Imaging;
@@ -83,6 +84,19 @@ namespace Jw.Vepix.Common
                 bitmapImage.EndInit();
 
                 return bitmapImage;
+            }
+        }
+
+        public static Bitmap ConvertBitmapImageToBitmap(BitmapImage bitmapImage, BitmapEncoderType encoderType)
+        {
+            using (MemoryStream outStream = new MemoryStream())
+            {
+                var encoder = CreateBitmapEncoder(encoderType);
+                encoder.Frames.Add(BitmapFrame.Create(bitmapImage));
+                encoder.Save(outStream);
+                Bitmap bitmap = new Bitmap(outStream);
+
+                return new Bitmap(bitmap);
             }
         }
 

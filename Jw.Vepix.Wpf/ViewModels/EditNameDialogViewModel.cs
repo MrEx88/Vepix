@@ -1,4 +1,5 @@
 ﻿using Jw.Vepix.Data;
+using Jw.Vepix.Data.Payloads;
 using Jw.Vepix.Wpf.Events;
 using Jw.Vepix.Wpf.Services;
 using Jw.Vepix.Wpf.Utilities;
@@ -11,14 +12,19 @@ namespace Jw.Vepix.Wpf.ViewModels
 {
     public class EditNameDialogViewModel : ViewModelBase, IPicturesDialogViewModel
     {
-        public EditNameDialogViewModel(IEventAggregator eventAggregator, List<Picture> pictures)
+        public EditNameDialogViewModel(IPictureRepository pictureRepository,
+            IEventAggregator eventAggregator, IMessageDialogService messageDialogService, List<Picture> pictures)
         {
             if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))
                 return;
 
-            _pictureRepo = new PictureRepository();
+            _pictureRepo = pictureRepository;
+
             _eventAggregator = eventAggregator;
 
+            _messageDialogService = messageDialogService;
+            _pictures = pictures;
+            
             EditPictureName = pictures[0].ImageName;
             _editPicture = pictures[0];
             _prefix = "";
@@ -48,7 +54,7 @@ namespace Jw.Vepix.Wpf.ViewModels
                 // todo: implement this instead of _editPicture
                 return _pictures;
             }
-        }        
+        }
 
         public string Prefix
         {
@@ -96,12 +102,13 @@ namespace Jw.Vepix.Wpf.ViewModels
             window.Close();
         }
 
-        private IEventAggregator _eventAggregator;
         private IPictureRepository _pictureRepo;
-        private string _editPictureName;
-        private string _prefix;
-        private string _suffix;
+        private IEventAggregator _eventAggregator;
+        private IMessageDialogService _messageDialogService;
         private Picture _editPicture;
         private List<Picture> _pictures;
+        private string _editPictureName;
+        private string _prefix;
+        private string _suffix;        
     }
 }

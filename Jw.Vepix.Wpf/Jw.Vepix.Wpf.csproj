@@ -99,6 +99,7 @@
     <Compile Include="Events\CropAreaDrawnEvent.cs" />
     <Compile Include="Events\PictureNameChangedEvent.cs" />
     <Compile Include="Events\OpenPicturesFromFolderEvent.cs" />
+    <Compile Include="Events\PictureOverwrittenEvent.cs" />
     <Compile Include="Events\UpdatePictureNameEvent.cs" />
     <Compile Include="Services\FileExplorerDialogService.cs" />
     <Compile Include="Services\ICollectionDialogService.cs" />
@@ -109,7 +110,6 @@
     <Compile Include="Utilities\CmdOptions.cs" />
     <Compile Include="Utilities\CropSelectionCanvas.cs" />
     <Compile Include="Utilities\RelayCommand.cs" />
-    <Compile Include="Utilities\StringExtensions.cs" />
     <Compile Include="Utilities\VepixConsoleParser.cs" />
     <Compile Include="Utilities\ViewModelLocator.cs" />
     <Compile Include="Services\BitmapService.cs" />

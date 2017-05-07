@@ -43,11 +43,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Picture.cs" />
-    <Compile Include="PictureNameChangePayload.cs" />
-    <Compile Include="PicturesFolderPayload.cs" />
+    <Compile Include="FileBytes.cs" />
+    <Compile Include="Payloads\PictureNameChangePayload.cs" />
+    <Compile Include="Payloads\PicturesFolderPayload.cs" />
     <Compile Include="PointBoundaries.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VepixConsole.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Jw.Vepix.Common\Jw.Vepix.Common.csproj">
+      <Project>{66593704-57C0-4A0C-8E2F-A74F2D4AAE59}</Project>
+      <Name>Jw.Vepix.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

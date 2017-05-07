@@ -12,50 +12,57 @@ namespace Jw.Vepix.Wpf.ViewModels
 {
     public class PictureDialogViewModel : ViewModelBase, IPicturesDialogViewModel
     {
-        public Picture ViewingPicture { get; set; }
-        public System.Windows.Controls.Image FullImage { get; set; }
-        public CropSelectionCanvas CropCanvas { get; set; }
-        public RelayCommand<object> SaveCommand { get; set; }
-        public RelayCommand<object> SaveAsCommand { get; set; }
-
-        public List<Picture> Pitcures
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public PictureDialogViewModel(IEventAggregator eventAggregator, List<Picture> pictures)
+        public PictureDialogViewModel(IEventAggregator eventAggregator, IMessageDialogService messageDialogService,
+            List<Picture> pictures)
         {
             // in future, maybe use this viewer to navigate through photos
             //_pictures = pictures;
             //_selectedPicture = selectedPicture;
-
-            ViewingPicture = pictures[0];
-            SetupCanvas(eventAggregator, ViewingPicture);
+            _pictureRepo = new PictureRepository(); //todo
 
             _eventAggregator = eventAggregator;
             _eventAggregator.GetEvent<CropAreaDrawnEvent>().Subscribe(OnCropAreaDrawn);
+
+            _messageDialogService = messageDialogService;
+
+            ViewingPicture = pictures[0];
+            SetupCanvas(eventAggregator, ViewingPicture);
 
             SaveCommand = new RelayCommand<object>(OnSaveExecute, OnSaveCanExecute);
             SaveAsCommand = new RelayCommand<object>(OnSaveAsExecute, OnSaveCanExecute);
         }
 
-        private void OnSaveAsExecute()
+        public Picture ViewingPicture { get; set; }
+        public System.Windows.Controls.Image FullImage { get; set; } //maybe just make local to method
+        public List<Picture> Pitcures
         {
-            var croppedImage = BitmapService.CropPreview(ViewingPicture, _cropArea.Value, BitmapEncoderType.JPEG);
-            FileService fileService = new FileService();
-            fileService.SaveImageAs(croppedImage, BitmapEncoderType.JPEG);
+            // in future, maybe use this viewer to navigate through photos
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
+        public CropSelectionCanvas CropCanvas { get; set; }
+
+        public RelayCommand<object> SaveCommand { get; set; }
+        public RelayCommand<object> SaveAsCommand { get; set; }
 
         private void OnSaveExecute()
         {
-            var croppedImage = BitmapService.CropPreview(ViewingPicture, _cropArea.Value, BitmapEncoderType.JPEG);
-            //1 are you sure you want to overwrite?
-            //2 FileService fileService = new FileService();
-            //fileService.SaveImageOverwrite(croppedImage, BitmapEncoderType.JPEG);
-            //3 notifypicturechange
+            var croppedImage = BitmapService.CropPreview(ViewingPicture, _cropArea.Value);
+            if (_messageDialogService.ShowQuestion("Are you sure you want to overwrite this image?", "Overwrite Image?"))
+            {
+                _pictureRepo.TryOverWrite(croppedImage, ViewingPicture.FullFileName, ViewingPicture.FileExtension.ToEncoderType());
+                _eventAggregator.GetEvent<PictureOverwrittenEvent>().Publish(ViewingPicture.Guid);
+            }
+        }
+
+        private void OnSaveAsExecute()
+        {
+            var croppedImage = BitmapService.CropPreview(ViewingPicture, _cropArea.Value);
+            //todo create picturerepository method for this
+            FileService fileService = new FileService();
+            fileService.SaveImageAs(croppedImage, BitmapEncoderType.JPEG);            
         }
 
         private bool OnSaveCanExecute() => _cropArea.HasValue;
@@ -84,6 +91,8 @@ namespace Jw.Vepix.Wpf.ViewModels
 
         private IEventAggregator _eventAggregator;
         private Int32Rect? _cropArea;
+        private IMessageDialogService _messageDialogService;
+        private PictureRepository _pictureRepo;
         //private List<Picture> _pictures;
         //private int _picIndex;
     }

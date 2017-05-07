@@ -1,4 +1,5 @@
 ﻿using Jw.Vepix.Common;
+using Jw.Vepix.Data;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -10,101 +11,74 @@ namespace Jw.Vepix.Wpf.Services
 {
     public class FileService : IFileService
     {
-        /// <summary>
-        /// Gets the image file paths that have matched the criteria of the parameters.
-        /// </summary>
-        /// <param name="path">The path to search in</param>
-        /// <param name="searchPattern">The file filters to use (i.e. "*.jpg")</param>
-        /// <param name="option">The SearchOption Enum to use</param>
-        /// <returns>A List of the image file paths</returns>
-        public async Task<Dictionary<string, byte[]>> GetFilesAndBytesFromDirectoryAsync(string path, List<string> searchPattern, SearchOption option)
+        public async Task<List<FileBytes>> GetFilesBytesAsync(List<string> fileNames)
         {
-            var files = new List<string>();
-            if (Directory.Exists(path))
-            {
-                await Task.Factory.StartNew(() =>
-                    searchPattern.ForEach( sp =>
-                        files.AddRange(Directory.GetFiles(path, sp, option))));
-            }
+            //todo maybe use parallel foreach here
+            var bytes = new List<FileBytes>();
+            await Task.Factory.StartNew(() =>
+                fileNames.ForEach(async file => bytes.Add(new FileBytes(file,
+                                            await GetFileBytesAsync(file)))));
 
-            //test
-            //var tests = new List<bool>();
-            //var folders = new List<string>();
-            //files.ForEach(file => {
-            //    if (!folders.Contains(Path.GetDirectoryName(file)))
-            //    {
-            //        folders.Add(Path.GetDirectoryName(file));
-            //    }
-            //});
-            //folders.ForEach(folder => tests.Add(folder.IsSubDirectoryOf(folders[0])));
-            //end test\\
-
-            return await ReadBytesFromFilesAsync(files);
+            return bytes;
         }
 
-        /// <summary>
-        /// Gets the image file paths that have matched the criteria of the parameters.
-        /// </summary>
-        /// <param name="path">The path to search in</param>
-        /// <param name="searchPattern">The file pattern to use (i.e. "*.jpg")</param>
-        /// <param name="option">The SearchOption Enum to use</param>
-        /// <returns>A List of the image file paths</returns>
-        public async Task<List<string>> GetFilesAndBytesFromDirectoryAsync2(string path, List<string> searchPattern, SearchOption option)
+        public async Task<List<string>> GetFileNamesFromDirectoryAsync(string folderPath,
+            List<string> searchPattern, SearchOption option)
         {
             var files = new List<string>();
-            if (Directory.Exists(path))
+            if (Directory.Exists(folderPath))
             {
                 await Task.Factory.StartNew(() =>
                     searchPattern.ForEach(sp =>
-                       files.AddRange(Directory.GetFiles(path, sp, option))));
+                       files.AddRange(Directory.GetFiles(folderPath, sp, option))));
             }
 
             return files;
         }
 
-        /// <summary>
-        /// Read all the bytes from file.
-        /// </summary>
-        /// <param name="file">The file name to check</param>
-        /// <returns>byte array of file</returns>
-        public byte[] ReadBytesFromFile(string file)
-            => File.ReadAllBytes(file);
+        public byte[] GetFileBytes(string fileName) => File.ReadAllBytes(fileName);
 
-        public async Task<Dictionary<string, byte[]>> ReadBytesFromFilesAsync(List<string> files)
+        public Task<byte[]> GetFileBytesAsync(string fileName) =>
+            Task.Factory.StartNew(() => File.ReadAllBytes(fileName));
+
+        public async Task<List<FileBytes>> GetFilesBytesFromDirectoryAsync(string folderPath,
+            List<string> searchPattern, SearchOption option)
         {
-            //todo: i think i will change this return type to just List<byte[]>
-            var bytes = new Dictionary<string, byte[]>();
-            await Task.Factory.StartNew(() =>
-                files.ForEach(file => bytes.Add(file, ReadBytesFromFile(file))));
+            var files = new List<string>();
+            if (Directory.Exists(folderPath))
+            {
+                await Task.Factory.StartNew(() =>
+                    searchPattern.ForEach(sp =>
+                       files.AddRange(Directory.GetFiles(folderPath, sp, option))));
+            }
 
-            return bytes;
+            return await GetFilesBytesAsync(files);
         }
 
-        /// <summary>
-        /// Changes the name of the file.
-        /// </summary>
-        /// <param name="oldName">The old name of the file</param>
-        /// <param name="newName">The name to change to file to</param>
-        public void ChangeFileName(string oldName, string newName)
+        public bool ChangeFileName(string oldName, string newName)
         {
             File.Move(oldName, newName);
+            return true;
         }
 
-        /// <summary>
-        /// Saves a bitmap image with a new file name.
-        /// </summary>
-        /// <param name="bitmapImage">Bitmap image to save</param>
-        /// <param name="encoderType">Bitmap encoder type</param>
-        public void SaveImageAs(BitmapImage bitmapImage, BitmapEncoderType encoderType)
+        public bool DeleteFile(string fileName)
         {
-            SaveFileDialog saveDialog = new SaveFileDialog()
+            File.Delete(fileName);
+            return true;
+        }
+
+        public bool IsValidFileName(string fileName)
+        {
+            string invalidCharacters = "[" + Regex.Escape(new string(Path.GetInvalidPathChars())) + "]";
+            return !(new Regex(invalidCharacters).IsMatch(fileName));
+        }
+
+        public bool OverwriteImage(BitmapImage bitmapImage, string fullFileName,
+            BitmapEncoderType encoderType)
+        {
+            using (var saveDialog = new SaveFileDialog())
             {
-                Title = "Vepix: Save Image As...",
-                Filter = "Jpeg Image|*.jpg|Bitmap Image|*.bmp|Gif Image|*.gif",
-            };
-            saveDialog.ShowDialog();
-            if (saveDialog.FileName != null && saveDialog.FileName != "")
-            {
+                saveDialog.FileName = fullFileName;
                 var encoder = BitmapService.CreateBitmapEncoder(encoderType);
                 encoder.Frames.Add(BitmapFrame.Create(bitmapImage));
                 using (var fileStream = (FileStream)saveDialog.OpenFile())
@@ -112,26 +86,28 @@ namespace Jw.Vepix.Wpf.Services
                     encoder.Save(fileStream);
                 }
             }
+            return true;
         }
 
-        /// <summary>
-        /// Deletes the specified file.
-        /// </summary>
-        /// <param name="fileName">The file name to delete</param>
-        public void DeleteFile(string fileName)
+        public bool SaveImageAs(BitmapImage bitmapImage, BitmapEncoderType encoderType)
         {
-            File.Delete(fileName);
-        }
+            using (var saveDialog = new SaveFileDialog())
+            {
+                saveDialog.Title = "Vepix: Save Image As...";
+                saveDialog.Filter = "Jpeg Image|*.jpg|Bitmap Image|*.bmp|Gif Image|*.gif";
+                saveDialog.ShowDialog();
+                if (saveDialog.FileName != null && saveDialog.FileName != "")
+                {
+                    var encoder = BitmapService.CreateBitmapEncoder(encoderType);
+                    encoder.Frames.Add(BitmapFrame.Create(bitmapImage));
+                    using (var fileStream = (FileStream)saveDialog.OpenFile())
+                    {
+                        encoder.Save(fileStream);
+                    }
+                }
+            }
 
-        /// <summary>
-        /// Checks if the string has a valid file name.
-        /// </summary>
-        /// <param name="fileName">The file name to check</param>
-        /// <returns>True if string is a valid file name</returns>
-        public bool IsValidFileName(string fileName)
-        {
-            string invalidCharacters = "[" + Regex.Escape(new string(Path.GetInvalidPathChars())) + "]";
-            return !(new Regex(invalidCharacters).IsMatch(fileName));
+            return true;
         }
     }
 }

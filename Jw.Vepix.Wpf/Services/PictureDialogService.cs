@@ -15,9 +15,10 @@ namespace Jw.Vepix.Wpf.Services
 
     public class PictureDialogService : ICollectionDialogService
     {
-        public PictureDialogService(DialogType dialogType, IEventAggregator eventAggregator, List<Picture> pictures)
+        public PictureDialogService(DialogType dialogType, IEventAggregator eventAggregator, 
+            IMessageDialogService messageDialogService, List<Picture> pictures)
         {
-            _dialogViewModel = CreateViewModel(dialogType, eventAggregator, pictures);
+            _dialogViewModel = CreateViewModel(dialogType, eventAggregator, messageDialogService, pictures);
             _dialog = CreateView(dialogType);
         }
 
@@ -32,14 +33,15 @@ namespace Jw.Vepix.Wpf.Services
             _dialog.Show();
         }
 
-        private ViewModelBase CreateViewModel(DialogType dialogType, IEventAggregator eventAggregator, List<Picture> pictures)
+        private ViewModelBase CreateViewModel(DialogType dialogType, IEventAggregator eventAggregator,
+            IMessageDialogService messageDialogService, List<Picture> pictures)
         {
             switch (dialogType)
             {
                 case DialogType.CropImages:
-                    return new PictureDialogViewModel(eventAggregator, pictures);
+                    return new PictureDialogViewModel(eventAggregator, messageDialogService, pictures);
                 default:
-                    return new EditNameDialogViewModel(eventAggregator, pictures);
+                    return new EditNameDialogViewModel(new PictureRepository(), eventAggregator, messageDialogService, pictures);
             }
         }
 

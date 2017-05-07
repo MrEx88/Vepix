@@ -1,8 +1,11 @@
-﻿using Jw.Vepix.Data;
+﻿using Jw.Vepix.Common;
+using Jw.Vepix.Data;
+using Jw.Vepix.Data.Payloads;
 using Jw.Vepix.Wpf.Events;
 using Jw.Vepix.Wpf.Services;
 using Jw.Vepix.Wpf.Utilities;
 using Prism.Events;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -12,26 +15,29 @@ namespace Jw.Vepix.Wpf.ViewModels
 {
     public class PictureGridViewModel : ViewModelBase, IPictureGridViewModel
     {
-        public PictureGridViewModel(IMessageDialogService modalDialog, IEventAggregator eventAggregator)
+        public PictureGridViewModel(IPictureRepository pictureRepository, IMessageDialogService modalDialog, IEventAggregator eventAggregator)
         {
             if (DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
                 return;
 
-            _pictures = new ObservableCollection<Picture>();
-            _filterOn = false;
-            _searchFilter = string.Empty;
-            _pictureRepo = new PictureRepository();
+            _pictureRepo = pictureRepository;
+
             _modalDialog = modalDialog;
 
             _eventAggregator = eventAggregator;
             _eventAggregator.GetEvent<PictureNameChangedEvent>().Subscribe(OnPictureNameChanged);
+            _eventAggregator.GetEvent<PictureOverwrittenEvent>().Subscribe(OnPictureOverwritten);
+
+            _pictures = new ObservableCollection<Picture>();
+            _filterOn = false;
+            _searchFilter = string.Empty;
 
             SearchCommand = new RelayCommand<string>(OnSearch);
             EditImageNameCommand = new RelayCommand<Picture>(OnEditImageName);
             CropImageCommand = new RelayCommand<Picture>(OnCropImage);
             DeleteImageCommand = new RelayCommand<Picture>(OnDeleteImage);
             CloseImageCommand = new RelayCommand<Picture>(OnCloseImage);            
-        }
+        }        
 
         public string FolderName
         {
@@ -84,6 +90,7 @@ namespace Jw.Vepix.Wpf.ViewModels
             ICollectionDialogService dialog = new PictureDialogService(
                 DialogType.EditNames,
                 _eventAggregator,
+                _modalDialog,
                 new List<Picture>() { picture });
             dialog.ShowVepixDialog();
         }
@@ -93,6 +100,7 @@ namespace Jw.Vepix.Wpf.ViewModels
             ICollectionDialogService dialog = new PictureDialogService(
                 DialogType.CropImages,
                 _eventAggregator,
+                _modalDialog,
                 new List<Picture>() { picture });
             dialog.ShowVepixDialog();
         }
@@ -104,7 +112,7 @@ namespace Jw.Vepix.Wpf.ViewModels
                 "Delete Image?"))
             {
                 Pictures.Remove(picture);
-                _pictureRepo.TryDelete(picture);
+                _pictureRepo.TryDelete(picture.FullFileName);
             }
         }
 
@@ -121,28 +129,38 @@ namespace Jw.Vepix.Wpf.ViewModels
             SelectedPicture.FullFileName =
                 SelectedPicture.FolderPath + payload.PictureName + SelectedPicture.FileExtension;
             Pictures.Insert(index, changedPicture);
-
-            //var index = _pictures.IndexOf(SelectedPicture);
-            //_pictures.RemoveAt(index);
-            //SelectedPicture.FullFileName =
-            //    SelectedPicture.FolderPath + payload.PictureName + SelectedPicture.FileExtension;
-            //_pictures.Insert(index, SelectedPicture);
-            //NotifyPropertyChanged("Pictures");
         }
 
-        public void Load(List<Picture> pictures)
+        private void OnPictureOverwritten(Guid guid)
         {
-            if (pictures.Count > 0)
-                FolderName = pictures.First().FolderName;
-            Pictures = new ObservableCollection<Picture>(pictures);
+            var picture = Pictures.First(pic => pic.Guid == guid);
+            var reloadedPicture = _pictureRepo.GetPicturesAsync(new string[] { picture.FullFileName }).Result;
+            Pictures.Remove(picture);
+            Pictures.Add(reloadedPicture.First());
+        }
+
+        public void Load(List<string> pictureFileNames)
+        {
+            Pictures = new ObservableCollection<Picture>();
+            FolderName = new System.IO.DirectoryInfo(System.IO.Path.GetDirectoryName(pictureFileNames.First())).Name + "*";
+            TaskRunner.WaitAllOneByOne(pictureFileNames, _pictureRepo.GetPictureAsync, Pictures.Add);
+        }
+
+        public async void Load(string folderPath)
+        {
+            Pictures = new ObservableCollection<Picture>();
+            FolderName = new System.IO.DirectoryInfo(folderPath).Name;
+
+            List<string> fileNames = await _pictureRepo.GetFileNamesAsync(folderPath);
+            TaskRunner.WaitAllOneByOne(fileNames, _pictureRepo.GetPictureAsync, Pictures.Add);
         }
 
         private IEventAggregator _eventAggregator;
-        private IPictureRepository _pictureRepo;
         private IMessageDialogService _modalDialog;
         private ObservableCollection<Picture> _pictures;
         private string _folderName;
         private bool _filterOn;
-        private string _searchFilter;        
+        private string _searchFilter;
+        private IPictureRepository _pictureRepo;
     }
 }

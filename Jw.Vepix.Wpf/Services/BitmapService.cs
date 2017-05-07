@@ -53,10 +53,9 @@ namespace Jw.Vepix.Wpf.Services
         /// </summary>
         /// <param name="picture">The picture to crop</param>
         /// <param name="rect">The size to crop the image to</param>
-        /// <param name="encoderType">The encoder type</param>
         /// <returns>The cropped Image</returns>
-        public static BitmapImage CropPreview(Picture picture, Int32Rect rect, BitmapEncoderType encoderType)
-            => Bitmapper.Crop(picture.BitmapImage, rect, encoderType);
+        public static BitmapImage CropPreview(Picture picture, Int32Rect rect)
+            => Bitmapper.Crop(picture.BitmapImage, rect, picture.FileExtension.ToEncoderType());
 
         internal static BitmapEncoder CreateBitmapEncoder(BitmapEncoderType encoderType)
             => Bitmapper.CreateBitmapEncoder(encoderType);

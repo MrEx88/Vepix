@@ -14,8 +14,9 @@ namespace Jw.Vepix.Wpf.ViewModels
             if (DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
                 return;
 
-            _pictureFolderItemViewModels = new ObservableCollection<PictureFolderTreeItemViewModel>();
             _eventAggregator = eventAggregator;
+
+            _pictureFolderItemViewModels = new ObservableCollection<PictureFolderTreeItemViewModel>();
         }
 
         public ObservableCollection<PictureFolderTreeItemViewModel> PictureFolderItemViewModels

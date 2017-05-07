@@ -26,6 +26,7 @@ namespace Jw.Vepix.Wpf.ViewModels
 
             _absolutePath = dirInfo.FullName;
             _parent = parent;
+
             _eventAggregator = eventAggregator;
 
             _children = new ObservableCollection<IPictureFolderTreeItemViewModel>(
