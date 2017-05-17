@@ -6,7 +6,8 @@ namespace Jw.Vepix.Common
 {
     public static class TaskRunner
     {
-        public async static void WaitAllOneByOne<T, U>(IEnumerable<T> collection, Func<T, Task<U>> theTask, Action<U> theAction)
+        public async static void WaitAllOneByOne<T, U>(IEnumerable<T> collection, 
+            Func<T, Task<U>> theTask, Action<U> theAction, Action onCompletion = null)
         {
             List<Task<U>> tasks = new List<Task<U>>();
 
@@ -31,6 +32,8 @@ namespace Jw.Vepix.Common
 
                 tasks.RemoveAt(index);
             }
+
+            onCompletion?.Invoke();
         }
     }
 }

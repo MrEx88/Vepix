@@ -54,6 +54,10 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MahApps.Metro, Version=1.5.0.23, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
+      <HintPath>..\packages\MahApps.Metro.1.5.0\lib\net45\MahApps.Metro.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
       <Private>True</Private>
@@ -78,6 +82,10 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\MahApps.Metro.1.5.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -96,17 +104,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Events\CropAreaDrawnEvent.cs" />
     <Compile Include="Events\PictureNameChangedEvent.cs" />
     <Compile Include="Events\OpenPicturesFromFolderEvent.cs" />
     <Compile Include="Events\PictureOverwrittenEvent.cs" />
+    <Compile Include="Events\PicturesFinishedLoadingEvent.cs" />
     <Compile Include="Events\UpdatePictureNameEvent.cs" />
     <Compile Include="Services\FileExplorerDialogService.cs" />
     <Compile Include="Services\ICollectionDialogService.cs" />
     <Compile Include="Services\IFileExplorerDialogService.cs" />
     <Compile Include="Services\IFileService.cs" />
     <Compile Include="Services\IPictureDialogService.cs" />
-    <Compile Include="Services\PictureDialogService.cs" />
+    <Compile Include="Services\PicturesFlyoutService.cs" />
     <Compile Include="Utilities\CmdOptions.cs" />
     <Compile Include="Utilities\CropSelectionCanvas.cs" />
     <Compile Include="Utilities\RelayCommand.cs" />
@@ -119,30 +129,46 @@
     <Compile Include="Services\IPictureRepository.cs" />
     <Compile Include="Services\PictureRepository.cs" />
     <Compile Include="ViewModels\EditNameDialogViewModel.cs" />
+    <Compile Include="ViewModels\EditNamesViewModel.cs" />
+    <Compile Include="ViewModels\ICollectionViewModel.cs" />
     <Compile Include="ViewModels\IPictureFolderTreeItemViewModel.cs" />
     <Compile Include="ViewModels\IPictureGridViewModel.cs" />
     <Compile Include="ViewModels\IPictureFolderTreeViewModel.cs" />
-    <Compile Include="ViewModels\IPicturesDialogViewModel.cs" />
     <Compile Include="ViewModels\PictureFolderTreeItemViewModel.cs" />
-    <Compile Include="ViewModels\PictureDialogViewModel.cs" />
     <Compile Include="ViewModels\PictureGridViewModel.cs" />
     <Compile Include="ViewModels\PictureFolderTreeViewModel.cs" />
+    <Compile Include="ViewModels\PicturesViewerViewModel.cs" />
     <Compile Include="ViewModels\VepixWindowViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\EditNameDialogView.xaml.cs">
       <DependentUpon>EditNameDialogView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\EditNamesView.xaml.cs">
+      <DependentUpon>EditNamesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PicturesViewerView.xaml.cs">
+      <DependentUpon>PicturesViewerView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\PictureGridView.xaml.cs">
       <DependentUpon>PictureGridView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\PicturesDialogView.xaml.cs">
-      <DependentUpon>PicturesDialogView.xaml</DependentUpon>
-    </Compile>
-    <Page Include="Utilities\StyleLibrary.xaml">
+    <Page Include="Resources\Icons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\IconsNonShared.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\ProgressRing.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\PicturesDialogView.xaml">
+    <Page Include="Views\EditNamesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PicturesViewerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -198,6 +224,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <Resource Include="Resources\Entypo.ttf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -223,6 +250,15 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\WindowsIcons-license.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Entypo-license.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\vepixIcon.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

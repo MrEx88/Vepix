@@ -1,8 +1,12 @@
-﻿namespace Jw.Vepix.Wpf.Services
+﻿using Jw.Vepix.Data;
+using Jw.Vepix.Wpf.ViewModels;
+using System.Collections.Generic;
+
+namespace Jw.Vepix.Wpf.Services
 {
-    interface ICollectionDialogService
+    interface ICollectionFlyoutService
     {
-        void ShowVepixDialog();
-        void CloseVepixDialog();
+        void ShowVepixFlyout<T>(List<Picture> pictures) where T : ICollectionViewModel;
+        void CloseVepixFlyout();
     }
 }

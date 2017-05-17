@@ -10,7 +10,7 @@ using System.Windows;
 
 namespace Jw.Vepix.Wpf.ViewModels
 {
-    public class EditNameDialogViewModel : ViewModelBase, IPicturesDialogViewModel
+    public class EditNameDialogViewModel : ViewModelBase
     {
         public EditNameDialogViewModel(IPictureRepository pictureRepository,
             IEventAggregator eventAggregator, IMessageDialogService messageDialogService, List<Picture> pictures)
@@ -27,8 +27,6 @@ namespace Jw.Vepix.Wpf.ViewModels
             
             EditPictureName = pictures[0].ImageName;
             _editPicture = pictures[0];
-            _prefix = "";
-            _suffix = "";
 
             OkCommand = new RelayCommand<Window>(OnOk);
             CancelCommand = new RelayCommand<Window>(OnCancel);
@@ -38,7 +36,7 @@ namespace Jw.Vepix.Wpf.ViewModels
         {
             get
             {
-                return _prefix + _editPictureName + _suffix;
+                return _editPictureName;
             }
             set
             {
@@ -55,19 +53,6 @@ namespace Jw.Vepix.Wpf.ViewModels
                 return _pictures;
             }
         }
-
-        public string Prefix
-        {
-            get { return _prefix; }
-            set { _prefix = value; NotifyPropertyChanged("EditPictureName"); }
-        }        
-
-        public string Suffix
-        {
-            get { return _suffix; }
-            set { _suffix = value; NotifyPropertyChanged("EditPictureName"); }
-        }
-
 
         public bool? DialogResult
         {
@@ -87,7 +72,7 @@ namespace Jw.Vepix.Wpf.ViewModels
                 _eventAggregator.GetEvent<PictureNameChangedEvent>().Publish(new PictureNameChangePayload()
                 {
                     Guid = _editPicture.Guid,
-                    PictureName = EditPictureName
+                    NewPictureName = EditPictureName
                 });
                 window.Close();
             }
@@ -107,8 +92,6 @@ namespace Jw.Vepix.Wpf.ViewModels
         private IMessageDialogService _messageDialogService;
         private Picture _editPicture;
         private List<Picture> _pictures;
-        private string _editPictureName;
-        private string _prefix;
-        private string _suffix;        
+        private string _editPictureName;     
     }
 }

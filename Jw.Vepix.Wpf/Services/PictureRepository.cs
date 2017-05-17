@@ -97,6 +97,7 @@ namespace Jw.Vepix.Wpf.Services
             BitmapEncoderType encoderType)
         {
             //todo: handle exceptions
+            //todo: overwriting is not working
             bool result = true;
             if (TryDelete(fullFileName))
             {
@@ -121,6 +122,9 @@ namespace Jw.Vepix.Wpf.Services
                 return pictures;
             });
         }
+
+        public bool TrySaveAs(BitmapImage image, BitmapEncoderType encoderType) =>
+            _fileService.SaveImageAs(image, encoderType);
 
         private IFileService _fileService;
         private readonly List<string> _supportedImagesFilterList = new List<string>

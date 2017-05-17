@@ -31,6 +31,10 @@ namespace Jw.Vepix.Wpf.Utilities
             //PictureGridViewModel = container.Resolve<PictureGridViewModel>();
             TreePictureFolderViewModel = container.Resolve<PictureFolderTreeViewModel>();
             VepixWindowViewModel = container.Resolve<VepixWindowViewModel>();
+
+            Container = container;
         }
+
+        public static UnityContainer Container { get; private set; }
     }
 }

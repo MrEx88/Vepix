@@ -117,7 +117,7 @@ namespace Jw.Vepix.Wpf.ViewModels
                 .AppendLine()
                 .AppendLine("Author: Jon Wesneski").ToString();
 
-            new MessageDialogService().ShowDialog(message, "vepix - About");
+            new MessageDialogService().ShowMessage("vepix - About", message);
         }
 
         private void OnOpenPicturesFromFolder(PicturesFolderPayload picturesFolder)

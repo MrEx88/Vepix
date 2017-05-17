@@ -1,5 +1,0 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <!-- use this link as a reference to what a style library looks like (around 4:40)
-    https://app.pluralsight.com/player?course=practical-linq&author=deborah-kurata&name=practical-linq-m4-binding&clip=2 -->
-</ResourceDictionary>

@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 
 namespace Jw.Vepix.Wpf.ViewModels
 {
@@ -25,8 +26,10 @@ namespace Jw.Vepix.Wpf.ViewModels
             _modalDialog = modalDialog;
 
             _eventAggregator = eventAggregator;
-            _eventAggregator.GetEvent<PictureNameChangedEvent>().Subscribe(OnPictureNameChanged);
+            //_eventAggregator.GetEvent<PictureNameChangedEvent>().Subscribe(OnPictureNameChanged);
             _eventAggregator.GetEvent<PictureOverwrittenEvent>().Subscribe(OnPictureOverwritten);
+            
+            ArePicturesLoading = false;
 
             _pictures = new ObservableCollection<Picture>();
             _filterOn = false;
@@ -34,15 +37,36 @@ namespace Jw.Vepix.Wpf.ViewModels
 
             SearchCommand = new RelayCommand<string>(OnSearch);
             EditImageNameCommand = new RelayCommand<Picture>(OnEditImageName);
+            EditSelectedImageNamesCommand = new RelayCommand<object>(OnEditSelectedImageNamesCommand);
             CropImageCommand = new RelayCommand<Picture>(OnCropImage);
             DeleteImageCommand = new RelayCommand<Picture>(OnDeleteImage);
             CloseImageCommand = new RelayCommand<Picture>(OnCloseImage);            
-        }        
+        }
 
         public string FolderName
         {
             get { return _folderName; }
-            set { _folderName = value; NotifyPropertyChanged(); }
+            set
+            {
+                if (value != _folderName)
+                {
+                    _folderName = value;
+                    NotifyPropertyChanged(); 
+                }
+            }
+        }
+
+        public bool ArePicturesLoading
+        {
+            get { return _arePicturesLoading; }
+            set
+            {
+                if (value != _arePicturesLoading)
+                {
+                    _arePicturesLoading = value;
+                    NotifyPropertyChanged(); 
+                }
+            }
         }
 
         public ObservableCollection<Picture> Pictures
@@ -65,6 +89,7 @@ namespace Jw.Vepix.Wpf.ViewModels
         
         public RelayCommand<string> SearchCommand { get; private set; }
         public RelayCommand<Picture> EditImageNameCommand { get; private set; }
+        public RelayCommand<object> EditSelectedImageNamesCommand { get; private set; }
         public RelayCommand<Picture> CropImageCommand { get; private set; }
         public RelayCommand<Picture> DeleteImageCommand { get; private set; }
         public RelayCommand<Picture> CloseImageCommand { get; private set; }
@@ -86,23 +111,20 @@ namespace Jw.Vepix.Wpf.ViewModels
 
         private void OnEditImageName(Picture picture)
         {
-            SelectedPicture = picture;
-            ICollectionDialogService dialog = new PictureDialogService(
-                DialogType.EditNames,
-                _eventAggregator,
-                _modalDialog,
-                new List<Picture>() { picture });
-            dialog.ShowVepixDialog();
+            new MessageDialogService().ShowInput("Edit Image Name", picture.ImageName);
+        }
+
+        private void OnEditSelectedImageNamesCommand()
+        {
+            _eventAggregator.GetEvent<PictureNameChangedEvent>().Subscribe(OnPictureNameChanged);
+            new PicturesFyloutService(FlyoutViewType.EditNames)
+                .ShowVepixFlyout<EditNamesViewModel>(Pictures.ToList());
         }
 
         private void OnCropImage(Picture picture)
         {
-            ICollectionDialogService dialog = new PictureDialogService(
-                DialogType.CropImages,
-                _eventAggregator,
-                _modalDialog,
-                new List<Picture>() { picture });
-            dialog.ShowVepixDialog();
+            new PicturesFyloutService(FlyoutViewType.Viewer)
+                .ShowVepixFlyout<PicturesViewerViewModel>(Pictures.ToList());
         }
 
         private void OnDeleteImage(Picture picture)
@@ -124,11 +146,16 @@ namespace Jw.Vepix.Wpf.ViewModels
         private void OnPictureNameChanged(PictureNameChangePayload payload)
         {
             var changedPicture = Pictures.FirstOrDefault(pic => pic.Guid == payload.Guid);
-            var index = Pictures.IndexOf(changedPicture);
-            Pictures.Remove(changedPicture);
-            SelectedPicture.FullFileName =
-                SelectedPicture.FolderPath + payload.PictureName + SelectedPicture.FileExtension;
-            Pictures.Insert(index, changedPicture);
+            if (changedPicture != null)
+            {
+                var index = Pictures.IndexOf(changedPicture);
+                Pictures.RemoveAt(index);
+                changedPicture.FullFileName = changedPicture.FolderPath + payload.NewPictureName + changedPicture.FileExtension;
+                Pictures.Insert(index, changedPicture);
+                NotifyPropertyChanged(() => Pictures);
+            }
+
+            _eventAggregator.GetEvent<PictureNameChangedEvent>().Unsubscribe(OnPictureNameChanged);
         }
 
         private void OnPictureOverwritten(Guid guid)
@@ -142,8 +169,10 @@ namespace Jw.Vepix.Wpf.ViewModels
         public void Load(List<string> pictureFileNames)
         {
             Pictures = new ObservableCollection<Picture>();
+            ArePicturesLoading = true;
             FolderName = new System.IO.DirectoryInfo(System.IO.Path.GetDirectoryName(pictureFileNames.First())).Name + "*";
-            TaskRunner.WaitAllOneByOne(pictureFileNames, _pictureRepo.GetPictureAsync, Pictures.Add);
+            TaskRunner.WaitAllOneByOne(pictureFileNames, _pictureRepo.GetPictureAsync, Pictures.Add,
+                () => ArePicturesLoading = false);
         }
 
         public async void Load(string folderPath)
@@ -151,8 +180,10 @@ namespace Jw.Vepix.Wpf.ViewModels
             Pictures = new ObservableCollection<Picture>();
             FolderName = new System.IO.DirectoryInfo(folderPath).Name;
 
+            ArePicturesLoading = true;
             List<string> fileNames = await _pictureRepo.GetFileNamesAsync(folderPath);
-            TaskRunner.WaitAllOneByOne(fileNames, _pictureRepo.GetPictureAsync, Pictures.Add);
+            TaskRunner.WaitAllOneByOne(fileNames, _pictureRepo.GetPictureAsync, Pictures.Add,
+                () => ArePicturesLoading = false);
         }
 
         private IEventAggregator _eventAggregator;
@@ -162,5 +193,6 @@ namespace Jw.Vepix.Wpf.ViewModels
         private bool _filterOn;
         private string _searchFilter;
         private IPictureRepository _pictureRepo;
+        private bool _arePicturesLoading;
     }
 }

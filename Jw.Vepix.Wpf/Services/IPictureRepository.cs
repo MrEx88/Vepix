@@ -82,7 +82,15 @@ namespace Jw.Vepix.Wpf.Services
         /// <param name="croppedImage">The new picture to overwrite</param>
         /// <param name="fullFileName">The file name of the picture</param>
         /// <param name="encoderType">The encoder type</param>
-        /// <returns>True if the file has been overwritten</returns>
+        /// <returns>True if the image file has been overwritten</returns>
         bool TryOverWrite(BitmapImage croppedImage, string fullFileName, BitmapEncoderType encoderType);
+
+        /// <summary>
+        /// Trys to save the image as a new image.
+        /// </summary>
+        /// <param name="image">The image to save</param>
+        /// <param name="encoderType">The encoder type</param>
+        /// <returns>True if the image file has been created</returns>
+        bool TrySaveAs(BitmapImage image, BitmapEncoderType encoderType);
     }
 }

@@ -1,4 +1,7 @@
-﻿using System.ComponentModel;
+﻿using Prism.Mvvm;
+using System;
+using System.ComponentModel;
+using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 
 namespace Jw.Vepix.Wpf.ViewModels
@@ -13,6 +16,12 @@ namespace Jw.Vepix.Wpf.ViewModels
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
+        }
+
+        protected void NotifyPropertyChanged<T>(Expression<Func<T>> propertyExpression)
+        {
+            string propertyName = PropertySupport.ExtractPropertyName(propertyExpression);
+            PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
