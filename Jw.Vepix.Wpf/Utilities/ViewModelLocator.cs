@@ -1,4 +1,7 @@
-﻿using Jw.Vepix.Wpf.Services;
+﻿using Jw.Vepix.Core.Interfaces;
+using Jw.Vepix.Core.Services;
+using Jw.Vepix.Infrastructure.Data;
+using Jw.Vepix.Wpf.Services;
 using Jw.Vepix.Wpf.ViewModels;
 using Microsoft.Practices.Unity;
 using Prism.Events;

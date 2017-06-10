@@ -1,4 +1,4 @@
-﻿using Jw.Vepix.Data.Payloads;
+﻿using Jw.Vepix.Wpf.Payloads;
 using Prism.Events;
 
 namespace Jw.Vepix.Wpf.Events

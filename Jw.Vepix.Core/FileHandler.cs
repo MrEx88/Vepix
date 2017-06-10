@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
 
-namespace Jw.Vepix.Common
+namespace Jw.Vepix.Core
 {
     public static class FileHandler
     {

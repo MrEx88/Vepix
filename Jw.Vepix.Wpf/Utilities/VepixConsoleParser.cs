@@ -1,4 +1,4 @@
-﻿using Jw.Vepix.Data;
+﻿using Jw.Vepix.Wpf.Results;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,6 +12,11 @@ namespace Jw.Vepix.Wpf.Utilities
 {
     public class VepixConsoleParser
     {
+        // todo: Now I know the difference between file filters and search patterns
+        // filefilters = "Image Files|*.jpg;*.jpeg;*.png;*.gif" (filter for image file format types)
+        // search patterns = "1*.jpg" or "r*.*"
+        // for command line, i will change search patterns to allow something like "*.*"
+        // when getting the files here, I still need to do the image file filter 
         public List<string> TopDirectories { get; private set; }
         public List<string> AllDirectories { get; private set; }
         public List<string> SearchPatterns { get; private set; }
@@ -33,11 +38,11 @@ namespace Jw.Vepix.Wpf.Utilities
             .AppendLine(AllDirectoriesHelp)
             .AppendLine(SearchPatternHelp).ToString();
 
-        public static VepixConsole ConsoleInstance()
+        public static VepixConsoleResults ConsoleInstance()
         {
             if (_vepixConsole == null)
             {
-                _vepixConsole = new VepixConsole(new List<string>(), new List<string>(), new List<string>());
+                _vepixConsole = new VepixConsoleResults(new List<string>(), new List<string>(), new List<string>());
             }
 
             return _vepixConsole;
@@ -63,7 +68,7 @@ namespace Jw.Vepix.Wpf.Utilities
             var allDirectories = GetArgsOf(ALL_DIRECTORIES_SWITCH, argsList, ValidateDirectories);
             var searchPatterns = GetArgsOf(SEARCH_PATTERN_SWITCH, argsList, ValidateSearchPattern);
 
-            _vepixConsole = new VepixConsole(topDirectories, allDirectories, searchPatterns);
+            _vepixConsole = new VepixConsoleResults(topDirectories, allDirectories, searchPatterns);
 
             return true;
         }
@@ -137,7 +142,7 @@ namespace Jw.Vepix.Wpf.Utilities
         private static extern bool FreeConsole();
         #endregion
 
-        private static VepixConsole _vepixConsole;
+        private static VepixConsoleResults _vepixConsole;
         private const string SWITCH_TOKEN = "-";
         private const string TOP_DIRECTORY_SWITCH = "-d";
         private const string ALL_DIRECTORIES_SWITCH = "-a";

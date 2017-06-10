@@ -1,11 +1,10 @@
-﻿using Jw.Vepix.Common;
-using Jw.Vepix.Data;
+﻿using Jw.Vepix.Core.Models;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
-namespace Jw.Vepix.Wpf.Services
+namespace Jw.Vepix.Core.Interfaces
 {
     public interface IPictureRepository
     {
@@ -54,12 +53,6 @@ namespace Jw.Vepix.Wpf.Services
         /// <param name="option">The SearchOption enum to use</param>
         /// <returns>A List of picture file names</returns>
         Task<List<string>> GetFileNamesAsync(string folderPath, SearchOption option = SearchOption.TopDirectoryOnly);
-
-        /// <summary>
-        /// Gets pictures from the command line.
-        /// </summary>
-        /// <returns>A List of pictures</returns>
-        Task<List<Picture>> GetPicturesFromCommandLineAsync();
 
         /// <summary>
         /// Trys to change the name of the picture.

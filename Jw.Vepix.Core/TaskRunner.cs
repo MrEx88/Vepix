@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Jw.Vepix.Common
+namespace Jw.Vepix.Core
 {
     public static class TaskRunner
     {

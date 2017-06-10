@@ -1,4 +1,5 @@
-﻿using Jw.Vepix.Data;
+﻿using Jw.Vepix.Core.Interfaces;
+using Jw.Vepix.Core.Models;
 using Jw.Vepix.Wpf.Events;
 using Jw.Vepix.Wpf.Services;
 using Jw.Vepix.Wpf.ViewModels;

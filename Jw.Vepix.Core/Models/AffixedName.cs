@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Jw.Vepix.Data
+namespace Jw.Vepix.Core.Models
 {
-    public class EditNameAffix : INotifyPropertyChanged
+    public class AffixedName : INotifyPropertyChanged
     {
-        public EditNameAffix(string name)
+        public AffixedName(string name)
         {
             _name = name;
         }

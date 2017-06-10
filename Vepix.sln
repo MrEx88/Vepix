@@ -9,9 +9,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B667648D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jw.Vepix.Wpf.Tests", "Jw.Vepix.Wpf.Tests\Jw.Vepix.Wpf.Tests.csproj", "{91A4DE78-FD24-46B7-AC7B-43DC9CE467D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jw.Vepix.Data", "Jw.Vepix.Data\Jw.Vepix.Data.csproj", "{9682FF8C-3E2E-4451-B167-86DB83E15D52}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jw.Vepix.Core", "Jw.Vepix.Core\Jw.Vepix.Core.csproj", "{66593704-57C0-4A0C-8E2F-A74F2D4AAE59}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jw.Vepix.Common", "Jw.Vepix.Common\Jw.Vepix.Common.csproj", "{66593704-57C0-4A0C-8E2F-A74F2D4AAE59}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jw.Vepix.Infrastructure", "Jw.Vepix.Infrastructure\Jw.Vepix.Infrastructure.csproj", "{FB496997-F4BB-4B12-9408-4F76EABACEC5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,14 +27,14 @@ Global
 		{91A4DE78-FD24-46B7-AC7B-43DC9CE467D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91A4DE78-FD24-46B7-AC7B-43DC9CE467D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91A4DE78-FD24-46B7-AC7B-43DC9CE467D7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9682FF8C-3E2E-4451-B167-86DB83E15D52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9682FF8C-3E2E-4451-B167-86DB83E15D52}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9682FF8C-3E2E-4451-B167-86DB83E15D52}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9682FF8C-3E2E-4451-B167-86DB83E15D52}.Release|Any CPU.Build.0 = Release|Any CPU
 		{66593704-57C0-4A0C-8E2F-A74F2D4AAE59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{66593704-57C0-4A0C-8E2F-A74F2D4AAE59}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66593704-57C0-4A0C-8E2F-A74F2D4AAE59}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66593704-57C0-4A0C-8E2F-A74F2D4AAE59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB496997-F4BB-4B12-9408-4F76EABACEC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB496997-F4BB-4B12-9408-4F76EABACEC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB496997-F4BB-4B12-9408-4F76EABACEC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB496997-F4BB-4B12-9408-4F76EABACEC5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

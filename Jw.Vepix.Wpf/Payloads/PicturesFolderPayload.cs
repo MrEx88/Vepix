@@ -1,4 +1,5 @@
-﻿namespace Jw.Vepix.Data
+﻿
+namespace Jw.Vepix.Wpf.Payloads
 {
     public class PicturesFolderPayload
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Jw.Vepix.Data.Payloads
+namespace Jw.Vepix.Wpf.Payloads
 {
     public class PictureNameChangePayload
     {

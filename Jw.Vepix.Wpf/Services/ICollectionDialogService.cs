@@ -1,4 +1,4 @@
-﻿using Jw.Vepix.Data;
+﻿using Jw.Vepix.Core.Models;
 using Jw.Vepix.Wpf.ViewModels;
 using System.Collections.Generic;
 

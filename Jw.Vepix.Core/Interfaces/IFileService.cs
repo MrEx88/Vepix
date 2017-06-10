@@ -1,11 +1,10 @@
-﻿using Jw.Vepix.Common;
-using Jw.Vepix.Data;
+﻿using Jw.Vepix.Core.Models;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
-namespace Jw.Vepix.Wpf.Services
+namespace Jw.Vepix.Core.Interfaces
 {
     public interface IFileService
     {

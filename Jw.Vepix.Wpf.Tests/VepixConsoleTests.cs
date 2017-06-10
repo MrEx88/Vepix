@@ -1,4 +1,4 @@
-﻿using Jw.Vepix.Data;
+﻿using Jw.Vepix.Wpf.Results;
 using Jw.Vepix.Wpf.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -14,7 +14,7 @@ namespace Jw.Vepix.Wpf.Tests
         // Assert.
 
         VepixConsoleParser _consoleParser = new VepixConsoleParser();
-        VepixConsole _console = VepixConsoleParser.ConsoleInstance();
+        VepixConsoleResults _console = VepixConsoleParser.ConsoleInstance();
         string _validPath = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
         string validSearchPattern = "*.jpg";
 

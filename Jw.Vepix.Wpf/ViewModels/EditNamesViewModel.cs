@@ -1,13 +1,13 @@
-﻿using Jw.Vepix.Data;
+﻿using Jw.Vepix.Core.Interfaces;
+using Jw.Vepix.Core.Models;
+using Jw.Vepix.Wpf.Events;
+using Jw.Vepix.Wpf.Payloads;
 using Jw.Vepix.Wpf.Services;
 using Jw.Vepix.Wpf.Utilities;
 using Prism.Events;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System;
-using Jw.Vepix.Wpf.Events;
-using Jw.Vepix.Data.Payloads;
 
 namespace Jw.Vepix.Wpf.ViewModels
 {
@@ -169,7 +169,7 @@ namespace Jw.Vepix.Wpf.ViewModels
             }
         }
 
-        public ObservableCollection<EditNameAffix> EditPictureNames
+        public ObservableCollection<AffixedName> EditPictureNames
         {
             get
             {
@@ -194,16 +194,16 @@ namespace Jw.Vepix.Wpf.ViewModels
         {
             Pictures = new ObservableCollection<Picture>(pictures);
 
-            EditPictureNames = new ObservableCollection<EditNameAffix>();
+            EditPictureNames = new ObservableCollection<AffixedName>();
             Pictures.ToList().ForEach(pic =>
-                EditPictureNames.Add(new EditNameAffix(pic.ImageName)));
+                EditPictureNames.Add(new AffixedName(pic.ImageName)));
         }
 
         private IPictureRepository _pictureRepository;
         private IMessageDialogService _messageDialogService;
         private IEventAggregator _eventAggregator;
         private ObservableCollection<Picture> _pictures;
-        private ObservableCollection<EditNameAffix> _editPictureNames;
+        private ObservableCollection<AffixedName> _editPictureNames;
         private string _prefix;
         private string _suffix;
     }

@@ -111,23 +111,21 @@
     <Compile Include="Events\PictureOverwrittenEvent.cs" />
     <Compile Include="Events\PicturesFinishedLoadingEvent.cs" />
     <Compile Include="Events\UpdatePictureNameEvent.cs" />
+    <Compile Include="Payloads\PictureNameChangePayload.cs" />
+    <Compile Include="Payloads\PicturesFolderPayload.cs" />
     <Compile Include="Services\FileExplorerDialogService.cs" />
     <Compile Include="Services\ICollectionDialogService.cs" />
     <Compile Include="Services\IFileExplorerDialogService.cs" />
-    <Compile Include="Services\IFileService.cs" />
     <Compile Include="Services\IPictureDialogService.cs" />
     <Compile Include="Services\PicturesFlyoutService.cs" />
     <Compile Include="Utilities\CmdOptions.cs" />
     <Compile Include="Utilities\CropSelectionCanvas.cs" />
     <Compile Include="Utilities\RelayCommand.cs" />
     <Compile Include="Utilities\VepixConsoleParser.cs" />
+    <Compile Include="Utilities\VepixConsoleResults.cs" />
     <Compile Include="Utilities\ViewModelLocator.cs" />
-    <Compile Include="Services\BitmapService.cs" />
     <Compile Include="Services\MessageDialogService.cs" />
-    <Compile Include="Services\FileService.cs" />
     <Compile Include="Services\IMessageDialogService.cs" />
-    <Compile Include="Services\IPictureRepository.cs" />
-    <Compile Include="Services\PictureRepository.cs" />
     <Compile Include="ViewModels\EditNameDialogViewModel.cs" />
     <Compile Include="ViewModels\EditNamesViewModel.cs" />
     <Compile Include="ViewModels\ICollectionViewModel.cs" />
@@ -230,13 +228,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Jw.Vepix.Common\Jw.Vepix.Common.csproj">
+    <ProjectReference Include="..\Jw.Vepix.Core\Jw.Vepix.Core.csproj">
       <Project>{66593704-57C0-4A0C-8E2F-A74F2D4AAE59}</Project>
-      <Name>Jw.Vepix.Common</Name>
+      <Name>Jw.Vepix.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Jw.Vepix.Data\Jw.Vepix.Data.csproj">
-      <Project>{9682FF8C-3E2E-4451-B167-86DB83E15D52}</Project>
-      <Name>Jw.Vepix.Data</Name>
+    <ProjectReference Include="..\Jw.Vepix.Infrastructure\Jw.Vepix.Infrastructure.csproj">
+      <Project>{FB496997-F4BB-4B12-9408-4F76EABACEC5}</Project>
+      <Name>Jw.Vepix.Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

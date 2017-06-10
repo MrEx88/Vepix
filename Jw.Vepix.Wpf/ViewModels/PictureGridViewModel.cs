@@ -1,7 +1,9 @@
-﻿using Jw.Vepix.Common;
-using Jw.Vepix.Data;
-using Jw.Vepix.Data.Payloads;
+﻿using Jw.Vepix.Core;
+using Jw.Vepix.Core.Extensions;
+using Jw.Vepix.Core.Interfaces;
+using Jw.Vepix.Core.Models;
 using Jw.Vepix.Wpf.Events;
+using Jw.Vepix.Wpf.Payloads;
 using Jw.Vepix.Wpf.Services;
 using Jw.Vepix.Wpf.Utilities;
 using Prism.Events;
@@ -10,7 +12,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows;
 
 namespace Jw.Vepix.Wpf.ViewModels
 {
@@ -170,7 +171,8 @@ namespace Jw.Vepix.Wpf.ViewModels
         {
             Pictures = new ObservableCollection<Picture>();
             ArePicturesLoading = true;
-            FolderName = new System.IO.DirectoryInfo(System.IO.Path.GetDirectoryName(pictureFileNames.First())).Name + "*";
+            // "*" is used to differentiate some pictures in a folder as opposed to all pictures in a folder.
+            FolderName = pictureFileNames.First().ToFilesFolderName() + "*"; 
             TaskRunner.WaitAllOneByOne(pictureFileNames, _pictureRepo.GetPictureAsync, Pictures.Add,
                 () => ArePicturesLoading = false);
         }
@@ -178,7 +180,7 @@ namespace Jw.Vepix.Wpf.ViewModels
         public async void Load(string folderPath)
         {
             Pictures = new ObservableCollection<Picture>();
-            FolderName = new System.IO.DirectoryInfo(folderPath).Name;
+            FolderName = folderPath.ToFoldersName();
 
             ArePicturesLoading = true;
             List<string> fileNames = await _pictureRepo.GetFileNamesAsync(folderPath);

@@ -1,12 +1,12 @@
-﻿using Jw.Vepix.Common;
-using Jw.Vepix.Data;
+﻿using Jw.Vepix.Core.Extensions;
+using Jw.Vepix.Core.Models;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
 
-namespace Jw.Vepix.Wpf.Services
+namespace Jw.Vepix.Core.Services
 {
     public static class BitmapService
     {
@@ -28,21 +28,23 @@ namespace Jw.Vepix.Wpf.Services
             var pictures = new List<Picture>();
             await Task.Factory.StartNew(() =>
             {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
+                //Application.Current.Dispatcher.Invoke(() =>
+                //{
                     foreach (var file in files)
                     {
                         var bitmapImage = new BitmapImage();
-                        var stream = new MemoryStream(file.Value);
-                        stream.Seek(0, SeekOrigin.Begin);
-                        bitmapImage.BeginInit();
-                        bitmapImage.StreamSource = stream;
-                        bitmapImage.EndInit();
-                        var picture = new Picture(bitmapImage, file.Key);
+                        using (var stream = new MemoryStream(file.Value))
+                        {
+                            stream.Seek(0, SeekOrigin.Begin);
+                            bitmapImage.BeginInit();
+                            bitmapImage.StreamSource = stream;
+                            bitmapImage.EndInit();
+                            var picture = new Picture(bitmapImage, file.Key);
 
-                        pictures.Add(picture);
+                            pictures.Add(picture);
+                        }
                     }
-                });
+                //});
             });
 
             return pictures;

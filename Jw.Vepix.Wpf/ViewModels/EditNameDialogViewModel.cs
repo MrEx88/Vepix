@@ -1,6 +1,7 @@
-﻿using Jw.Vepix.Data;
-using Jw.Vepix.Data.Payloads;
+﻿using Jw.Vepix.Core.Interfaces;
+using Jw.Vepix.Core.Models;
 using Jw.Vepix.Wpf.Events;
+using Jw.Vepix.Wpf.Payloads;
 using Jw.Vepix.Wpf.Services;
 using Jw.Vepix.Wpf.Utilities;
 using Prism.Events;

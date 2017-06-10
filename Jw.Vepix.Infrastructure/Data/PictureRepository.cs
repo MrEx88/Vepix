@@ -1,19 +1,20 @@
-﻿using Jw.Vepix.Common;
-using Jw.Vepix.Data;
-using Jw.Vepix.Wpf.Utilities;
+﻿using Jw.Vepix.Core;
+using Jw.Vepix.Core.Interfaces;
+using Jw.Vepix.Core.Models;
+using Jw.Vepix.Core.Services;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
-namespace Jw.Vepix.Wpf.Services
+namespace Jw.Vepix.Infrastructure.Data
 {
     public class PictureRepository : IPictureRepository
     {
-        public PictureRepository()
+        public PictureRepository(IFileService fileService)
         {
-            _fileService = new FileService();
+            _fileService = fileService;
         }
 
         //todo do I need to put async/await keywords here; what is the difference
@@ -29,33 +30,6 @@ namespace Jw.Vepix.Wpf.Services
         {
             var fileBytes = await _fileService.GetFilesBytesAsync(pictureFileNames);
             return await LoadPicturesAsync(fileBytes);
-        }
-
-        public async Task<List<Picture>> GetPicturesFromCommandLineAsync()
-        {
-            // todo: Now I know the difference between file filters and search patterns
-            // filefilters = "Image Files|*.jpg;*.jpeg;*.png;*.gif" (filter for image file format types)
-            // search patterns = "1*.jpg" or "r*.*"
-            // for command line, i will change search patterns to allow something like "*.*"
-            // when getting the files here, I still need to do the image file filter 
-            List<Picture> pictures = new List<Picture>();
-
-            await Task.Factory.StartNew(() =>
-            {
-                var console = VepixConsoleParser.ConsoleInstance();
-                foreach (var dir in console.TopDirectories)
-                {
-                    pictures.AddRange(GetPicturesFromFolderAsync(dir, 
-                        SearchOption.TopDirectoryOnly, console.SearchPatterns.ToArray()).Result);
-                }
-                foreach (var dir in console.AllDirectories)
-                {
-                    pictures.AddRange(GetPicturesFromFolderAsync(dir,
-                        SearchOption.AllDirectories, console.SearchPatterns.ToArray()).Result);
-                }
-            });
-
-            return pictures;
         }
 
         public async Task<List<Picture>> GetPicturesFromFolderAsync(string folderPath,

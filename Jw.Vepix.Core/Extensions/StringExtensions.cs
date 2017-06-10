@@ -1,14 +1,14 @@
 ﻿using System.IO;
 
-namespace Jw.Vepix.Common
+namespace Jw.Vepix.Core.Extensions
 {
     public static class StringExtensions
     {
-        public static bool IsSubDirectoryOf(this string directory, string otherDirectory)
+        public static bool IsSubFolderOf(this string folder, string otherFolder)
         {
             var isChild = false;
-            var directoryInfo = new DirectoryInfo(directory);
-            var otherDirectoryInfo = new DirectoryInfo(otherDirectory);
+            var directoryInfo = new DirectoryInfo(folder);
+            var otherDirectoryInfo = new DirectoryInfo(otherFolder);
 
             while (directoryInfo.Parent != null)
             {
@@ -25,6 +25,12 @@ namespace Jw.Vepix.Common
 
             return isChild;
         }
+
+        public static string ToFilesFolderName(this string file)
+            => Path.GetDirectoryName(file).ToFoldersName();
+
+        public static string ToFoldersName(this string folder)
+            => new DirectoryInfo(folder).Name;
 
         public static BitmapEncoderType ToEncoderType(this string fileExtension)
         {
@@ -43,7 +49,7 @@ namespace Jw.Vepix.Common
                 case ".WMP":
                     return BitmapEncoderType.WMP;
                 default:
-                    throw new FileFormatException($"{fileExtension} not a valid bitmap encoder type");
+                    throw new FileFormatException($"{fileExtension} is not a valid bitmap encoder type");
             }
         }
     }

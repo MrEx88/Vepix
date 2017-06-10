@@ -1,5 +1,5 @@
-﻿using Jw.Vepix.Data;
-using Jw.Vepix.Wpf.Events;
+﻿using Jw.Vepix.Wpf.Events;
+using Jw.Vepix.Wpf.Payloads;
 using Jw.Vepix.Wpf.Utilities;
 using Prism.Events;
 using System.Collections.ObjectModel;
