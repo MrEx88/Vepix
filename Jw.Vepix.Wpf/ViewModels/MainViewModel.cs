@@ -13,9 +13,9 @@ using System.Windows.Forms;
 
 namespace Jw.Vepix.Wpf.ViewModels
 {
-    public class VepixWindowViewModel : ViewModelBase
+    public class MainViewModel : ViewModelBase
     {
-        public VepixWindowViewModel(IPictureFolderTreeViewModel pictureFolderTreeViewModel,
+        public MainViewModel(IPictureFolderTreeViewModel pictureFolderTreeViewModel,
             Func<IPictureGridViewModel> pictureGridViewModelCreator,
             IFileExplorerDialogService fileExplorerDialogService,
             IEventAggregator eventAggregator)
@@ -27,8 +27,12 @@ namespace Jw.Vepix.Wpf.ViewModels
             _pictureGridViewModelCreator = pictureGridViewModelCreator;
             _fileExplorerDialogService = fileExplorerDialogService;
 
+            _helpInfoText = "";
+
             _eventAggregator = eventAggregator;
             _eventAggregator.GetEvent<OpenPicturesFromFolderEvent>().Subscribe(OnOpenPicturesFromFolder);
+            _eventAggregator.GetEvent<StatusTextUserActionEvent>().Subscribe(OnStatusTextUserAction);
+            _eventAggregator.GetEvent<StatusTextHelpInfoEvent>().Subscribe(OnStatusTextHelpInfo);
 
             PictureGridViewModels = new ObservableCollection<IPictureGridViewModel>();
 
@@ -51,6 +55,26 @@ namespace Jw.Vepix.Wpf.ViewModels
             set
             {
                 _selectedPictureGridViewModel = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public string UserActionText
+        {
+            get { return _userActionText; }
+            set
+            {
+                _userActionText = value;
+                NotifyPropertyChanged();
+            }
+        }        
+
+        public string  HelpInfoText
+        {
+            get { return _helpInfoText; }
+            set
+            {
+                _helpInfoText = value;
                 NotifyPropertyChanged();
             }
         }
@@ -87,7 +111,7 @@ namespace Jw.Vepix.Wpf.ViewModels
         {
             // todo: think about what to do if a folder does not contain any photos
             // maybe have Load() return false??
-            // maybe just display a message in the tab saying no images in this folder??
+            // maybe just display a message in the tab saying no Pictures in this folder??
             var pictureGridViewModel = _pictureGridViewModelCreator();
             PictureGridViewModels.Add(pictureGridViewModel);
             pictureGridViewModel.Load(folderPath);
@@ -125,6 +149,16 @@ namespace Jw.Vepix.Wpf.ViewModels
             SelectedPictureGridViewModel = CreateAndLoadPictureGridViewModel(picturesFolder.AbsolutePath);
         }
 
+        private void OnStatusTextHelpInfo(string text)
+        {
+            HelpInfoText = text;
+        }
+
+        private void OnStatusTextUserAction(string text)
+        {
+            UserActionText = text;
+        }
+
         private void CheckCommandLine()
         {
             // todo: need to pass the searh patterns too
@@ -153,5 +187,7 @@ namespace Jw.Vepix.Wpf.ViewModels
         private Func<IPictureGridViewModel> _pictureGridViewModelCreator;
         private IPictureGridViewModel _selectedPictureGridViewModel;
         private IFileExplorerDialogService _fileExplorerDialogService;
+        private string _userActionText;
+        private string _helpInfoText;
     }
 }

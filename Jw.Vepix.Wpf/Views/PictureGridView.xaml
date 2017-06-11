@@ -3,26 +3,34 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:conv="clr-namespace:Jw.Vepix.Wpf.Converters"
              xmlns:local="clr-namespace:Jw.Vepix.Wpf.Views"
              xmlns:vm="clr-namespace:Jw.Vepix.Wpf.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-
+    <UserControl.Resources>
+        <conv:SelectedItemsToPicturesConverter x:Key="selectedItemsToPicturesConverter" />
+    </UserControl.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="25" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         
-        <!-- Search -->
+        <!-- Edit Names & Search -->
         <StackPanel Orientation="Horizontal"
                     Width="Auto"
-                    HorizontalAlignment="Center"
-                    Margin="5 0 0 5">
+                    HorizontalAlignment="Center">
+            
+            <CheckBox Content="Select All" />
+            
             <Button Content="Edit Names"
-                    Command="{Binding EditSelectedImageNamesCommand}"
-                    Margin="0 0 20 0" />
+                    Command="{Binding EditSelectedPictureNamesCommand}"
+                    Margin="20 0 20 0" />
+            
             <TextBlock Text="Search: " />
             <TextBox  x:Name="txtPictureSearch"
                       Width="100">
@@ -32,28 +40,73 @@
                                 CommandParameter="{Binding Text, ElementName=txtPictureSearch}"/>
                 </TextBox.InputBindings>
             </TextBox>
+            
         </StackPanel>
         
         <!-- Grid of Pictures -->
         <ScrollViewer VerticalScrollBarVisibility="Auto"
-                      Grid.Row="1">
-            <ItemsControl x:Name="imageList"
-                          ItemsSource="{Binding Path=Pictures}"
-                          BorderBrush="#FFA90606"
-                          Background="#FFA90606">
-                <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <UniformGrid Margin="50"
-                                 Background="AliceBlue">
-                    </UniformGrid>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
+                      HorizontalScrollBarVisibility="Disabled"
+                      Grid.Row="1"
+                      Margin="0 10 0 0">
+            
+            <ListView x:Name="pictureList"
+                      ItemsSource="{Binding Path=Pictures}"
+                      BorderBrush="#FFA90606">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding PicturesListSelectionChangedCommand}"
+                                               CommandParameter="{Binding ElementName=pictureList,
+                                                                          Path=SelectedItems.Count}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <ListView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="View/Edit"
+                                  Command="{Binding ViewEditPicturesCommand}"
+                                  CommandParameter="{Binding PlacementTarget.SelectedItems, 
+                                                             RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}},
+                                                             Converter={StaticResource selectedItemsToPicturesConverter}}" />
+                        <Separator />
+                        <MenuItem Header="Close"
+                                  Command="{Binding ClosePicturesCommand}"
+                                  CommandParameter="{Binding PlacementTarget.SelectedItems, 
+                                                             RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}},
+                                                             Converter={StaticResource selectedItemsToPicturesConverter}}" />
+                        <MenuItem Header="Edit names"
+                                  Command="{Binding EditSelectedPictureNamesCommand}"
+                                  CommandParameter="{Binding PlacementTarget.SelectedItems, 
+                                                             RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}},
+                                                             Converter={StaticResource selectedItemsToPicturesConverter}}" />
+                        <MenuItem Header="Copy"
+                                  Command="{Binding CopyPicturesCommand}"
+                                  CommandParameter="{Binding PlacementTarget.SelectedItems, 
+                                                             RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}},
+                                                             Converter={StaticResource selectedItemsToPicturesConverter}}" />
+                        <MenuItem Header="Move"
+                                  Command="{Binding MovePicturesCommand}"
+                                  CommandParameter="{Binding PlacementTarget.SelectedItems, 
+                                                             RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}},
+                                                             Converter={StaticResource selectedItemsToPicturesConverter}}" />
+                        <MenuItem Header="Delete"
+                                  Command="{Binding DeletePicturesCommand}"
+                                  CommandParameter="{Binding PlacementTarget.SelectedItems, 
+                                                             RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}},
+                                                             Converter={StaticResource selectedItemsToPicturesConverter}}" />
+                    </ContextMenu>
+                </ListView.ContextMenu>
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel HorizontalAlignment="Left"
+                                   MaxWidth="{Binding ElementName=pictureList, Path=ActualWidth}" />
+                    </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+                <ListView.ItemTemplate>
                     <DataTemplate>
                         <Border BorderBrush="Black"
                                 BorderThickness="2">
-                            <Grid>
-                                <Image Source="{Binding Path=BitmapImage}" />
+                            <Grid MaxHeight="200">
+                                <Image Source="{Binding Path=BitmapImage}"
+                                       MaxWidth="150" />
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="15" />
@@ -62,48 +115,55 @@
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="15" />
                                         <ColumnDefinition Width="15" />
-                                        <ColumnDefinition Width="15" />
-                                        <ColumnDefinition Width="15" />
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock x:Name="txtImageName" 
-                                           Text="{Binding ImageName}"
-                                           Grid.Column="0" />
+                                    
+                                    <TextBlock x:Name="txtPictureName" 
+                                               Text="{Binding ImageName}"
+                                               Grid.Column="0"
+                                               Foreground="White">
+                                        <TextBlock.Background>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                <GradientStop Color="#00000000" Offset="1" />
+                                                <GradientStop Color="#55000000" Offset="0.55" />
+                                                <GradientStop Color="#AA000000" Offset="0.1" />
+                                            </LinearGradientBrush>
+                                        </TextBlock.Background>
+                                    </TextBlock>
+                                    
                                     <Button x:Name="btnEditName"
-                                            Command="{Binding ElementName=imageList, Path=DataContext.EditImageNameCommand}"
+                                            Command="{Binding ElementName=pictureList, Path=DataContext.EditPictureNameCommand}"
                                             CommandParameter="{Binding}"
                                             Content="E"
                                             Grid.Column="1"
-                                            FontSize="10" />
-                                    <Button x:Name="btnCropImage"
-                                            Command="{Binding ElementName=imageList, Path=DataContext.CropImageCommand}"
-                                            CommandParameter="{Binding}"
-                                            Content="C"
-                                            Grid.Column="2"
-                                            FontSize="10" />
-                                    <Button x:Name="btnDeleteImage"
-                                            Command="{Binding ElementName=imageList, Path=DataContext.DeleteImageCommand}"
-                                            CommandParameter="{Binding}"
-                                            Content="D"
-                                            Grid.Column="3"
-                                            FontSize="10" />
-                                    <Button x:Name="btnCloseImage"
-                                            Command="{Binding ElementName=imageList, Path=DataContext.CloseImageCommand}"
+                                            FontSize="5" />
+                                    
+                                    <Button x:Name="btnClosePicture"
+                                            Command="{Binding ElementName=pictureList, Path=DataContext.ClosePictureCommand}"
                                             CommandParameter="{Binding}"
                                             Content="X"
-                                            Grid.Column="4"
-                                            FontSize="10" />
+                                            Grid.Column="2"
+                                            FontSize="5" />
                                 </Grid>
+                                
                                 <DockPanel LastChildFill="False">
                                     <TextBlock x:Name="lblDimensions" 
-                                           Text="{Binding Dimensions}"
-                                           DockPanel.Dock="Bottom"
-                                           Background="Beige" />
+                                               Text="{Binding Dimensions}"
+                                               DockPanel.Dock="Bottom"
+                                               Foreground="White">
+                                        <TextBlock.Background>
+                                            <LinearGradientBrush StartPoint="0,1" EndPoint="0,0">
+                                                <GradientStop Color="#00000000" Offset="1" />
+                                                <GradientStop Color="#55000000" Offset="0.55" />
+                                                <GradientStop Color="#AA000000" Offset="0.1" />
+                                            </LinearGradientBrush>
+                                        </TextBlock.Background>
+                                    </TextBlock>
                                 </DockPanel>
                             </Grid>
                         </Border>
                     </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+                </ListView.ItemTemplate>
+            </ListView>
         </ScrollViewer>
     </Grid>
 </UserControl>

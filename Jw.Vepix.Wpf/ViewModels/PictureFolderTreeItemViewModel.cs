@@ -9,8 +9,6 @@ using System.Linq;
 
 namespace Jw.Vepix.Wpf.ViewModels
 {
-    // maybe I don't need FolderNode class. Just have its properties here. That way
-    // I only have to manage one tree, not two.
     public class PictureFolderTreeItemViewModel : ViewModelBase, IPictureFolderTreeItemViewModel
     {
         public PictureFolderTreeItemViewModel(DirectoryInfo dirInfo, IEventAggregator eventAggregator)

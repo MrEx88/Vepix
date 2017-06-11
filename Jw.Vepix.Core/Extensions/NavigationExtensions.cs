@@ -8,6 +8,7 @@ namespace Jw.Vepix.Core.Extensions
 {
     public static class NavigationExtensions
     {
+        //todo: need to finish implementing this: https://app.pluralsight.com/library/courses/building-multi-client-end-to-end-service-oriented-applications/table-of-contents
         //public static bool IsNavigable(this PropertyInfo property)
         //{
         //    bool navigable = true;

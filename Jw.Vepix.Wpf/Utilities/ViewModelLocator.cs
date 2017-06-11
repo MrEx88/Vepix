@@ -10,10 +10,9 @@ namespace Jw.Vepix.Wpf.Utilities
 {
     public class ViewModelLocator
     {
-        public EditNameDialogViewModel EditNameDialogViewModel { get; }
         //public PictureGridViewModel PictureGridViewModel { get; }
+        public MainViewModel MainViewModel { get; }
         public PictureFolderTreeViewModel TreePictureFolderViewModel { get; }
-        public VepixWindowViewModel VepixWindowViewModel { get; }
 
         public ViewModelLocator()
         {
@@ -24,7 +23,6 @@ namespace Jw.Vepix.Wpf.Utilities
             container.RegisterType<IMessageDialogService, MessageDialogService>();
             container.RegisterType<IPictureRepository, PictureRepository>();
 
-            container.RegisterType<EditNameDialogViewModel>();
             container.RegisterType<IPictureGridViewModel, PictureGridViewModel>();
             container.RegisterType<IPictureFolderTreeViewModel, PictureFolderTreeViewModel>();
 
@@ -32,8 +30,8 @@ namespace Jw.Vepix.Wpf.Utilities
 
             //EditNameDialogViewModel = container.Resolve<EditNameDialogViewModel>();
             //PictureGridViewModel = container.Resolve<PictureGridViewModel>();
+            MainViewModel = container.Resolve<MainViewModel>();
             TreePictureFolderViewModel = container.Resolve<PictureFolderTreeViewModel>();
-            VepixWindowViewModel = container.Resolve<VepixWindowViewModel>();
 
             Container = container;
         }

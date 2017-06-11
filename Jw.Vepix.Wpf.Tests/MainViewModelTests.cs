@@ -15,7 +15,7 @@ using System.Windows.Forms;
 namespace Jw.Vepix.Wpf.Tests
 {
     [TestClass]
-    public class VepixWindowViewModelTests
+    public class MainViewModelTests
     {
 
         // <[Method/Property]NameUnderTest>_Should<ExpectedResult> _When<Condition>()
@@ -29,7 +29,7 @@ namespace Jw.Vepix.Wpf.Tests
         private Mock<IEventAggregator> _mockEventAggregator;
         private OpenPicturesFromFolderEvent _openPicturesFromFolderEvent;
         private Mock<IPictureRepository> _mockPictureRepo;
-        private VepixWindowViewModel _mockVepixWindowviewModel;
+        private MainViewModel _mockMainViewModel;
 
         [TestInitialize]
         public void Initialize()
@@ -42,7 +42,7 @@ namespace Jw.Vepix.Wpf.Tests
             _mockEventAggregator.Setup(ea => ea.GetEvent<OpenPicturesFromFolderEvent>()).
                 Returns(_openPicturesFromFolderEvent);
              _mockPictureRepo = new Mock<IPictureRepository>();
-            _mockVepixWindowviewModel = new VepixWindowViewModel(_mockPictureFolderTreeViewModel.Object,
+            _mockMainViewModel = new MainViewModel(_mockPictureFolderTreeViewModel.Object,
                 CreatePictureGridViewModel, _mockFileExplorerDialogService.Object, _mockEventAggregator.Object);
         }
 
@@ -63,7 +63,7 @@ namespace Jw.Vepix.Wpf.Tests
         [TestMethod]
         public void SelectedGridViewModel_ShouldBeNull_WhenFirstInitialized()
         {
-            Assert.IsNull(_mockVepixWindowviewModel.SelectedPictureGridViewModel);
+            Assert.IsNull(_mockMainViewModel.SelectedPictureGridViewModel);
         }
 
         [TestMethod]
@@ -74,7 +74,7 @@ namespace Jw.Vepix.Wpf.Tests
                 .Returns(DialogResult.OK);
             _mockPictureRepo.Setup(repo => repo.GetPicturesFromFolderAsync(It.IsAny<string>(), SearchOption.AllDirectories))
                 .Returns(It.IsAny<Task<List<Picture>>>());
-            _mockVepixWindowviewModel.OpenFolderCommand.Execute(SearchOption.AllDirectories);
+            _mockMainViewModel.OpenFolderCommand.Execute(SearchOption.AllDirectories);
             
             _mockPictureFolderTreeViewModel.Verify(vm => vm.Load(It.IsAny<string>()), Times.Once);
         }

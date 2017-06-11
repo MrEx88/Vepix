@@ -18,7 +18,7 @@
                 <ColumnDefinition Width="40" />
                 <ColumnDefinition Width="15" />
             </Grid.ColumnDefinitions>
-            <TextBlock x:Name="txtImageName" 
+            <TextBlock x:Name="txtPictureName" 
                        Grid.Column="0" />
             <Button Content="Save"
                     Command="{Binding SaveCommand}"
@@ -29,7 +29,7 @@
                     Grid.Column="2"
                     FontSize="10" />
         </Grid>
-        <!-- Image gets added to CropCanvas in VM -->
+        <!-- Picture gets added to CropCanvas in VM -->
         <Border BorderBrush="Black" 
                 BorderThickness="2"
                 Grid.Row="1">

@@ -31,9 +31,9 @@ namespace Jw.Vepix.Wpf.ViewModels
 
             _pictures = new ObservableCollection<Picture>();
         }
+
         public Image Image { get; private set; }
         public Picture ViewingPicture { get; set; }
-
         public CropSelectionCanvas CropCanvas { get; set; }
 
         public ObservableCollection<Picture> Pictures
@@ -58,32 +58,33 @@ namespace Jw.Vepix.Wpf.ViewModels
 
         private void OnSaveExecute()
         {
-            var croppedImage = BitmapService.CropPreview(ViewingPicture, _cropArea.Value);
-            if (_messageDialogService.ShowQuestion("Are you sure you want to overwrite this image?", "Overwrite Image?"))
+            var croppedPicture = BitmapService.CropPreview(ViewingPicture, _cropArea.Value);
+            if (_messageDialogService.ShowQuestion("Are you sure you want to overwrite this picture?", "Overwrite Picture?"))
             {
-                _pictureRepository.TryOverWrite(croppedImage, ViewingPicture.FullFileName, ViewingPicture.FileExtension.ToEncoderType());
+                _pictureRepository.TryOverWrite(croppedPicture, ViewingPicture.FullFileName, ViewingPicture.FileExtension.ToEncoderType());
                 _eventAggregator.GetEvent<PictureOverwrittenEvent>().Publish(ViewingPicture.Guid);
             }
         }
 
         private void OnSaveAsExecute()
         {
-            var croppedImage = BitmapService.CropPreview(ViewingPicture, _cropArea.Value);
+            var croppedPicture = BitmapService.CropPreview(ViewingPicture, _cropArea.Value);
             //todo create picturerepository method for this
             FileService fileService = new FileService();
-            fileService.SaveImageAs(croppedImage, BitmapEncoderType.JPEG);
+            fileService.SaveImageAs(croppedPicture, BitmapEncoderType.JPEG);
         }
 
         private bool OnSaveCanExecute() => _cropArea.HasValue;
 
         private void SetupCanvas(Picture picture)
         {
-            Image = new System.Windows.Controls.Image()
+            Image = new Image()
             {
                 Source = picture.BitmapImage,
                 Height = picture.Height,
                 Width = picture.Width
             };
+
             CropCanvas = new CropSelectionCanvas(_eventAggregator,
                 new PointBoundaries(new Point(picture.Width, picture.Height)));
             CropCanvas.Children.Add(Image);

@@ -68,7 +68,7 @@
     <Compile Include="PictureGridViewModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PictureViewModelTests.cs" />
-    <Compile Include="VepixWindowViewModelTests.cs" />
+    <Compile Include="MainViewModelTests.cs" />
     <Compile Include="VepixConsoleTests.cs" />
   </ItemGroup>
   <ItemGroup>

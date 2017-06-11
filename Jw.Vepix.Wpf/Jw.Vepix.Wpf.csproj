@@ -105,12 +105,16 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Converters\IntToVisibilityConverter.cs" />
+    <Compile Include="Converters\SelectedItemsToPicturesConverter.cs" />
     <Compile Include="Events\CropAreaDrawnEvent.cs" />
     <Compile Include="Events\PictureNameChangedEvent.cs" />
     <Compile Include="Events\OpenPicturesFromFolderEvent.cs" />
     <Compile Include="Events\PictureOverwrittenEvent.cs" />
     <Compile Include="Events\PicturesFinishedLoadingEvent.cs" />
+    <Compile Include="Events\StatusTextHelpInfoEvent.cs" />
     <Compile Include="Events\UpdatePictureNameEvent.cs" />
+    <Compile Include="Events\StatusTextUserActionEvent.cs" />
     <Compile Include="Payloads\PictureNameChangePayload.cs" />
     <Compile Include="Payloads\PicturesFolderPayload.cs" />
     <Compile Include="Services\FileExplorerDialogService.cs" />
@@ -126,23 +130,22 @@
     <Compile Include="Utilities\ViewModelLocator.cs" />
     <Compile Include="Services\MessageDialogService.cs" />
     <Compile Include="Services\IMessageDialogService.cs" />
-    <Compile Include="ViewModels\EditNameDialogViewModel.cs" />
     <Compile Include="ViewModels\EditNamesViewModel.cs" />
     <Compile Include="ViewModels\ICollectionViewModel.cs" />
     <Compile Include="ViewModels\IPictureFolderTreeItemViewModel.cs" />
     <Compile Include="ViewModels\IPictureGridViewModel.cs" />
     <Compile Include="ViewModels\IPictureFolderTreeViewModel.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\PictureFolderTreeItemViewModel.cs" />
     <Compile Include="ViewModels\PictureGridViewModel.cs" />
     <Compile Include="ViewModels\PictureFolderTreeViewModel.cs" />
     <Compile Include="ViewModels\PicturesViewerViewModel.cs" />
-    <Compile Include="ViewModels\VepixWindowViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
-    <Compile Include="Views\EditNameDialogView.xaml.cs">
-      <DependentUpon>EditNameDialogView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\EditNamesView.xaml.cs">
       <DependentUpon>EditNamesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainView.xaml.cs">
+      <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PicturesViewerView.xaml.cs">
       <DependentUpon>PicturesViewerView.xaml</DependentUpon>
@@ -166,6 +169,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\MainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\PicturesViewerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -174,7 +181,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\VepixWindow.xaml">
+    <Page Include="VepixWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -185,14 +192,10 @@
     <Compile Include="Views\PictureFolderTreeView.xaml.cs">
       <DependentUpon>PictureFolderTreeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\VepixWindow.xaml.cs">
+    <Compile Include="VepixWindow.xaml.cs">
       <DependentUpon>VepixWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\EditNameDialogView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\PictureGridView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -215,6 +218,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
