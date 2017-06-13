@@ -50,10 +50,26 @@ namespace Jw.Vepix.Core.Interfaces
         /// <summary>
         /// Changes the name of the file.
         /// </summary>
-        /// <param name="oldName">The old name of the file</param>
-        /// <param name="newName">The name to change to file to</param>
-        /// <returns>True if name changed successfully.</returns>
-        bool ChangeFileName(string oldName, string newName);
+        /// <param name="oldFileName">The name of the old file</param>
+        /// <param name="newFileName">The new file name</param>
+        /// <returns>True if file name changed successfully</returns>
+        bool ChangeFileName(string oldFileName, string newFileName);
+
+        /// <summary>
+        /// Copies the file to another location.
+        /// </summary>
+        /// <param name="sourceFileName">The name of the file to copy</param>
+        /// <param name="destinationFileName">The name of the file to copy to</param>
+        /// <returns>True if copied successfully</returns>
+        bool CopyTo(string folderName, string file);
+
+        /// <summary>
+        /// Changes the name of the file.
+        /// </summary>
+        /// <param name="sourceFileName">The name of the file to move</param>
+        /// <param name="newName">The name to move to file to</param>
+        /// <returns>True if name moved successfully</returns>
+        bool MoveTo(string folderName, string file);
 
         /// <summary>
         /// Checks if the string has a valid file name.

@@ -12,12 +12,16 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace Jw.Vepix.Wpf.ViewModels
 {
     public class PictureGridViewModel : ViewModelBase, IPictureGridViewModel
     {
-        public PictureGridViewModel(IPictureRepository pictureRepository, IEventAggregator eventAggregator, IMessageDialogService modalDialog)
+        public PictureGridViewModel(IPictureRepository pictureRepository, 
+                                    IEventAggregator eventAggregator,
+                                    IMessageDialogService modalDialog, 
+                                    IFileExplorerDialogService fileExplorerDialogService)
         {
             if (DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
                 return;
@@ -25,6 +29,8 @@ namespace Jw.Vepix.Wpf.ViewModels
             _pictureRepo = pictureRepository;
 
             _modalDialog = modalDialog;
+
+            _fileExplorerDialogService = fileExplorerDialogService;
 
             _eventAggregator = eventAggregator;
             //_eventAggregator.GetEvent<PictureNameChangedEvent>().Subscribe(OnPictureNameChanged);
@@ -139,28 +145,48 @@ namespace Jw.Vepix.Wpf.ViewModels
 
         private void OnCopyPicturesCommand(List<Picture> pictures)
         {
-            // todo: open folder dialog
-            throw new NotImplementedException();
-
-            System.Threading.Tasks.Task.Factory.StartNew(() =>
+            string folderPath;
+            if (_fileExplorerDialogService.ShowFolderBrowserDialog(out folderPath) == DialogResult.OK)
             {
-                _eventAggregator.GetEvent<StatusTextHelpInfoEvent>().Publish("Pictures have successfully copied");
-                System.Threading.Thread.Sleep(5000);
-                _eventAggregator.GetEvent<StatusTextHelpInfoEvent>().Publish(string.Empty);
-            });
+                // todo: how to handle when some pictures copy and some don't
+                // maybe refactor TryCopy to return picture name if it failed.
+                // same goes for TryMove, TryDelete, TryChangeName, 
+                if (_pictures.All(pic => _pictureRepo.TryCopy(pic, folderPath)))
+                {
+                    System.Threading.Tasks.Task.Factory.StartNew(() =>
+                    {
+                        _eventAggregator.GetEvent<StatusTextHelpInfoEvent>().Publish("Pictures have successfully copied");
+                        System.Threading.Thread.Sleep(5000);
+                        _eventAggregator.GetEvent<StatusTextHelpInfoEvent>().Publish(string.Empty);
+                    });
+                }
+                else
+                {
+                    _modalDialog.ShowMessage("Failed to move all pictures", "Make sure those names don't already exist in new location");
+                }
+            }
         }
 
         private void OnMovePicturesCommand(List<Picture> pictures)
         {
-            // todo: open folder dialog
-            throw new NotImplementedException();
-
-            System.Threading.Tasks.Task.Factory.StartNew(() =>
+            string folderPath;
+            if (_fileExplorerDialogService.ShowFolderBrowserDialog(out folderPath) == DialogResult.OK)
             {
-                _eventAggregator.GetEvent<StatusTextHelpInfoEvent>().Publish("Pictures have successfully moved");
-                System.Threading.Thread.Sleep(5000);
-                _eventAggregator.GetEvent<StatusTextHelpInfoEvent>().Publish(string.Empty);
-            });
+                // todo: how to handle when some pictures copy and some don't
+                if (_pictures.All(pic => _pictureRepo.TryMove(pic, folderPath)))
+                {
+                    System.Threading.Tasks.Task.Factory.StartNew(() =>
+                    {
+                        _eventAggregator.GetEvent<StatusTextHelpInfoEvent>().Publish("Pictures have successfully moved");
+                        System.Threading.Thread.Sleep(5000);
+                        _eventAggregator.GetEvent<StatusTextHelpInfoEvent>().Publish(string.Empty);
+                    });
+                }
+                else
+                {
+                    _modalDialog.ShowMessage("Failed to move all pictures", "Make sure those names don't already exist in new location");
+                }
+            }
         }
 
         private void OnDeletePicturesCommand(List<Picture> pictures)
@@ -255,6 +281,7 @@ namespace Jw.Vepix.Wpf.ViewModels
         private IPictureRepository _pictureRepo;
         private IEventAggregator _eventAggregator;
         private IMessageDialogService _modalDialog;
+        private IFileExplorerDialogService _fileExplorerDialogService;
         private ObservableCollection<Picture> _pictures;
         private string _folderName;
         private bool _filterOn;

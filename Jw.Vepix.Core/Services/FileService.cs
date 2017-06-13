@@ -55,9 +55,21 @@ namespace Jw.Vepix.Core.Services
             return await GetFilesBytesAsync(files);
         }
 
-        public bool ChangeFileName(string oldName, string newName)
+        public bool ChangeFileName(string sourceFileName, string destinationFileName)
         {
-            File.Move(oldName, newName);
+            File.Move(sourceFileName, destinationFileName);
+            return true;
+        }
+
+        public bool CopyTo(string folderName, string file)
+        {
+            File.Copy(file, "{folderName}\\{fileName}");
+            return true;
+        }
+
+        public bool MoveTo(string folderName, string file)
+        {
+            File.Move(file, "{folderName}\\{fileName}");
             return true;
         }
 

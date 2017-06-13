@@ -8,7 +8,9 @@
                       xmlns:vm="clr-namespace:Jw.Vepix.Wpf.ViewModels"
                       Title="vepix" Height="630" Width="1120"
                       TitleCaps="False"
-                      Icon="Resources/vepixIcon.png">
+                      Icon="Resources/vepixIcon.png"
+                      GlowBrush="Red"
+                      BorderThickness="1">
     <controls:MetroWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -60,7 +62,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        
+
         <view:MainView x:Name="mainView"
                        Grid.Row="0"
                        Margin="5 5 5 5"/>
@@ -79,6 +81,6 @@
             <StatusBarItem Content="{Binding ElementName=mainView,
                                              Path=DataContext.HelpInfoText}" />
         </StatusBar>
-        
+
     </Grid>
 </controls:MetroWindow>

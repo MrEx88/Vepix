@@ -63,6 +63,22 @@ namespace Jw.Vepix.Core.Interfaces
         bool TryChangePictureName(Picture picture, string newName);
 
         /// <summary>
+        /// Trys to copy the picture to another folder.
+        /// </summary>
+        /// <param name="picture">The picture to copy</param>
+        /// <param name="fullFolderPath">The folder to copy to</param>
+        /// <returns>True if picture has been copied</returns>
+        bool TryCopy(Picture picture, string fullFolderPath);
+
+        /// <summary>
+        /// Trys to move the picture to another folder.
+        /// </summary>
+        /// <param name="picture">The picture to move</param>
+        /// <param name="fullFolderPath">The folder to move to</param>
+        /// <returns>True if picture has been moved</returns>
+        bool TryMove(Picture picture, string fullFolderPath);
+
+        /// <summary>
         /// Trys to delete the specified picture.
         /// </summary>
         /// <param name="pictureFileName">The picture to delete</param>

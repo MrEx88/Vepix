@@ -6,6 +6,7 @@ namespace Jw.Vepix.Wpf.Services
     {
         void ShowVepixDialog(Window window);
         void CloseVepixDialog();
+        void ShowMessage(string title, string message);
         bool ShowQuestion(string message, string title);
     }
 }

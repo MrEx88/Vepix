@@ -20,29 +20,40 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         
-        <!-- Edit Names & Search -->
-        <StackPanel Orientation="Horizontal"
-                    Width="Auto"
-                    HorizontalAlignment="Center">
-            
-            <CheckBox Content="Select All" />
-            
-            <Button Content="Edit Names"
+        <!-- todo need to find a place for this -->
+        <!--<Button Content="Edit Names"
                     Command="{Binding EditSelectedPictureNamesCommand}"
-                    Margin="20 0 20 0" />
-            
-            <TextBlock Text="Search: " />
-            <TextBox  x:Name="txtPictureSearch"
-                      Width="100">
-                <TextBox.InputBindings>
-                    <KeyBinding Command="{Binding SearchCommand}"
-                                Key="Enter"
-                                CommandParameter="{Binding Text, ElementName=txtPictureSearch}"/>
-                </TextBox.InputBindings>
-            </TextBox>
-            
-        </StackPanel>
-        
+                    controls:ButtonHelper.PreserveTextCase="True"
+                    Style="{DynamicResource SquareButtonStyle}"
+                    Margin="150 0 20 0" />-->
+
+        <!-- Edit Names & Search -->
+        <DockPanel Grid.Row="0"
+                   LastChildFill="False">
+            <!-- todo: still need to find out how to do this -->
+            <!--<CheckBox Content="Select All"
+                      HorizontalAlignment="Left"
+                      DockPanel.Dock="Left"
+                      Margin="0 2 0 0" />-->
+
+            <StackPanel Orientation="Horizontal"
+                        DockPanel.Dock="Right">
+                <TextBox  x:Name="txtPictureSearch"
+                          controls:TextBoxHelper.Watermark="Search"
+                          Style="{DynamicResource SearchMetroTextBox}"
+                          controls:TextBoxHelper.ButtonCommand="{Binding SearchCommand, Mode=OneWay}"
+                          controls:TextBoxHelper.ButtonCommandParameter="{Binding ElementName=txtPictureSearch, Path=Text}"
+                          Width="100">
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Enter"
+                                    Command="{Binding SearchCommand}"
+                                    CommandParameter="{Binding Text, 
+                                                               ElementName=txtPictureSearch}"/> 
+                    </TextBox.InputBindings>
+                </TextBox>
+            </StackPanel>
+        </DockPanel>
+
         <!-- Grid of Pictures -->
         <ScrollViewer VerticalScrollBarVisibility="Auto"
                       HorizontalScrollBarVisibility="Disabled"
@@ -59,6 +70,8 @@
                                                                           Path=SelectedItems.Count}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
+                
+                <!-- Context Menu -->
                 <ListView.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="View/Edit"
@@ -97,7 +110,8 @@
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel HorizontalAlignment="Left"
-                                   MaxWidth="{Binding ElementName=pictureList, Path=ActualWidth}" />
+                                   MaxWidth="{Binding ElementName=pictureList,
+                                                      Path=ActualWidth}" />
                     </ItemsPanelTemplate>
             </ListView.ItemsPanel>
                 <ListView.ItemTemplate>
@@ -131,14 +145,16 @@
                                     </TextBlock>
                                     
                                     <Button x:Name="btnEditName"
-                                            Command="{Binding ElementName=pictureList, Path=DataContext.EditPictureNameCommand}"
+                                            Command="{Binding ElementName=pictureList, 
+                                                              Path=DataContext.EditPictureNameCommand}"
                                             CommandParameter="{Binding}"
                                             Content="E"
                                             Grid.Column="1"
                                             FontSize="5" />
                                     
                                     <Button x:Name="btnClosePicture"
-                                            Command="{Binding ElementName=pictureList, Path=DataContext.ClosePictureCommand}"
+                                            Command="{Binding ElementName=pictureList,
+                                                              Path=DataContext.ClosePictureCommand}"
                                             CommandParameter="{Binding}"
                                             Content="X"
                                             Grid.Column="2"
@@ -146,8 +162,7 @@
                                 </Grid>
                                 
                                 <DockPanel LastChildFill="False">
-                                    <TextBlock x:Name="lblDimensions" 
-                                               Text="{Binding Dimensions}"
+                                    <TextBlock Text="{Binding Dimensions}"
                                                DockPanel.Dock="Bottom"
                                                Foreground="White">
                                         <TextBlock.Background>

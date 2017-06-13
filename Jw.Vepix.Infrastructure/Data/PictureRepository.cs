@@ -59,6 +59,20 @@ namespace Jw.Vepix.Infrastructure.Data
             return result;
         }
 
+        public bool TryCopy(Picture picture, string fullFolderPath)
+        {
+            bool result = true;
+            _fileService.CopyTo(fullFolderPath, picture.ImageName);
+            return true;
+        }
+
+        public bool TryMove(Picture picture, string fullFolderPath)
+        {
+            bool result = true;
+            _fileService.MoveTo(fullFolderPath, picture.ImageName);
+            return true;
+        }
+
         public bool TryDelete(string fileName)
         {
             //todo: handle exceptions

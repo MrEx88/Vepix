@@ -36,6 +36,7 @@
             <Button x:Name="btnOpenContainingDirectory"
                     Command="{Binding OpenFolderCommand}" 
                     CommandParameter="{x:Static io:SearchOption.AllDirectories}"
+                    Style="{DynamicResource AccentedSquareButtonStyle}"
                     ToolTip="Open Folder Tree"
                     Margin="0 0 5 0">
                 <Rectangle Width="20"
@@ -50,6 +51,7 @@
             <Button x:Name="btnOpenDirectory"
                     Command="{Binding OpenFolderCommand}" 
                     CommandParameter="{x:Static io:SearchOption.TopDirectoryOnly}"
+                    Style="{DynamicResource SquareButtonStyle}"
                     ToolTip="Open Folder"
                     Margin="0 0 5 0">
                 <Rectangle Width="20"
@@ -63,6 +65,7 @@
             </Button>
             <Button x:Name="btnOpenFiles"
                     Command="{Binding OpenFilesCommand}"
+                    Style="{DynamicResource SquareButtonStyle}"
                     ToolTip="Open File(s)">
                 <Rectangle Width="20"
                            Height="20"
@@ -74,6 +77,7 @@
                 </Rectangle>
             </Button>
         </StackPanel>
+        
         <Grid Grid.Row="1"
               Margin="5 5 5 5">
             <Grid.ColumnDefinitions>

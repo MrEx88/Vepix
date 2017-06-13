@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Jw.Vepix.Wpf.Views"
+             xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
@@ -11,6 +12,7 @@
             <RowDefinition Height="15" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+        
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -18,19 +20,23 @@
                 <ColumnDefinition Width="40" />
                 <ColumnDefinition Width="15" />
             </Grid.ColumnDefinitions>
+            
             <TextBlock x:Name="txtPictureName" 
                        Grid.Column="0" />
             <Button Content="Save"
                     Command="{Binding SaveCommand}"
+                    controls:ButtonHelper.PreserveTextCase="True"
                     Grid.Column="1" 
                     FontSize="10" />
             <Button Content="Save As"
                     Command="{Binding SaveAsCommand}"
+                    controls:ButtonHelper.PreserveTextCase="True"
                     Grid.Column="2"
                     FontSize="10" />
         </Grid>
+       
         <!-- Picture gets added to CropCanvas in VM -->
-        <Border BorderBrush="Black" 
+        <Border BorderBrush="WhiteSmoke" 
                 BorderThickness="2"
                 Grid.Row="1">
             <ScrollViewer Content="{Binding CropCanvas}"
