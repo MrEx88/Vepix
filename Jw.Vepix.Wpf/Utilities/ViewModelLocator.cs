@@ -18,6 +18,7 @@ namespace Jw.Vepix.Wpf.Utilities
         {
             var container = new UnityContainer();
 
+            container.RegisterType<IEventAggregator, EventAggregator>(new ContainerControlledLifetimeManager());
             container.RegisterType<IFileExplorerDialogService, FileExplorerDialogService>();
             container.RegisterType<IFileService, FileService>();
             container.RegisterType<IMessageDialogService, MessageDialogService>();
@@ -26,9 +27,9 @@ namespace Jw.Vepix.Wpf.Utilities
             container.RegisterType<IPictureGridViewModel, PictureGridViewModel>();
             container.RegisterType<IPictureFolderTreeViewModel, PictureFolderTreeViewModel>();
 
-            container.RegisterType<IEventAggregator, EventAggregator>(new ContainerControlledLifetimeManager());
-
-            //EditNameDialogViewModel = container.Resolve<EditNameDialogViewModel>();
+            container.RegisterType<ICollectionViewModel, EditNamesViewModel>();
+            container.RegisterType<ICollectionViewModel, PicturesViewerViewModel>();
+            
             //PictureGridViewModel = container.Resolve<PictureGridViewModel>();
             MainViewModel = container.Resolve<MainViewModel>();
             TreePictureFolderViewModel = container.Resolve<PictureFolderTreeViewModel>();

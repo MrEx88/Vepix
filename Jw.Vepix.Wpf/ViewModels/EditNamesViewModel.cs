@@ -8,6 +8,7 @@ using Prism.Events;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System;
 
 namespace Jw.Vepix.Wpf.ViewModels
 {
@@ -182,6 +183,14 @@ namespace Jw.Vepix.Wpf.ViewModels
                     _editPictureNames = value;
                     NotifyPropertyChanged();
                 }
+            }
+        }
+
+        public string ViewTitle
+        {
+            get
+            {
+                return "Edit Picture Names";
             }
         }
 

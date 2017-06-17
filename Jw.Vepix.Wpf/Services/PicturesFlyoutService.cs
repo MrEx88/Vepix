@@ -1,10 +1,12 @@
 ﻿using Jw.Vepix.Core.Models;
+using Jw.Vepix.Wpf.Utilities;
 using Jw.Vepix.Wpf.ViewModels;
 using MahApps.Metro.Controls;
 using Microsoft.Practices.Unity;
 using System;
 using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Data;
 
 namespace Jw.Vepix.Wpf.Services
 {
@@ -29,10 +31,17 @@ namespace Jw.Vepix.Wpf.Services
 
         public void ShowVepixFlyout<T>(List<Picture> pictures) where T : ICollectionViewModel
         {
-            var viewModel = Utilities.ViewModelLocator.Container.Resolve<T>();
+            var viewModel = ViewModelLocator.Container.Resolve<T>();
             viewModel.Load(pictures);
             _flyout.DataContext = viewModel;
-            
+
+            var binding = new Binding();
+            binding.Source = viewModel;
+            binding.Path = new PropertyPath("ViewTitle");
+            binding.Mode = BindingMode.OneWay;
+            binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            BindingOperations.SetBinding(_flyout, Flyout.HeaderProperty, binding);
+
             _flyout.IsOpen = true;
         }
 

@@ -7,6 +7,7 @@ namespace Jw.Vepix.Wpf.ViewModels
     public interface ICollectionViewModel
     {
         ObservableCollection<Picture> Pictures { get; set; }
+        string ViewTitle { get; }
         void Load(List<Picture> pictures);
     }
 }

@@ -33,16 +33,23 @@ namespace Jw.Vepix.Wpf.ViewModels
         }
 
         public Image Image { get; private set; }
-        public Picture ViewingPicture { get; set; }
+        public Picture ViewingPicture
+        {
+            get { return _viewingPicture; }
+            set
+            {
+                if (value != _viewingPicture)
+                {
+                    _viewingPicture = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
         public CropSelectionCanvas CropCanvas { get; set; }
 
         public ObservableCollection<Picture> Pictures
         {
-            get
-            {
-                return _pictures;
-            }
-
+            get { return _pictures; }
             set
             {
                 if (value != _pictures)
@@ -55,6 +62,22 @@ namespace Jw.Vepix.Wpf.ViewModels
 
         public RelayCommand<object> SaveCommand { get; set; }
         public RelayCommand<object> SaveAsCommand { get; set; }
+
+        public string ViewTitle
+        {
+            get
+            {
+                return _viewTitle;
+            }
+            private set
+            {
+                if (value != _viewTitle)
+                {
+                    _viewTitle = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
 
         private void OnSaveExecute()
         {
@@ -101,8 +124,10 @@ namespace Jw.Vepix.Wpf.ViewModels
 
         public void Load(List<Picture> pictures)
         {
-            _pictures = new ObservableCollection<Picture>(pictures);
+            Pictures = new ObservableCollection<Picture>(pictures);
             ViewingPicture = pictures[0];
+            ViewTitle = ViewingPicture.ImageName;
+
             SetupCanvas(ViewingPicture);
         }
 
@@ -111,5 +136,7 @@ namespace Jw.Vepix.Wpf.ViewModels
         private IEventAggregator _eventAggregator;
         private ObservableCollection<Picture> _pictures;
         private Int32Rect? _cropArea;
+        private Picture _viewingPicture;
+        private string _viewTitle;
     }
 }

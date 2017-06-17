@@ -11,7 +11,14 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
-        <conv:SelectedItemsToPicturesConverter x:Key="selectedItemsToPicturesConverter" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Resources/Icons.xaml" />
+                <ResourceDictionary>
+                    <conv:SelectedItemsToPicturesConverter x:Key="selectedItemsToPicturesConverter" />
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </UserControl.Resources>
     
     <Grid>
@@ -20,7 +27,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         
-        <!-- todo need to find a place for this -->
+        <!-- todo: need to find a place for this -->
         <!--<Button Content="Edit Names"
                     Command="{Binding EditSelectedPictureNamesCommand}"
                     controls:ButtonHelper.PreserveTextCase="True"
@@ -30,24 +37,28 @@
         <!-- Edit Names & Search -->
         <DockPanel Grid.Row="0"
                    LastChildFill="False">
-            <!-- todo: still need to find out how to do this -->
-            <!--<CheckBox Content="Select All"
+            
+            <CheckBox x:Name="chkBoxSelectAll" 
+                      Content="Select All"
+                      Click="chkBoxSelectAll_Click"
                       HorizontalAlignment="Left"
                       DockPanel.Dock="Left"
-                      Margin="0 2 0 0" />-->
+                      Margin="0 2 0 0" />
 
             <StackPanel Orientation="Horizontal"
                         DockPanel.Dock="Right">
                 <TextBox  x:Name="txtPictureSearch"
                           controls:TextBoxHelper.Watermark="Search"
                           Style="{DynamicResource SearchMetroTextBox}"
-                          controls:TextBoxHelper.ButtonCommand="{Binding SearchCommand, Mode=OneWay}"
-                          controls:TextBoxHelper.ButtonCommandParameter="{Binding ElementName=txtPictureSearch, Path=Text}"
-                          Width="100">
-                    <TextBox.InputBindings>
+                          controls:TextBoxHelper.ButtonCommand="{Binding SearchCommand,
+                                                                         Mode=OneWay}"
+                          controls:TextBoxHelper.ButtonCommandParameter="{Binding ElementName=txtPictureSearch,
+                                                                                  Path=Text}"
+                          Width="150">
+                <TextBox.InputBindings>
                         <KeyBinding Key="Enter"
                                     Command="{Binding SearchCommand}"
-                                    CommandParameter="{Binding Text, 
+                                    CommandParameter="{Binding Text,
                                                                ElementName=txtPictureSearch}"/> 
                     </TextBox.InputBindings>
                 </TextBox>
@@ -85,7 +96,7 @@
                                   CommandParameter="{Binding PlacementTarget.SelectedItems, 
                                                              RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}},
                                                              Converter={StaticResource selectedItemsToPicturesConverter}}" />
-                        <MenuItem Header="Edit names"
+                        <MenuItem Header="Edit name(s)"
                                   Command="{Binding EditSelectedPictureNamesCommand}"
                                   CommandParameter="{Binding PlacementTarget.SelectedItems, 
                                                              RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}},
@@ -119,61 +130,130 @@
                         <Border BorderBrush="Black"
                                 BorderThickness="2">
                             <Grid MaxHeight="200">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="15" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="15" />
+                                </Grid.RowDefinitions>
                                 <Image Source="{Binding Path=BitmapImage}"
+                                       Grid.Row="0"
+                                       Grid.RowSpan="3"
                                        MaxWidth="150" />
-                                <Grid>
+                                
+                                <Grid Grid.Row="0">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="15" />
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="15" />
-                                        <ColumnDefinition Width="15" />
                                     </Grid.ColumnDefinitions>
-                                    
-                                    <TextBlock x:Name="txtPictureName" 
+
+                                    <!-- Name, Edit name button, Close button -->
+                                    <Grid Grid.Column="0"
+                                          Grid.ColumnSpan="3">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="15" />
+                                            <ColumnDefinition Width="15" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.Background>
+                                            <LinearGradientBrush StartPoint="0,0"
+                                                                 EndPoint="0,1">
+                                                <GradientStop Color="#00000000"
+                                                              Offset="1" />
+                                                <GradientStop Color="#77000000"
+                                                              Offset="0.55" />
+                                                <GradientStop Color="#DD000000"
+                                                              Offset="0.1" />
+                                            </LinearGradientBrush>
+                                        </Grid.Background>
+                                        <TextBlock x:Name="txtPictureName" 
                                                Text="{Binding ImageName}"
                                                Grid.Column="0"
                                                Foreground="White">
-                                        <TextBlock.Background>
-                                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                                <GradientStop Color="#00000000" Offset="1" />
-                                                <GradientStop Color="#55000000" Offset="0.55" />
-                                                <GradientStop Color="#AA000000" Offset="0.1" />
-                                            </LinearGradientBrush>
-                                        </TextBlock.Background>
-                                    </TextBlock>
-                                    
-                                    <Button x:Name="btnEditName"
-                                            Command="{Binding ElementName=pictureList, 
-                                                              Path=DataContext.EditPictureNameCommand}"
-                                            CommandParameter="{Binding}"
-                                            Content="E"
-                                            Grid.Column="1"
-                                            FontSize="5" />
-                                    
-                                    <Button x:Name="btnClosePicture"
-                                            Command="{Binding ElementName=pictureList,
-                                                              Path=DataContext.ClosePictureCommand}"
-                                            CommandParameter="{Binding}"
-                                            Content="X"
-                                            Grid.Column="2"
-                                            FontSize="5" />
+                                            <TextBlock.Effect>
+                                                <DropShadowEffect Color="Black"
+                                                                  ShadowDepth="1"
+                                                                  BlurRadius="1" />
+                                            </TextBlock.Effect>
+                                        </TextBlock>
+
+                                        <Button x:Name="btnEditName"
+                                                Command="{Binding ElementName=pictureList, 
+                                                                  Path=DataContext.EditPictureNameCommand}"
+                                                CommandParameter="{Binding}"
+                                                Grid.Column="1"
+                                                Background="Transparent"
+                                                BorderBrush="Transparent"
+                                                BorderThickness="0"
+                                                ToolTip="Edit picture name"
+                                                Padding="0 -11 0 0">
+                                            <Button.Effect>
+                                                <DropShadowEffect Color="Black"
+                                                                  ShadowDepth="1"
+                                                                  BlurRadius="1" />
+                                            </Button.Effect>
+                                            
+                                            <Rectangle Height="13" 
+                                                       Width="10" 
+                                                       Fill="White">
+                                                <Rectangle.OpacityMask>
+                                                    <VisualBrush Stretch="Fill"
+                                                                 Visual="{DynamicResource appbar_edit}" />
+                                                </Rectangle.OpacityMask>
+                                            </Rectangle>
+                                        </Button>
+
+                                        <Button x:Name="btnClosePicture"
+                                                Command="{Binding ElementName=pictureList,
+                                                                  Path=DataContext.ClosePictureCommand}"
+                                                CommandParameter="{Binding}"
+                                                Grid.Column="2"
+                                                Background="Transparent"
+                                                BorderBrush="Transparent"
+                                                BorderThickness="0"
+                                                ToolTip="close picture"
+                                                Padding="0 -11 0 0">
+                                            <Button.Effect>
+                                                <DropShadowEffect Color="Black"
+                                                                  ShadowDepth="1"
+                                                                  BlurRadius="1" />
+                                            </Button.Effect>
+                                            
+                                            <Rectangle Height="10" 
+                                                       Width="8"
+                                                       Fill="White">
+                                                <Rectangle.OpacityMask>
+                                                    <VisualBrush Stretch="Fill"
+                                                                 Visual="{DynamicResource appbar_close}" />
+                                                </Rectangle.OpacityMask>
+                                            </Rectangle>
+                                        </Button>
+                                    </Grid>
                                 </Grid>
                                 
-                                <DockPanel LastChildFill="False">
+                                <!-- Dimensions -->
+                                <Grid Grid.Row="2">
+                                    <Grid.Background>
+                                        <LinearGradientBrush StartPoint="0,1"
+                                                             EndPoint="0,0">
+                                            <GradientStop Color="#00000000"
+                                                          Offset="1" />
+                                            <GradientStop Color="#55000000"
+                                                          Offset="0.55" />
+                                            <GradientStop Color="#AA000000"
+                                                          Offset="0.1" />
+                                        </LinearGradientBrush>
+                                    </Grid.Background>
                                     <TextBlock Text="{Binding Dimensions}"
-                                               DockPanel.Dock="Bottom"
                                                Foreground="White">
-                                        <TextBlock.Background>
-                                            <LinearGradientBrush StartPoint="0,1" EndPoint="0,0">
-                                                <GradientStop Color="#00000000" Offset="1" />
-                                                <GradientStop Color="#55000000" Offset="0.55" />
-                                                <GradientStop Color="#AA000000" Offset="0.1" />
-                                            </LinearGradientBrush>
-                                        </TextBlock.Background>
+                                        <TextBlock.Effect>
+                                            <DropShadowEffect Color="Black"
+                                                              ShadowDepth="1"
+                                                              BlurRadius="1" />
+                                        </TextBlock.Effect>
                                     </TextBlock>
-                                </DockPanel>
+                                </Grid>
                             </Grid>
                         </Border>
                     </DataTemplate>

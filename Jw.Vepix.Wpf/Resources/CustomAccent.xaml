@@ -5,17 +5,16 @@
                     mc:Ignorable="options">
 
     <!--ACCENT COLORS-->
-    <Color x:Key="HighlightColor">#FFB2B2B2</Color>
+    <Color x:Key="HighlightColor">#FFB2B2B2</Color> <!-- highlighted text -->
     
     <!--80%-->
     <Color x:Key="AccentColor">#FF2B2B2B</Color>
-    <!-- Keep these colors for now; I'm not sure when they get used -->
     <!--60%-->
-    <Color x:Key="AccentColor2">#99D80073</Color>
+    <Color x:Key="AccentColor2">#FFB2B2B2</Color><!-- OnSelected -->
     <!--40%-->
-    <Color x:Key="AccentColor3">#66D80073</Color>
+    <Color x:Key="AccentColor3">#66B2B2B2</Color> <!-- OnMouseOver -->
     <!--20%-->
-    <Color x:Key="AccentColor4">#33D80073</Color>
+    <Color x:Key="AccentColor4">#33D80073</Color> <!-- ??Don't know?? -->
 
     <!-- re-set brushes too -->
     <SolidColorBrush x:Key="HighlightBrush" Color="{StaticResource HighlightColor}" options:Freeze="True" />

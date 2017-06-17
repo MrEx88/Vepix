@@ -37,11 +37,9 @@ namespace Jw.Vepix.Wpf
                 }
             }
 
-            //todo: need to come up with a way where this can always be referenced
-            // for debugging/release and installed
             try
             {
-                ThemeManager.AddAccent("CustomAccent", new Uri(@"C:\Users\Jon\Documents\Visual Studio 2015\Projects\Vepix\Jw.Vepix.Wpf\Resources\CustomAccent.xaml"));
+                ThemeManager.AddAccent("CustomAccent", new Uri("/Resources/CustomAccent.xaml", UriKind.Relative));
 
                 // get the current app style (theme and accent) from the application
                 Tuple<AppTheme, Accent> theme = ThemeManager.DetectAppStyle(Application.Current);
@@ -51,7 +49,7 @@ namespace Jw.Vepix.Wpf
                                             ThemeManager.GetAccent("CustomAccent"),
                                             theme.Item1);
             }
-            catch (Exception ex) { }
+            catch (Exception) { }
 
             base.OnStartup(e);
         }

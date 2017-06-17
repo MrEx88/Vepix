@@ -11,5 +11,17 @@ namespace Jw.Vepix.Wpf.Views
         {
             InitializeComponent();
         }
+
+        private void chkBoxSelectAll_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if (chkBoxSelectAll.IsChecked.Value)
+            {
+                pictureList.SelectAll();
+            }
+            else
+            {
+                pictureList.UnselectAll();
+            }
+        }
     }
 }
