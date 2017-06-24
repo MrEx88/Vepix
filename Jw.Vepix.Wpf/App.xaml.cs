@@ -37,19 +37,15 @@ namespace Jw.Vepix.Wpf
                 }
             }
 
-            try
-            {
-                ThemeManager.AddAccent("CustomAccent", new Uri("/Resources/CustomAccent.xaml", UriKind.Relative));
+            ThemeManager.AddAccent("CustomAccent", new Uri("/Resources/CustomAccent.xaml", UriKind.Relative));
 
-                // get the current app style (theme and accent) from the application
-                Tuple<AppTheme, Accent> theme = ThemeManager.DetectAppStyle(Application.Current);
+            // get the current app style (theme and accent) from the application
+            Tuple<AppTheme, Accent> theme = ThemeManager.DetectAppStyle(Application.Current);
 
-                // now change app style to the custom accent and current theme
-                ThemeManager.ChangeAppStyle(Application.Current,
-                                            ThemeManager.GetAccent("CustomAccent"),
-                                            theme.Item1);
-            }
-            catch (Exception) { }
+            // now change app style to the custom accent and current theme
+            ThemeManager.ChangeAppStyle(Application.Current,
+                                        ThemeManager.GetAccent("CustomAccent"),
+                                        theme.Item1);
 
             base.OnStartup(e);
         }

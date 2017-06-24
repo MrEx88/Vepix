@@ -73,7 +73,7 @@
             
             <ListView x:Name="pictureList"
                       ItemsSource="{Binding Path=Pictures}"
-                      BorderBrush="#FFA90606">
+                      BorderBrush="Red">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
                         <i:InvokeCommandAction Command="{Binding PicturesListSelectionChangedCommand}"

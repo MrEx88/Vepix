@@ -4,13 +4,21 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Jw.Vepix.Wpf.Views"
+             xmlns:custom="clr-namespace:Jw.Vepix.Wpf.Controls"
              xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:conv="clr-namespace:Jw.Vepix.Wpf.Converters"
+             xmlns:util="clr-namespace:Jw.Vepix.Wpf.Utilities"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <conv:BoolToVisibilityConverter x:Key="boolToVisibilityConverter" />
+        <conv:BoolToCursorConverter x:Key="boolToCursorConverter" />
+    </UserControl.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="35" />
             <RowDefinition Height="30" />
-            <RowDefinition Height="20" />
             <RowDefinition Height="*" />
             <RowDefinition Height="35" />
         </Grid.RowDefinitions>
@@ -18,32 +26,53 @@
         <!-- Edit buttons -->
         <StackPanel Grid.Row="0"
                     Orientation="Horizontal"
-                    Margin="0 0 0 5">
-            <Button Content="Crop"
-                    controls:ButtonHelper.PreserveTextCase="True" />
-            <!--<Button Content="Scale"
-                    controls:ButtonHelper.PreserveTextCase="True" />-->
+                    Margin="10 0 0 5">
+            <ToggleButton x:Name="tglBtnCrop"
+                          Content="Crop"
+                          FontSize="10" />
+            <!-- <ToggleButton x:Name="tglBtnScale"
+                          Content="Crop"
+                          FontSize="10" /> -->
         </StackPanel>
         
         <!-- Zoom control -->
-        <Slider Grid.Row="1"
+        <Slider x:Name="sliderZoom"
+                Grid.Row="1"
+                Value="{Binding ZoomFactor}"
                 Width="200"
                 HorizontalAlignment="Left"
-                Margin="10 0 0 5"
+                Margin="10 5 0 5"
                 Minimum="0"
                 Maximum="1"
                 TickFrequency="0.1" />
 
         <!-- Viewing Picture. This gets added to CropCanvas in VM -->
-        <Border BorderBrush="WhiteSmoke" 
+        <Border x:Name="borderViewer"
+                BorderBrush="White" 
                 BorderThickness="2"
                 Grid.Row="2"
                 Margin="5 0 5 0"
-                Cursor="Cross">
-            <ScrollViewer Content="{Binding CropCanvas}"
-                                  VerticalScrollBarVisibility="Auto"
-                                  HorizontalScrollBarVisibility="Auto">
-                <!--<Image x:Name="imgPictureCell" Source="{Binding ViewingPicture.BitmapImage}" /> -->
+                Cursor="{Binding ElementName=tglBtnCrop,
+                                 Path=IsChecked,
+                                 Converter={StaticResource boolToCursorConverter}}">
+            <ScrollViewer VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Auto">
+                <custom:CropSelectionCanvas x:Name="canvasCustom"
+                                            CropArea="{Binding CropArea, Mode=TwoWay}"
+                                            CropEnabled="{Binding ElementName=tglBtnCrop,
+                                                            Path=IsChecked}"
+                                            Height="{Binding CropHeight}"
+                                            Width="{Binding CropWidth}">
+                    <Image x:Name="imageBeingViewed"
+                           Source="{Binding BImage,
+                                            NotifyOnTargetUpdated=True}"
+                           Height="{Binding ViewingPicture.Height}"
+                           Width="{Binding ViewingPicture.Width}"
+                           RenderTransform="{Binding ZoomTransform}"
+                           TargetUpdated="imageBeingViewed_TargetUpdated"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center" />
+                </custom:CropSelectionCanvas>
             </ScrollViewer>
         </Border>
         
@@ -59,12 +88,20 @@
 
             <Button Content="Save"
                     Command="{Binding SaveCommand}"
+                    Style="{DynamicResource AccentedSquareButtonStyle}"
+                    Visibility="{Binding ElementName=tglBtnCrop,
+                                         Path=IsChecked,
+                                         Converter={StaticResource boolToVisibilityConverter}}"
                     controls:ButtonHelper.PreserveTextCase="True"
                     Grid.Column="1" 
                     FontSize="10"
                     Margin="0 0 10 0" />
             <Button Content="Save As"
                     Command="{Binding SaveAsCommand}"
+                    Style="{DynamicResource SquareButtonStyle}"
+                    Visibility="{Binding ElementName=tglBtnCrop,
+                                         Path=IsChecked,
+                                         Converter={StaticResource boolToVisibilityConverter}}"
                     controls:ButtonHelper.PreserveTextCase="True"
                     Grid.Column="2"
                     FontSize="10" />

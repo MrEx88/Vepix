@@ -104,6 +104,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\CropSelectionCanvas.cs" />
+    <Compile Include="Converters\BoolToCursorConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\IntToVisibilityConverter.cs" />
     <Compile Include="Converters\SelectedItemsToPicturesConverter.cs" />
@@ -123,7 +125,6 @@
     <Compile Include="Services\IPictureDialogService.cs" />
     <Compile Include="Services\PicturesFlyoutService.cs" />
     <Compile Include="Utilities\CmdOptions.cs" />
-    <Compile Include="Utilities\CropSelectionCanvas.cs" />
     <Compile Include="Utilities\RelayCommand.cs" />
     <Compile Include="Utilities\VepixConsoleParser.cs" />
     <Compile Include="Utilities\VepixConsoleResults.cs" />

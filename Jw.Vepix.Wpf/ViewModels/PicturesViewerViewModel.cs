@@ -3,6 +3,7 @@ using Jw.Vepix.Core.Extensions;
 using Jw.Vepix.Core.Interfaces;
 using Jw.Vepix.Core.Models;
 using Jw.Vepix.Core.Services;
+using Jw.Vepix.Wpf.Controls;
 using Jw.Vepix.Wpf.Events;
 using Jw.Vepix.Wpf.Services;
 using Jw.Vepix.Wpf.Utilities;
@@ -11,7 +12,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace Jw.Vepix.Wpf.ViewModels
 {
@@ -29,10 +29,10 @@ namespace Jw.Vepix.Wpf.ViewModels
             SaveCommand = new RelayCommand<object>(OnSaveExecute, OnSaveCanExecute);
             SaveAsCommand = new RelayCommand<object>(OnSaveAsExecute, OnSaveCanExecute);
 
+
             _pictures = new ObservableCollection<Picture>();
         }
 
-        public Image Image { get; private set; }
         public Picture ViewingPicture
         {
             get { return _viewingPicture; }
@@ -45,7 +45,76 @@ namespace Jw.Vepix.Wpf.ViewModels
                 }
             }
         }
-        public CropSelectionCanvas CropCanvas { get; set; }
+
+        private System.Windows.Media.Imaging.BitmapImage _bImage;
+
+        public System.Windows.Media.Imaging.BitmapImage BImage
+        {
+            get { return _bImage; }
+            set
+            {
+                if (value != _bImage)
+                {
+                    _bImage = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+
+        public CropSelectionCanvas CropCanvas
+        {
+            get { return _cropCanvas; }
+            set
+            {
+                if (value != _cropCanvas)
+                {
+                    _cropCanvas = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public Int32Rect? CropArea
+        {
+            get { return _cropArea; }
+            set
+            {
+                _cropArea = value;
+                SaveAsCommand.RaiseCanExecuteChanged();
+                SaveCommand.RaiseCanExecuteChanged();
+            }
+        }
+
+        private double _cropHeight;
+
+        public double CropHeight
+        {
+            get { return _cropHeight; }
+            set
+            {
+                if (value != _cropHeight)
+                {
+                    _cropHeight = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        private double _cropWidth;
+
+        public double CropWidth
+        {
+            get { return _cropWidth; }
+            set
+            {
+                if (value != _cropWidth)
+                {
+                    _cropWidth = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
 
         public ObservableCollection<Picture> Pictures
         {
@@ -65,10 +134,7 @@ namespace Jw.Vepix.Wpf.ViewModels
 
         public string ViewTitle
         {
-            get
-            {
-                return _viewTitle;
-            }
+            get { return _viewTitle; }
             private set
             {
                 if (value != _viewTitle)
@@ -78,6 +144,35 @@ namespace Jw.Vepix.Wpf.ViewModels
                 }
             }
         }
+
+        public double ZoomFactor
+        {
+            get { return _zoomFactor; }
+            set
+            {
+                if (value != _zoomFactor)
+                {
+                    _zoomFactor = value;
+                    NotifyPropertyChanged();
+
+                    ZoomTransform = new System.Windows.Media.ScaleTransform(_zoomFactor, _zoomFactor, 0.5, 0.5);
+                }
+            }
+        }
+        
+        public System.Windows.Media.ScaleTransform ZoomTransform
+        {
+            get { return _zoomTransform; }
+            set
+            {
+                if (value != _zoomTransform)
+                {
+                    _zoomTransform = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
 
         private void OnSaveExecute()
         {
@@ -101,18 +196,8 @@ namespace Jw.Vepix.Wpf.ViewModels
 
         private void SetupCanvas(Picture picture)
         {
-            Image = new Image()
-            {
-                Source = picture.BitmapImage,
-                Height = picture.Height,
-                Width = picture.Width
-            };
-
-            CropCanvas = new CropSelectionCanvas(_eventAggregator,
-                new PointBoundaries(new Point(picture.Width, picture.Height)));
-            CropCanvas.Children.Add(Image);
-            CropCanvas.Height = Convert.ToDouble(picture.Height);
-            CropCanvas.Width = Convert.ToDouble(picture.Width);
+            CropHeight = Convert.ToDouble(picture.Height);
+            CropWidth = Convert.ToDouble(picture.Width);
         }
 
         private void OnCropAreaDrawn(Int32Rect rect)
@@ -126,6 +211,7 @@ namespace Jw.Vepix.Wpf.ViewModels
         {
             Pictures = new ObservableCollection<Picture>(pictures);
             ViewingPicture = pictures[0];
+            BImage = ViewingPicture.BitmapImage;
             ViewTitle = ViewingPicture.ImageName;
 
             SetupCanvas(ViewingPicture);
@@ -137,6 +223,9 @@ namespace Jw.Vepix.Wpf.ViewModels
         private ObservableCollection<Picture> _pictures;
         private Int32Rect? _cropArea;
         private Picture _viewingPicture;
+        private System.Windows.Media.ScaleTransform _zoomTransform;
         private string _viewTitle;
+        private double _zoomFactor;
+        private CropSelectionCanvas _cropCanvas;
     }
 }
