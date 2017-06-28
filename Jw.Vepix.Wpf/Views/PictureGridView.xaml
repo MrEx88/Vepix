@@ -127,8 +127,8 @@
             </ListView.ItemsPanel>
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <Border BorderBrush="Black"
-                                BorderThickness="2">
+                        <Border BorderBrush="Red"
+                                BorderThickness="1">
                             <Grid MaxHeight="200">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="15" />

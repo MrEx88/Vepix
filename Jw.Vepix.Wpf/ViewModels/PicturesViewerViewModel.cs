@@ -11,6 +11,7 @@ using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 
 namespace Jw.Vepix.Wpf.ViewModels
@@ -29,8 +30,6 @@ namespace Jw.Vepix.Wpf.ViewModels
             SaveCommand = new RelayCommand<object>(OnSaveExecute, OnSaveCanExecute);
             SaveAsCommand = new RelayCommand<object>(OnSaveAsExecute, OnSaveCanExecute);
 
-
-            _pictures = new ObservableCollection<Picture>();
         }
 
         public Picture ViewingPicture
@@ -45,22 +44,6 @@ namespace Jw.Vepix.Wpf.ViewModels
                 }
             }
         }
-
-        private System.Windows.Media.Imaging.BitmapImage _bImage;
-
-        public System.Windows.Media.Imaging.BitmapImage BImage
-        {
-            get { return _bImage; }
-            set
-            {
-                if (value != _bImage)
-                {
-                    _bImage = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
-
 
         public CropSelectionCanvas CropCanvas
         {
@@ -154,25 +137,9 @@ namespace Jw.Vepix.Wpf.ViewModels
                 {
                     _zoomFactor = value;
                     NotifyPropertyChanged();
-
-                    ZoomTransform = new System.Windows.Media.ScaleTransform(_zoomFactor, _zoomFactor, 0.5, 0.5);
                 }
             }
         }
-        
-        public System.Windows.Media.ScaleTransform ZoomTransform
-        {
-            get { return _zoomTransform; }
-            set
-            {
-                if (value != _zoomTransform)
-                {
-                    _zoomTransform = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
-
 
         private void OnSaveExecute()
         {
@@ -211,7 +178,6 @@ namespace Jw.Vepix.Wpf.ViewModels
         {
             Pictures = new ObservableCollection<Picture>(pictures);
             ViewingPicture = pictures[0];
-            BImage = ViewingPicture.BitmapImage;
             ViewTitle = ViewingPicture.ImageName;
 
             SetupCanvas(ViewingPicture);
@@ -223,7 +189,6 @@ namespace Jw.Vepix.Wpf.ViewModels
         private ObservableCollection<Picture> _pictures;
         private Int32Rect? _cropArea;
         private Picture _viewingPicture;
-        private System.Windows.Media.ScaleTransform _zoomTransform;
         private string _viewTitle;
         private double _zoomFactor;
         private CropSelectionCanvas _cropCanvas;

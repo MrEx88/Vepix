@@ -12,7 +12,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="50" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="30" />
+            <RowDefinition Height="40" />
         </Grid.RowDefinitions>
         
         <StackPanel Grid.Row="0"
@@ -24,14 +24,18 @@
                 <TextBlock x:Name="txtBoxPrefix"
                            Text="Prefix:"
                            Width="75"/>
-                <TextBox Text="{Binding Prefix, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                <TextBox Text="{Binding Prefix,
+                                        UpdateSourceTrigger=PropertyChanged,
+                                        Mode=TwoWay}" />
             </StackPanel>
             
             <StackPanel Orientation="Vertical">
                 <TextBlock x:Name="txtBoxSuffix"
                            Text="Suffix:"
                            Width="75"/>
-                <TextBox Text="{Binding Suffix, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                <TextBox Text="{Binding Suffix,
+                                        UpdateSourceTrigger=PropertyChanged,
+                                        Mode=TwoWay}" />
             </StackPanel>
         </StackPanel>
         
@@ -48,10 +52,11 @@
                       Margin="0 10 0 0 "
                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                       AutoGenerateColumns="False"
-                      AlternatingRowBackground="White"
+                      RowBackground="#DDFFFFFF"
+                      AlternatingRowBackground="#DDFFAAAA"
                       AlternationCount="2">
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn>
+                    <DataGridTemplateColumn CanUserResize="False">
                         <DataGridTemplateColumn.HeaderTemplate>
                             <DataTemplate>
                                 <Label Content="" />
@@ -60,7 +65,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Image Source="{Binding BitmapImage}"
-                               Height="40" />
+                                       Height="38" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -70,8 +75,14 @@
             <!-- Edit Name Data Grid -->
             <DataGrid Grid.Column="1"
                       x:Name="dataGrid"
-                      ItemsSource="{Binding EditPictureNames, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                      ItemsSource="{Binding EditPictureNames,
+                                            UpdateSourceTrigger=PropertyChanged,
+                                            Mode=TwoWay}"
                       AutoGenerateColumns="False"
+                      RowBackground="#DDFFFFFF"
+                      AlternatingRowBackground="#DDFFAAAA"
+                      AlternationCount="2"
+                      RowHeight="40"
                       Margin="10 10 0 0">
                 <DataGrid.CellStyle>
                     <Style TargetType="{x:Type DataGridCell}">
@@ -87,9 +98,10 @@
                     <DataGridTemplateColumn CanUserResize="False">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock HorizontalAlignment="Center">
+                                <TextBlock HorizontalAlignment="Center"
+                                           VerticalAlignment="Center">
                                     <Hyperlink Command="{Binding Path=DataContext.RemovePictureCommand,
-                                                                 RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid }}}"
+                                                                 RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid }}}"
                                                CommandParameter="{Binding ElementName=dataGrid,
                                                                           Path=SelectedIndex}">
                                         Remove
@@ -103,16 +115,18 @@
                             <DataTemplate>
                                 <CheckBox Content="Prefix"
                                           DataContext="{Binding ElementName=dataGrid, Path=DataContext}"
-                                          IsChecked="{Binding IsAllPrefixChecked, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                          IsChecked="{Binding IsAllPrefixChecked,
+                                                              UpdateSourceTrigger=PropertyChanged,
+                                                              Mode=TwoWay}"
                                           HorizontalAlignment="Center" />
                             </DataTemplate>
                         </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsPrefixChecked, UpdateSourceTrigger=PropertyChanged}"
+                                <CheckBox IsChecked="{Binding IsPrefixChecked,
+                                                              UpdateSourceTrigger=PropertyChanged}"
                                           Command="{Binding Path=DataContext.IsAllPrefixesCheckedCommand,
-                                                    RelativeSource= {RelativeSource FindAncestor,
-                                                    AncestorType={x:Type DataGrid }}}"
+                                                            RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"
                                           HorizontalAlignment="Center" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -121,18 +135,23 @@
                         <DataGridTemplateColumn.HeaderTemplate>
                             <DataTemplate>
                                 <CheckBox Content="Suffix"
-                                          DataContext="{Binding ElementName=dataGrid, Path=DataContext}"
-                                          IsChecked="{Binding IsAllSuffixChecked, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                          DataContext="{Binding ElementName=dataGrid,
+                                                                Path=DataContext}"
+                                          IsChecked="{Binding IsAllSuffixChecked,
+                                                              UpdateSourceTrigger=PropertyChanged,
+                                                              Mode=TwoWay}"
                                           HorizontalAlignment="Center" />
                             </DataTemplate>
                         </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsSuffixChecked, UpdateSourceTrigger=PropertyChanged}"
+                                <CheckBox IsChecked="{Binding IsSuffixChecked,
+                                                              UpdateSourceTrigger=PropertyChanged}"
                                           Command="{Binding Path=DataContext.IsAllSuffixesCheckedCommand,
-                                                    RelativeSource= {RelativeSource FindAncestor,
-                                                    AncestorType={x:Type DataGrid }}}"
-                                          HorizontalAlignment="Center" />
+                                                            RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"
+                                          HorizontalAlignment="Center"
+                                          Background="Transparent"
+                                          Foreground="Black" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -145,19 +164,31 @@
                         </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Button HorizontalAlignment="Left">
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding Prefix, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-                                        <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-                                        <TextBlock Text="{Binding Suffix, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                                    </StackPanel>
-                                </Button>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Prefix,
+                                                              UpdateSourceTrigger=PropertyChanged,
+                                                              Mode=TwoWay}"
+                                               Background="Transparent"
+                                               Foreground="Black"
+                                               Margin="0 4 -6 0" />
+                                    <TextBox Text="{Binding Name,
+                                                            UpdateSourceTrigger=PropertyChanged,
+                                                            Mode=TwoWay}"
+                                             Background="Transparent"
+                                             Foreground="Black"
+                                             BorderThickness="0" />
+                                    <TextBlock Text="{Binding Suffix,
+                                                              UpdateSourceTrigger=PropertyChanged,
+                                                              Mode=TwoWay}"
+                                               Background="Transparent"
+                                               Foreground="Black"
+                                               Margin="-6 4 0 0" />
+                                </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            
         </Grid>
         
         <!-- Save -->
@@ -165,7 +196,8 @@
                 Content="Save"
                 Command="{Binding OverwriteNamesCommand}"
                 controls:ButtonHelper.PreserveTextCase="True"
+                Style="{StaticResource SquareButtonStyle}"
                 HorizontalAlignment="Right"
-                Margin="0 0 30 5" />
+                Margin="0 5 30 5" />
     </Grid>
 </UserControl>

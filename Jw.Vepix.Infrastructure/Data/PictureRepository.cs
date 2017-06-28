@@ -63,14 +63,14 @@ namespace Jw.Vepix.Infrastructure.Data
         {
             bool result = true;
             _fileService.CopyTo(fullFolderPath, picture.ImageName);
-            return true;
+            return result;
         }
 
         public bool TryMove(Picture picture, string fullFolderPath)
         {
             bool result = true;
             _fileService.MoveTo(fullFolderPath, picture.ImageName);
-            return true;
+            return result;
         }
 
         public bool TryDelete(string fileName)

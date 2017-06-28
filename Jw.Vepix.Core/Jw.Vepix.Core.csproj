@@ -58,7 +58,6 @@
   <ItemGroup>
     <Compile Include="Bitmapper.cs" />
     <Compile Include="Extensions\NavigationExtensions.cs" />
-    <Compile Include="FileHandler.cs" />
     <Compile Include="Interfaces\IFileService.cs" />
     <Compile Include="Interfaces\IPictureRepository.cs" />
     <Compile Include="Models\AffixedName.cs" />
