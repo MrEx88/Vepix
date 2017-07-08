@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Express 14 for Windows Desktop
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JW.Vepix.Wpf", "JW.Vepix.Wpf\JW.Vepix.Wpf.csproj", "{5368412B-C556-4B96-8FB4-B6AD51676959}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "J.Vepix.Wpf", "J.Vepix.Wpf\J.Vepix.Wpf.csproj", "{5368412B-C556-4B96-8FB4-B6AD51676959}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B667648D-692A-40A6-BF99-9409F0E27AA7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JW.Vepix.Wpf.Tests", "JW.Vepix.Wpf.Tests\JW.Vepix.Wpf.Tests.csproj", "{91A4DE78-FD24-46B7-AC7B-43DC9CE467D7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "J.Vepix.Wpf.Tests", "J.Vepix.Wpf.Tests\J.Vepix.Wpf.Tests.csproj", "{91A4DE78-FD24-46B7-AC7B-43DC9CE467D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JW.Vepix.Core", "JW.Vepix.Core\JW.Vepix.Core.csproj", "{66593704-57C0-4A0C-8E2F-A74F2D4AAE59}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "J.Vepix.Core", "J.Vepix.Core\J.Vepix.Core.csproj", "{66593704-57C0-4A0C-8E2F-A74F2D4AAE59}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JW.Vepix.Infrastructure", "JW.Vepix.Infrastructure\JW.Vepix.Infrastructure.csproj", "{FB496997-F4BB-4B12-9408-4F76EABACEC5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "J.Vepix.Infrastructure", "J.Vepix.Infrastructure\J.Vepix.Infrastructure.csproj", "{FB496997-F4BB-4B12-9408-4F76EABACEC5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
