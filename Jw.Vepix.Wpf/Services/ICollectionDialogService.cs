@@ -1,8 +1,8 @@
-﻿using Jw.Vepix.Core.Models;
-using Jw.Vepix.Wpf.ViewModels;
+﻿using JW.Vepix.Core.Models;
+using JW.Vepix.Wpf.ViewModels;
 using System.Collections.Generic;
 
-namespace Jw.Vepix.Wpf.Services
+namespace JW.Vepix.Wpf.Services
 {
     interface ICollectionFlyoutService
     {

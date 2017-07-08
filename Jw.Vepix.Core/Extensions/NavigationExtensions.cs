@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Jw.Vepix.Core.Extensions
+namespace JW.Vepix.Core.Extensions
 {
     public static class NavigationExtensions
     {

@@ -1,7 +1,7 @@
-﻿using Jw.Vepix.Core.Models;
+﻿using JW.Vepix.Core.Models;
 using Prism.Events;
 
-namespace Jw.Vepix.Wpf.Services
+namespace JW.Vepix.Wpf.Services
 {
     interface IPictureDialogService
     {

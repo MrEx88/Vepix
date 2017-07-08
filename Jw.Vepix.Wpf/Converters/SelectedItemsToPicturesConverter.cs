@@ -1,11 +1,11 @@
-﻿using Jw.Vepix.Core.Models;
+﻿using JW.Vepix.Core.Models;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Data;
 
-namespace Jw.Vepix.Wpf.Converters
+namespace JW.Vepix.Wpf.Converters
 {
     public class SelectedItemsToPicturesConverter : IValueConverter
     {

@@ -1,21 +1,21 @@
-﻿using Jw.Vepix.Core.Interfaces;
-using Jw.Vepix.Core.Models;
-using Jw.Vepix.Wpf.Events;
-using Jw.Vepix.Wpf.Payloads;
-using Jw.Vepix.Wpf.Services;
-using Jw.Vepix.Wpf.Utilities;
+﻿using JW.Vepix.Core.Interfaces;
+using JW.Vepix.Core.Models;
+using JW.Vepix.Wpf.Events;
+using JW.Vepix.Wpf.Payloads;
+using JW.Vepix.Wpf.Services;
+using JW.Vepix.Wpf.Utilities;
 using Prism.Events;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System;
 
-namespace Jw.Vepix.Wpf.ViewModels
+namespace JW.Vepix.Wpf.ViewModels
 {
     public class EditNamesViewModel : ViewModelBase, ICollectionViewModel
     {
-        public EditNamesViewModel(IPictureRepository pictureRepository, IMessageDialogService messageDialogService,
-            IEventAggregator eventAggregator)
+        public EditNamesViewModel(IPictureRepository pictureRepository,
+                                  IMessageDialogService messageDialogService,
+                                  IEventAggregator eventAggregator)
         {
             _pictureRepository = pictureRepository;
             _messageDialogService = messageDialogService;
@@ -25,8 +25,6 @@ namespace Jw.Vepix.Wpf.ViewModels
             IsAllPrefixesCheckedCommand = new RelayCommand<object>(OnIsAllPrefixesCheckedCommand);
             IsAllSuffixesCheckedCommand = new RelayCommand<object>(OnIsAllSuffixesCheckedCommand);
             OverwriteNamesCommand = new RelayCommand<object>(OnOverwriteNamesCommand, OnCanOverwriteNamesCommand);
-            //_pictures = new ObservableCollection<Picture>();
-            //_editPictureNames = new ObservableCollection<EditNameAffix>();
         }
         
         private void OnRemovePictureCommand(int index)
@@ -93,7 +91,7 @@ namespace Jw.Vepix.Wpf.ViewModels
                     {
                         _editPictureNames[i].Prefix = _prefix;
                     }
-                    NotifyPropertyChanged("EditPictureNames");
+                    NotifyPropertyChanged(() => EditPictureNames);
                 }
             }
         }
@@ -110,7 +108,7 @@ namespace Jw.Vepix.Wpf.ViewModels
                     {
                         _editPictureNames[i].Suffix = _suffix;
                     }
-                    NotifyPropertyChanged("EditPictureNames");
+                    NotifyPropertyChanged(() => EditPictureNames);
                 }
             }
         }
@@ -153,16 +151,12 @@ namespace Jw.Vepix.Wpf.ViewModels
             }
         }
 
-
         public ObservableCollection<Picture> Pictures
         {
-            get
-            {
-                return _pictures;
-            }
+            get { return _pictures; }
             set
             {
-                if (_pictures != value)
+                if (value != _pictures)
                 {
                     _pictures = value;
                     NotifyPropertyChanged();
@@ -172,10 +166,7 @@ namespace Jw.Vepix.Wpf.ViewModels
 
         public ObservableCollection<AffixedName> EditPictureNames
         {
-            get
-            {
-                return _editPictureNames;
-            }
+            get { return _editPictureNames; }
             set
             {
                 if (value != _editPictureNames)
@@ -186,13 +177,7 @@ namespace Jw.Vepix.Wpf.ViewModels
             }
         }
 
-        public string ViewTitle
-        {
-            get
-            {
-                return "Edit Picture Names";
-            }
-        }
+        public string ViewTitle => "Edit Picture Names";
 
         public RelayCommand<int> RemovePictureCommand { get; private set; }
         public RelayCommand<object> IsAllPrefixesCheckedCommand { get; private set; }

@@ -1,5 +1,5 @@
-﻿using Jw.Vepix.Core.Interfaces;
-using Jw.Vepix.Core.Models;
+﻿using JW.Vepix.Core.Interfaces;
+using JW.Vepix.Core.Models;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
 
-namespace Jw.Vepix.Core.Services
+namespace JW.Vepix.Core.Services
 {
     public class FileService : IFileService
     {
@@ -91,8 +91,7 @@ namespace Jw.Vepix.Core.Services
             using (var saveDialog = new SaveFileDialog())
             {
                 saveDialog.FileName = fullFileName;
-                var encoder = EncoderService.CreateEncoder(encoderType);
-                encoder.Frames.Add(BitmapFrame.Create(bitmapImage));
+                var encoder = EncoderService.CreateEncoder(encoderType, bitmapImage);
                 using (var fileStream = (FileStream)saveDialog.OpenFile())
                 {
                     encoder.Save(fileStream);
@@ -105,13 +104,12 @@ namespace Jw.Vepix.Core.Services
         {
             using (var saveDialog = new SaveFileDialog())
             {
-                saveDialog.Title = "Vepix: Save Image As...";
+                saveDialog.Title = "Vepix: Save Picture As...";
                 saveDialog.Filter = "Jpeg Image|*.jpg|Bitmap Image|*.bmp|Gif Image|*.gif";
                 saveDialog.ShowDialog();
                 if (saveDialog.FileName != null && saveDialog.FileName != "")
                 {
-                    var encoder = EncoderService.CreateEncoder(encoderType);
-                    encoder.Frames.Add(BitmapFrame.Create(bitmapImage));
+                    var encoder = EncoderService.CreateEncoder(encoderType, bitmapImage);
                     using (var fileStream = (FileStream)saveDialog.OpenFile())
                     {
                         encoder.Save(fileStream);

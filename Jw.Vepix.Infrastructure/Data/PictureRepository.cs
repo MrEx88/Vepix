@@ -1,7 +1,7 @@
-﻿using Jw.Vepix.Core.Extensions;
-using Jw.Vepix.Core.Interfaces;
-using Jw.Vepix.Core.Models;
-using Jw.Vepix.Core.Services;
+﻿using JW.Vepix.Core.Extensions;
+using JW.Vepix.Core.Interfaces;
+using JW.Vepix.Core.Models;
+using JW.Vepix.Core.Services;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
 
-namespace Jw.Vepix.Infrastructure.Data
+namespace JW.Vepix.Infrastructure.Data
 {
     public class PictureRepository : IPictureRepository
     {

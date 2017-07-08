@@ -1,12 +1,12 @@
-﻿using Jw.Vepix.Core.Models;
-using Jw.Vepix.Core.Services;
+﻿using JW.Vepix.Core.Models;
+using JW.Vepix.Core.Services;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
 
-namespace Jw.Vepix.Core.Interfaces
+namespace JW.Vepix.Core.Interfaces
 {
     public interface IPictureRepository
     {

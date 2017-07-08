@@ -1,8 +1,8 @@
-﻿using Jw.Vepix.Wpf.Utilities;
+﻿using JW.Vepix.Wpf.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
-namespace Jw.Vepix.Wpf.Tests
+namespace JW.Vepix.Wpf.Tests
 {
     [TestClass]
     public class VepixConsoleTests

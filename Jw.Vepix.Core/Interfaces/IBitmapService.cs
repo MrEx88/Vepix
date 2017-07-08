@@ -1,9 +1,9 @@
-﻿using Jw.Vepix.Core.Services;
+﻿using JW.Vepix.Core.Services;
 using System.Drawing;
 using System.Windows;
 using System.Windows.Media.Imaging;
 
-namespace Jw.Vepix.Core.Interfaces
+namespace JW.Vepix.Core.Interfaces
 {
     public interface IBitmapService
     {
@@ -17,7 +17,7 @@ namespace Jw.Vepix.Core.Interfaces
         /// <summary>
         /// Converts byte array to a BitmapImage.
         /// </summary>
-        /// <param name="fileName">The picture file name</param>
+        /// <param name="fileName">The image file name</param>
         /// <returns>Instance of BitmapImage</returns>
         BitmapImage CreateBitmapImage(string fileName);
 
@@ -26,6 +26,7 @@ namespace Jw.Vepix.Core.Interfaces
         /// </summary>
         /// <param name="bitmapImage">The image to crop</param>
         /// <param name="rect">The size to crop the image to</param>
+        /// <param name="encoderType">The type to encode to</param>
         /// <returns>The cropped Image</returns>
         BitmapImage Crop(BitmapImage bitmapImage, Int32Rect rect, BitmapEncoderType encoderType);
 

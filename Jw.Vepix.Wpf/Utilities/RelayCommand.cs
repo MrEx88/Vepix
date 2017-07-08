@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace Jw.Vepix.Wpf.Utilities
+namespace JW.Vepix.Wpf.Utilities
 {
     public class RelayCommand<T> : ICommand
     {

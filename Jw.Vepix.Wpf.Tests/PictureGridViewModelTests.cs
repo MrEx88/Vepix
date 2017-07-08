@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
-namespace Jw.Vepix.Wpf.Tests
+namespace JW.Vepix.Wpf.Tests
 {
     [TestClass]
     public class PictureGridViewModelTests

@@ -1,24 +1,23 @@
-﻿using Jw.Vepix.Core;
-using Jw.Vepix.Core.Interfaces;
-using Jw.Vepix.Core.Models;
-using Jw.Vepix.Core.Services;
-using Jw.Vepix.Wpf.Controls;
-using Jw.Vepix.Wpf.Events;
-using Jw.Vepix.Wpf.Services;
-using Jw.Vepix.Wpf.Utilities;
+﻿using JW.Vepix.Core.Interfaces;
+using JW.Vepix.Core.Models;
+using JW.Vepix.Core.Services;
+using JW.Vepix.Wpf.Controls;
+using JW.Vepix.Wpf.Events;
+using JW.Vepix.Wpf.Services;
+using JW.Vepix.Wpf.Utilities;
 using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Windows;
 
-namespace Jw.Vepix.Wpf.ViewModels
+namespace JW.Vepix.Wpf.ViewModels
 {
     public class PicturesViewerViewModel : ViewModelBase, ICollectionViewModel
     {
-        public PicturesViewerViewModel(IPictureRepository pictureRepository, IMessageDialogService messageDialogService,
-            IEventAggregator eventAggregator)
+        public PicturesViewerViewModel(IPictureRepository pictureRepository,
+                                       IMessageDialogService messageDialogService,
+                                       IEventAggregator eventAggregator)
         {
             _pictureRepository = pictureRepository;
             _messageDialogService = messageDialogService;
@@ -44,6 +43,7 @@ namespace Jw.Vepix.Wpf.ViewModels
             }
         }
 
+        // todo: i might not need this
         public CropSelectionCanvas CropCanvas
         {
             get { return _cropCanvas; }

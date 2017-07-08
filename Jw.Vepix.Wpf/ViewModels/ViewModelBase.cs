@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 
-namespace Jw.Vepix.Wpf.ViewModels
+namespace JW.Vepix.Wpf.ViewModels
 {
     public class ViewModelBase : INotifyPropertyChanged
     {

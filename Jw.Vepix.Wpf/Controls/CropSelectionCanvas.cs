@@ -1,4 +1,4 @@
-﻿using Jw.Vepix.Core.Models;
+﻿using JW.Vepix.Core.Models;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -6,7 +6,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
-namespace Jw.Vepix.Wpf.Controls
+namespace JW.Vepix.Wpf.Controls
 {
     public class CropSelectionCanvas : Canvas
     {

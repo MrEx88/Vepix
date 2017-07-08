@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Jw.Vepix.Wpf.Utilities
+namespace JW.Vepix.Wpf.Utilities
 {
     public class VepixCommandLineParser
     {

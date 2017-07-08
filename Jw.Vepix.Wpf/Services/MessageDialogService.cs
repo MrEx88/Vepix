@@ -2,7 +2,7 @@
 using MahApps.Metro.Controls.Dialogs;
 using System.Windows;
 
-namespace Jw.Vepix.Wpf.Services
+namespace JW.Vepix.Wpf.Services
 {
     public class MessageDialogService : IMessageDialogService
     {

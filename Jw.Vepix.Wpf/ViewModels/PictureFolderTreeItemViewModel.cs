@@ -1,13 +1,13 @@
-﻿using Jw.Vepix.Wpf.Events;
-using Jw.Vepix.Wpf.Payloads;
-using Jw.Vepix.Wpf.Utilities;
+﻿using JW.Vepix.Wpf.Events;
+using JW.Vepix.Wpf.Payloads;
+using JW.Vepix.Wpf.Utilities;
 using Prism.Events;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 
-namespace Jw.Vepix.Wpf.ViewModels
+namespace JW.Vepix.Wpf.ViewModels
 {
     public class PictureFolderTreeItemViewModel : ViewModelBase, IPictureFolderTreeItemViewModel
     {
@@ -60,7 +60,7 @@ namespace Jw.Vepix.Wpf.ViewModels
         public bool TreeItemAlreadyExists(string absolutePath)
         {
             var directories = new DirectoryInfo(AbsolutePath).GetDirectories().ToList();
-            return directories.Exists(dic => dic.FullName == absolutePath);
+            return absolutePath == AbsolutePath || directories.Exists(dic => dic.FullName == absolutePath);
         }
 
         public bool IsAParentTo(PictureFolderTreeItemViewModel treeItem)

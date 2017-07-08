@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 
-namespace Jw.Vepix.Core.Extensions
+namespace JW.Vepix.Core.Extensions
 {
     public static class ObservableCollectionsExtensions
     {

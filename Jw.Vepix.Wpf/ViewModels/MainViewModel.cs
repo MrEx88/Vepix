@@ -1,8 +1,8 @@
-﻿using Jw.Vepix.Core.Extensions;
-using Jw.Vepix.Wpf.Events;
-using Jw.Vepix.Wpf.Payloads;
-using Jw.Vepix.Wpf.Services;
-using Jw.Vepix.Wpf.Utilities;
+﻿using JW.Vepix.Core.Extensions;
+using JW.Vepix.Wpf.Events;
+using JW.Vepix.Wpf.Payloads;
+using JW.Vepix.Wpf.Services;
+using JW.Vepix.Wpf.Utilities;
 using Prism.Events;
 using System;
 using System.Collections.Generic;
@@ -12,14 +12,14 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace Jw.Vepix.Wpf.ViewModels
+namespace JW.Vepix.Wpf.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
         public MainViewModel(IPictureFolderTreeViewModel pictureFolderTreeViewModel,
-            Func<IPictureGridViewModel> pictureGridViewModelCreator,
-            IFileExplorerDialogService fileExplorerDialogService,
-            IEventAggregator eventAggregator)
+                             Func<IPictureGridViewModel> pictureGridViewModelCreator,
+                             IFileExplorerDialogService fileExplorerDialogService,
+                             IEventAggregator eventAggregator)
         {
             if (DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
                 return;
@@ -52,8 +52,11 @@ namespace Jw.Vepix.Wpf.ViewModels
             get { return _selectedPictureGridViewModel; }
             set
             {
-                _selectedPictureGridViewModel = value;
-                NotifyPropertyChanged();
+                if (value != _selectedPictureGridViewModel)
+                {
+                    _selectedPictureGridViewModel = value;
+                    NotifyPropertyChanged(); 
+                }
             }
         }
 
@@ -95,7 +98,7 @@ namespace Jw.Vepix.Wpf.ViewModels
             {
                 if (option == SearchOption.AllDirectories)
                 {
-                    PictureFolderTreeViewModel.Load(selectedPath);
+                    PictureFolderTreeViewModel.TryLoad(selectedPath);
                 }
 
                 SelectedPictureGridViewModel = CreateAndLoadPictureGridViewModel(selectedPath);
@@ -106,9 +109,15 @@ namespace Jw.Vepix.Wpf.ViewModels
         {
             // Check if folder is already opened.
             var pictureGridViewModel = PictureGridViewModels.ToList().Find(picGrid =>
-                ((PictureGridViewModel)picGrid).AbsolutePath == pictureFileNames.First().ToFilesFolderName());
+                ((PictureGridViewModel)picGrid).AbsolutePath == pictureFileNames.First().ToParentFolderPath());
             if (pictureGridViewModel != null)
             {
+                // Remove any duplicates.
+                pictureFileNames.RemoveAll(fileName => PictureGridViewModels.ToList()
+                                .Exists(gridViewModel => gridViewModel.Pictures.ToList()
+                                .Exists(pic => pic.FullFileName == fileName)));
+
+                pictureGridViewModel.Load(pictureFileNames);
                 return pictureGridViewModel;
             }
 
@@ -128,10 +137,7 @@ namespace Jw.Vepix.Wpf.ViewModels
             {
                 return pictureGridViewModel;
             }
-
-            // todo: think about what to do if a folder does not contain any photos
-            // maybe have Load() return false??
-            // maybe just display a message in the tab saying no Pictures in this folder??
+            
             pictureGridViewModel = _pictureGridViewModelCreator();
             PictureGridViewModels.Add(pictureGridViewModel);
             pictureGridViewModel.Load(folderPath);
@@ -181,11 +187,11 @@ namespace Jw.Vepix.Wpf.ViewModels
 
         private void CheckCommandLine()
         {
-            // todo: need to pass the searh patterns too
+            // todo: need to pass the search patterns too
             var userInputs = VepixCommandLineParser.ConsoleInstance();
             foreach (var treeFolder in userInputs.TreeFolders)
             {
-                PictureFolderTreeViewModel.Load(treeFolder);
+                PictureFolderTreeViewModel.TryLoad(treeFolder);
             }
 
             var firstLoad = true;

@@ -1,8 +1,8 @@
-﻿using Jw.Vepix.Wpf.Services;
+﻿using JW.Vepix.Wpf.Services;
 using MahApps.Metro.Controls;
 using System.Windows;
 
-namespace Jw.Vepix.Wpf
+namespace JW.Vepix.Wpf
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

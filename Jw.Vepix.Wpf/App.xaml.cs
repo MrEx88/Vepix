@@ -1,10 +1,10 @@
-﻿using Jw.Vepix.Wpf.Utilities;
+﻿using JW.Vepix.Wpf.Utilities;
 using MahApps.Metro;
 using System;
 using System.Linq;
 using System.Windows;
 
-namespace Jw.Vepix.Wpf
+namespace JW.Vepix.Wpf
 {
     /// <summary>
     /// Interaction logic for App.xaml

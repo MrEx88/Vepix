@@ -1,12 +1,12 @@
-﻿using Jw.Vepix.Core.Interfaces;
-using Jw.Vepix.Core.Services;
-using Jw.Vepix.Infrastructure.Data;
-using Jw.Vepix.Wpf.Services;
-using Jw.Vepix.Wpf.ViewModels;
+﻿using JW.Vepix.Core.Interfaces;
+using JW.Vepix.Core.Services;
+using JW.Vepix.Infrastructure.Data;
+using JW.Vepix.Wpf.Services;
+using JW.Vepix.Wpf.ViewModels;
 using Microsoft.Practices.Unity;
 using Prism.Events;
 
-namespace Jw.Vepix.Wpf.Utilities
+namespace JW.Vepix.Wpf.Utilities
 {
     public class ViewModelLocator
     {

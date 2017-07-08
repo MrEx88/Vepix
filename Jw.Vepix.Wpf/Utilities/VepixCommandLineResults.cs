@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Jw.Vepix.Wpf.Utilities
+namespace JW.Vepix.Wpf.Utilities
 {
     public class VepixCommandLineResults
     {

@@ -1,11 +1,11 @@
-﻿using Jw.Vepix.Core;
-using Jw.Vepix.Core.Extensions;
-using Jw.Vepix.Core.Interfaces;
-using Jw.Vepix.Core.Models;
-using Jw.Vepix.Wpf.Events;
-using Jw.Vepix.Wpf.Payloads;
-using Jw.Vepix.Wpf.Services;
-using Jw.Vepix.Wpf.Utilities;
+﻿using JW.Vepix.Core;
+using JW.Vepix.Core.Extensions;
+using JW.Vepix.Core.Interfaces;
+using JW.Vepix.Core.Models;
+using JW.Vepix.Wpf.Events;
+using JW.Vepix.Wpf.Payloads;
+using JW.Vepix.Wpf.Services;
+using JW.Vepix.Wpf.Utilities;
 using Prism.Events;
 using System;
 using System.Collections.Generic;
@@ -14,7 +14,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace Jw.Vepix.Wpf.ViewModels
+namespace JW.Vepix.Wpf.ViewModels
 {
     public class PictureGridViewModel : ViewModelBase, IPictureGridViewModel
     {
@@ -100,6 +100,8 @@ namespace Jw.Vepix.Wpf.ViewModels
             }
         }
 
+        public bool HasPictures => Pictures.Count > 0;
+
         public ObservableCollection<Picture> Pictures
         {
             get
@@ -113,6 +115,7 @@ namespace Jw.Vepix.Wpf.ViewModels
             {
                 _pictures = value;
                 NotifyPropertyChanged();
+                NotifyPropertyChanged(() => HasPictures);
             }
         }
 
@@ -279,8 +282,7 @@ namespace Jw.Vepix.Wpf.ViewModels
 
         public void Load(List<string> pictureFileNames)
         {
-            Pictures = new ObservableCollection<Picture>();
-            AbsolutePath = pictureFileNames.First().ToFilesFolderName();
+            AbsolutePath = pictureFileNames.First().ToParentFolderPath();
             ArePicturesLoading = true;
             TaskRunner.WaitAllOneByOne(pictureFileNames, _pictureRepo.GetPictureAsync, Pictures.Add,
                 () => ArePicturesLoading = false);
@@ -290,6 +292,14 @@ namespace Jw.Vepix.Wpf.ViewModels
         {
             List<string> fileNames = await _pictureRepo.GetFileNamesAsync(folderPath);
             IsOpenFiles = false;
+
+            if (fileNames.Count == 0)
+            {
+                AbsolutePath = folderPath;
+
+                return;
+            }
+
             Load(fileNames);
         }
 

@@ -1,5 +1,5 @@
 ﻿
-namespace Jw.Vepix.Core.Models
+namespace JW.Vepix.Core.Models
 {
     public class FileBytes
     {

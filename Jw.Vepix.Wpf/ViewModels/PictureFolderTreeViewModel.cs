@@ -1,10 +1,11 @@
-﻿using Jw.Vepix.Core.Extensions;
+﻿using JW.Vepix.Core.Extensions;
 using Prism.Events;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 
-namespace Jw.Vepix.Wpf.ViewModels
+namespace JW.Vepix.Wpf.ViewModels
 {
     public class PictureFolderTreeViewModel : ViewModelBase, IPictureFolderTreeViewModel
     {
@@ -28,12 +29,12 @@ namespace Jw.Vepix.Wpf.ViewModels
             }
         }
 
-        public void Load(string folder)
+        public bool TryLoad(string folder)
         {
             var dirInfo = new DirectoryInfo(folder);
 
             var treeItem = new PictureFolderTreeItemViewModel(dirInfo, _eventAggregator);
-            TryAdd(treeItem);
+            return TryAdd(treeItem);
         }
 
         private bool TryAdd(PictureFolderTreeItemViewModel treeItem)
@@ -41,15 +42,13 @@ namespace Jw.Vepix.Wpf.ViewModels
             if (PictureFolderItemViewModels.Count != 0)
             {
                 // Check if folder already exists.
-                foreach (var folderTreeItem in PictureFolderItemViewModels)
+                if (PictureFolderItemViewModels.ToList().Exists(folderTreeItem => 
+                        folderTreeItem.TreeItemAlreadyExists(treeItem.AbsolutePath)))
                 {
-                    if(folderTreeItem.TreeItemAlreadyExists(treeItem.AbsolutePath))
-                    {
-                        return false;
-                    }
+                    return false;
                 }
 
-                // Check if folder is Parent to existing folder(s).
+                // Remove if folder is Parent to existing folder(s).
                 PictureFolderItemViewModels.RemoveAll(folderItem => folderItem.IsAParentTo(treeItem));
             }
 

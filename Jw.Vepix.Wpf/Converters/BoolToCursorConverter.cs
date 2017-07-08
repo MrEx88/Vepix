@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Input;
 
-namespace Jw.Vepix.Wpf.Converters
+namespace JW.Vepix.Wpf.Converters
 {
     public class BoolToCursorConverter : IValueConverter
     {

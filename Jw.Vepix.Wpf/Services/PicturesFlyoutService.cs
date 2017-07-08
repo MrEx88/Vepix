@@ -1,6 +1,6 @@
-﻿using Jw.Vepix.Core.Models;
-using Jw.Vepix.Wpf.Utilities;
-using Jw.Vepix.Wpf.ViewModels;
+﻿using JW.Vepix.Core.Models;
+using JW.Vepix.Wpf.Utilities;
+using JW.Vepix.Wpf.ViewModels;
 using MahApps.Metro.Controls;
 using Microsoft.Practices.Unity;
 using System;
@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Data;
 
-namespace Jw.Vepix.Wpf.Services
+namespace JW.Vepix.Wpf.Services
 {
     public enum FlyoutViewType
     {

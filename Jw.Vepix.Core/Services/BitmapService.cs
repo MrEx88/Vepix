@@ -1,11 +1,11 @@
-﻿using Jw.Vepix.Core.Interfaces;
+﻿using JW.Vepix.Core.Interfaces;
 using System;
 using System.Drawing;
 using System.IO;
 using System.Windows;
 using System.Windows.Media.Imaging;
 
-namespace Jw.Vepix.Core.Services
+namespace JW.Vepix.Core.Services
 {
     public class BitmapService : IBitmapService
     {
@@ -44,16 +44,14 @@ namespace Jw.Vepix.Core.Services
             return ConvertCroppedBitmapToBitmapImage(croppedImage, encoderType);
         }
 
-        //I may want to make this public
-        private BitmapImage ConvertCroppedBitmapToBitmapImage(BitmapSource croppedImage, BitmapEncoderType encoderType)
+        //todo: I may want to make this public
+        private BitmapImage ConvertCroppedBitmapToBitmapImage(CroppedBitmap croppedImage, BitmapEncoderType encoderType)
         {
-            var encoder = EncoderService.CreateEncoder(encoderType);
-
             using (var stream = new MemoryStream())
             {
-                var bitmapImage = new BitmapImage();
-                encoder.Frames.Add(BitmapFrame.Create(croppedImage));
+                var encoder = EncoderService.CreateEncoder(encoderType, croppedImage);
                 encoder.Save(stream);
+                var bitmapImage = new BitmapImage();
                 bitmapImage.BeginInit();
                 bitmapImage.StreamSource = new MemoryStream(stream.ToArray());
                 bitmapImage.EndInit();
@@ -62,15 +60,13 @@ namespace Jw.Vepix.Core.Services
             }
         }
 
-        //I may want to make this public
         public Bitmap ConvertBitmapImageToBitmap(BitmapImage bitmapImage, BitmapEncoderType encoderType)
         {
             using (MemoryStream outStream = new MemoryStream())
             {
-                var encoder = EncoderService.CreateEncoder(encoderType);
-                encoder.Frames.Add(BitmapFrame.Create(bitmapImage));
+                var encoder = EncoderService.CreateEncoder(encoderType, bitmapImage);
                 encoder.Save(outStream);
-                Bitmap bitmap = new Bitmap(outStream);
+                var bitmap = new Bitmap(outStream);
 
                 return new Bitmap(bitmap);
             }

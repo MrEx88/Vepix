@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Jw.Vepix.Core.Models
+namespace JW.Vepix.Core.Models
 {
     public class AffixedName : INotifyPropertyChanged
     {

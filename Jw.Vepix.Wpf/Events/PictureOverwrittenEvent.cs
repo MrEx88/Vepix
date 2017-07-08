@@ -1,7 +1,7 @@
 ﻿using Prism.Events;
 using System;
 
-namespace Jw.Vepix.Wpf.Events
+namespace JW.Vepix.Wpf.Events
 {
     public class PictureOverwrittenEvent : PubSubEvent<Guid>
     {

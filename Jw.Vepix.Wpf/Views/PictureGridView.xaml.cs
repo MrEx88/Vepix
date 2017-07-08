@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace Jw.Vepix.Wpf.Views
+namespace JW.Vepix.Wpf.Views
 {
     /// <summary>
     /// Interaction logic for PictureGridView.xaml

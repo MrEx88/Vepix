@@ -1,7 +1,7 @@
-﻿using Jw.Vepix.Wpf.Payloads;
+﻿using JW.Vepix.Wpf.Payloads;
 using Prism.Events;
 
-namespace Jw.Vepix.Wpf.Events
+namespace JW.Vepix.Wpf.Events
 {
     public class OpenPicturesFromFolderEvent : PubSubEvent<PicturesFolderPayload>
     {

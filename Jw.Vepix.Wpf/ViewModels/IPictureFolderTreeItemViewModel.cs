@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace Jw.Vepix.Wpf.ViewModels
+namespace JW.Vepix.Wpf.ViewModels
 {
     public interface IPictureFolderTreeItemViewModel
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 
-namespace Jw.Vepix.Core.Models
+namespace JW.Vepix.Core.Models
 {
     public class PointBoundaries
     {

@@ -2,7 +2,7 @@
 using System.IO;
 using System.Windows.Media.Imaging;
 
-namespace Jw.Vepix.Core.Models
+namespace JW.Vepix.Core.Models
 {
     public class Picture
     {

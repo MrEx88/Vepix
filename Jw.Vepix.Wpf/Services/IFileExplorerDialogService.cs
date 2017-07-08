@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Windows.Forms;
 
-namespace Jw.Vepix.Wpf.Services
+namespace JW.Vepix.Wpf.Services
 {
     public interface IFileExplorerDialogService
     {

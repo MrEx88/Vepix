@@ -1,4 +1,4 @@
-﻿using Jw.Vepix.Core.Extensions;
+﻿using JW.Vepix.Core.Extensions;
 using Microsoft.Practices.Prism.Mvvm;
 using System;
 using System.Collections;
@@ -9,7 +9,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-namespace Jw.Vepix.Core
+namespace JW.Vepix.Core
 {
     public class ObjectBase : INotifyPropertyChanged
     {

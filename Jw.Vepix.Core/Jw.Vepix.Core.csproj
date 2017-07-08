@@ -7,8 +7,8 @@
     <ProjectGuid>{66593704-57C0-4A0C-8E2F-A74F2D4AAE59}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Jw.Vepix.Core</RootNamespace>
-    <AssemblyName>Jw.Vepix.Core</AssemblyName>
+    <RootNamespace>JW.Vepix.Core</RootNamespace>
+    <AssemblyName>JW.Vepix.Core</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

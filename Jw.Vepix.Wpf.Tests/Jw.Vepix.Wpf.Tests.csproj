@@ -6,8 +6,8 @@
     <ProjectGuid>{91A4DE78-FD24-46B7-AC7B-43DC9CE467D7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Jw.Vepix.Wpf.Tests</RootNamespace>
-    <AssemblyName>Jw.Vepix.Wpf.Tests</AssemblyName>
+    <RootNamespace>JW.Vepix.Wpf.Tests</RootNamespace>
+    <AssemblyName>JW.Vepix.Wpf.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -69,16 +69,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PictureViewModelTests.cs" />
     <Compile Include="MainViewModelTests.cs" />
+    <Compile Include="UnitTest1.cs" />
     <Compile Include="VepixConsoleTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Jw.Vepix.Core\Jw.Vepix.Core.csproj">
+    <ProjectReference Include="..\Jw.Vepix.Core\JW.Vepix.Core.csproj">
       <Project>{66593704-57c0-4a0c-8e2f-a74f2d4aae59}</Project>
-      <Name>Jw.Vepix.Core</Name>
+      <Name>JW.Vepix.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Jw.Vepix.Wpf\Jw.Vepix.Wpf.csproj">
+    <ProjectReference Include="..\Jw.Vepix.Wpf\JW.Vepix.Wpf.csproj">
       <Project>{5368412b-c556-4b96-8fb4-b6ad51676959}</Project>
-      <Name>Jw.Vepix.Wpf</Name>
+      <Name>JW.Vepix.Wpf</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

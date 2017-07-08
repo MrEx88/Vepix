@@ -1,7 +1,7 @@
-﻿using Jw.Vepix.Core.Services;
+﻿using JW.Vepix.Core.Services;
 using System.IO;
 
-namespace Jw.Vepix.Core.Extensions
+namespace JW.Vepix.Core.Extensions
 {
     public static class StringExtensions
     {
@@ -32,6 +32,9 @@ namespace Jw.Vepix.Core.Extensions
 
         public static string ToFoldersName(this string folder)
             => new DirectoryInfo(folder).Name;
+
+        public static string ToParentFolderPath(this string path)
+            => new DirectoryInfo(path).Parent.FullName;
 
         public static BitmapEncoderType ToEncoderType(this string fileExtension)
         {

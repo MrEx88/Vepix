@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Jw.Vepix.Wpf.Services
+namespace JW.Vepix.Wpf.Services
 {
     public interface IMessageDialogService
     {

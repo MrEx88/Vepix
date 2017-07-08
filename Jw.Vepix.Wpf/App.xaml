@@ -1,8 +1,8 @@
-﻿<Application x:Class="Jw.Vepix.Wpf.App"
+﻿<Application x:Class="JW.Vepix.Wpf.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:Jw.Vepix.Wpf"
-             xmlns:locator="clr-namespace:Jw.Vepix.Wpf.Utilities"
+             xmlns:local="clr-namespace:JW.Vepix.Wpf"
+             xmlns:locator="clr-namespace:JW.Vepix.Wpf.Utilities"
              StartupUri="VepixWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>

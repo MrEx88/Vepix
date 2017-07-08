@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Jw.Vepix.Wpf.Views
+namespace JW.Vepix.Wpf.Views
 {
     /// <summary>
     /// Interaction logic for EditNamesView.xaml

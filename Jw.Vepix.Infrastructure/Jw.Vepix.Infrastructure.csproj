@@ -7,8 +7,8 @@
     <ProjectGuid>{FB496997-F4BB-4B12-9408-4F76EABACEC5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Jw.Vepix.Infrastructure</RootNamespace>
-    <AssemblyName>Jw.Vepix.Infrastructure</AssemblyName>
+    <RootNamespace>JW.Vepix.Infrastructure</RootNamespace>
+    <AssemblyName>JW.Vepix.Infrastructure</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -48,9 +48,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Jw.Vepix.Core\Jw.Vepix.Core.csproj">
+    <ProjectReference Include="..\Jw.Vepix.Core\JW.Vepix.Core.csproj">
       <Project>{66593704-57c0-4a0c-8e2f-a74f2d4aae59}</Project>
-      <Name>Jw.Vepix.Core</Name>
+      <Name>JW.Vepix.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,8 +1,8 @@
-﻿using Jw.Vepix.Core.Models;
+﻿using JW.Vepix.Core.Models;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace Jw.Vepix.Wpf.ViewModels
+namespace JW.Vepix.Wpf.ViewModels
 {
     public interface ICollectionViewModel
     {

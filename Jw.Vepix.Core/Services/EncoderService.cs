@@ -1,6 +1,6 @@
 ﻿using System.Windows.Media.Imaging;
 
-namespace Jw.Vepix.Core.Services
+namespace JW.Vepix.Core.Services
 {
     public enum BitmapEncoderType
     {
@@ -14,23 +14,33 @@ namespace Jw.Vepix.Core.Services
 
     public static class EncoderService
     {
-        public static BitmapEncoder CreateEncoder(BitmapEncoderType encoderType)
+        public static BitmapEncoder CreateEncoder(BitmapEncoderType encoderType, BitmapSource bitmapSource)
         {
+            BitmapEncoder bitmapEncoder;
             switch (encoderType)
             {
                 case BitmapEncoderType.BMP:
-                    return new BmpBitmapEncoder();
+                    bitmapEncoder = new BmpBitmapEncoder();
+                    break;
                 case BitmapEncoderType.GIF:
-                    return new GifBitmapEncoder();
+                    bitmapEncoder = new GifBitmapEncoder();
+                    break;
                 case BitmapEncoderType.PNG:
-                    return new PngBitmapEncoder();
+                    bitmapEncoder = new PngBitmapEncoder();
+                    break;
                 case BitmapEncoderType.TIFF:
-                    return new TiffBitmapEncoder();
+                    bitmapEncoder = new TiffBitmapEncoder();
+                    break;
                 case BitmapEncoderType.WMP:
-                    return new WmpBitmapEncoder();
+                    bitmapEncoder = new WmpBitmapEncoder();
+                    break;
                 default:
-                    return new JpegBitmapEncoder();
+                    bitmapEncoder = new JpegBitmapEncoder();
+                    break;
             }
+
+            bitmapEncoder.Frames.Add(BitmapFrame.Create(bitmapSource));
+            return bitmapEncoder;
         }
     }
 }

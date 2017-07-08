@@ -1,6 +1,6 @@
 ﻿using Prism.Events;
 
-namespace Jw.Vepix.Wpf.Events
+namespace JW.Vepix.Wpf.Events
 {
     public class StatusTextUserActionEvent : PubSubEvent<string>
     {
