@@ -59,7 +59,9 @@ namespace Jw.Vepix.Core.Extensions
                     {
                         // only add to list of the property is NOT marked with [NotNavigable]
                         if (IsBrowsable(obj, property))
+                        {
                             propertyInfoList.Add(property);
+                        }
                     }
                 }
 

@@ -1,9 +1,8 @@
-﻿using Prism.Events;
-using System.Collections.Generic;
+﻿using Jw.Vepix.Core.Extensions;
+using Prism.Events;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
 
 namespace Jw.Vepix.Wpf.ViewModels
 {
@@ -16,10 +15,10 @@ namespace Jw.Vepix.Wpf.ViewModels
 
             _eventAggregator = eventAggregator;
 
-            _pictureFolderItemViewModels = new ObservableCollection<PictureFolderTreeItemViewModel>();
+            _pictureFolderItemViewModels = new ObservableCollection<IPictureFolderTreeItemViewModel>();
         }
 
-        public ObservableCollection<PictureFolderTreeItemViewModel> PictureFolderItemViewModels
+        public ObservableCollection<IPictureFolderTreeItemViewModel> PictureFolderItemViewModels
         {
             get { return _pictureFolderItemViewModels; }
             set
@@ -33,17 +32,33 @@ namespace Jw.Vepix.Wpf.ViewModels
         {
             var dirInfo = new DirectoryInfo(folder);
 
-            _rootFolder = new PictureFolderTreeItemViewModel(dirInfo, _eventAggregator);
-
-            PictureFolderItemViewModels = new ObservableCollection<PictureFolderTreeItemViewModel>(
-                new PictureFolderTreeItemViewModel[]
-                {
-                    _rootFolder
-                });
+            var treeItem = new PictureFolderTreeItemViewModel(dirInfo, _eventAggregator);
+            TryAdd(treeItem);
         }
 
-        private PictureFolderTreeItemViewModel _rootFolder;
-        private ObservableCollection<PictureFolderTreeItemViewModel> _pictureFolderItemViewModels;
+        private bool TryAdd(PictureFolderTreeItemViewModel treeItem)
+        {
+            if (PictureFolderItemViewModels.Count != 0)
+            {
+                // Check if folder already exists.
+                foreach (var folderTreeItem in PictureFolderItemViewModels)
+                {
+                    if(folderTreeItem.TreeItemAlreadyExists(treeItem.AbsolutePath))
+                    {
+                        return false;
+                    }
+                }
+
+                // Check if folder is Parent to existing folder(s).
+                PictureFolderItemViewModels.RemoveAll(folderItem => folderItem.IsAParentTo(treeItem));
+            }
+
+            PictureFolderItemViewModels.Add(treeItem);
+
+            return true;
+        }
+
+        private ObservableCollection<IPictureFolderTreeItemViewModel> _pictureFolderItemViewModels;
         private IEventAggregator _eventAggregator;
     }
 }

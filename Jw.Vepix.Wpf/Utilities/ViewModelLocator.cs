@@ -20,6 +20,7 @@ namespace Jw.Vepix.Wpf.Utilities
 
             container.RegisterType<IEventAggregator, EventAggregator>(new ContainerControlledLifetimeManager());
             container.RegisterType<IFileExplorerDialogService, FileExplorerDialogService>();
+            container.RegisterType<IBitmapService, BitmapService>();
             container.RegisterType<IFileService, FileService>();
             container.RegisterType<IMessageDialogService, MessageDialogService>();
             container.RegisterType<IPictureRepository, PictureRepository>();

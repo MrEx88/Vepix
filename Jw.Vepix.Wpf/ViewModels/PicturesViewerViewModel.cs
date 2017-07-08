@@ -1,5 +1,4 @@
 ﻿using Jw.Vepix.Core;
-using Jw.Vepix.Core.Extensions;
 using Jw.Vepix.Core.Interfaces;
 using Jw.Vepix.Core.Models;
 using Jw.Vepix.Core.Services;
@@ -143,20 +142,20 @@ namespace Jw.Vepix.Wpf.ViewModels
 
         private void OnSaveExecute()
         {
-            var croppedPicture = BitmapService.CropPreview(ViewingPicture, _cropArea.Value);
+            var croppedPicture = _pictureRepository.GetCroppedImage(ViewingPicture, _cropArea.Value);
             if (_messageDialogService.ShowQuestion("Are you sure you want to overwrite this picture?", "Overwrite Picture?"))
             {
-                _pictureRepository.TryOverWrite(croppedPicture, ViewingPicture.FullFileName, ViewingPicture.FileExtension.ToEncoderType());
+                _pictureRepository.TryOverwrite(croppedPicture);
                 _eventAggregator.GetEvent<PictureOverwrittenEvent>().Publish(ViewingPicture.Guid);
             }
         }
 
         private void OnSaveAsExecute()
         {
-            var croppedPicture = BitmapService.CropPreview(ViewingPicture, _cropArea.Value);
+            var croppedPicture = _pictureRepository.GetCroppedImage(ViewingPicture, _cropArea.Value);
             //todo create picturerepository method for this
             FileService fileService = new FileService();
-            fileService.SaveImageAs(croppedPicture, BitmapEncoderType.JPEG);
+            fileService.SaveImageAs(croppedPicture.BitmapImage, BitmapEncoderType.JPEG);
         }
 
         private bool OnSaveCanExecute() => _cropArea.HasValue;

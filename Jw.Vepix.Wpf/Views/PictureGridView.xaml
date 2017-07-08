@@ -129,7 +129,7 @@
                     <DataTemplate>
                         <Border BorderBrush="Red"
                                 BorderThickness="1">
-                            <Grid MaxHeight="200">
+                            <Grid Height="100">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="15" />
                                     <RowDefinition Height="*" />

@@ -35,7 +35,8 @@ namespace Jw.Vepix.Wpf.ViewModels
             _eventAggregator = eventAggregator;
             //_eventAggregator.GetEvent<PictureNameChangedEvent>().Subscribe(OnPictureNameChanged);
             _eventAggregator.GetEvent<PictureOverwrittenEvent>().Subscribe(OnPictureOverwritten);
-            
+
+            IsOpenFiles = true;
             ArePicturesLoading = false;
 
             _pictures = new ObservableCollection<Picture>();
@@ -52,20 +53,39 @@ namespace Jw.Vepix.Wpf.ViewModels
             ClosePicturesCommand = new RelayCommand<List<Picture>>(OnClosePicturesCommand);
             ViewEditPicturesCommand = new RelayCommand<List<Picture>>(OnViewEditPicturesCommand);
             PicturesListSelectionChangedCommand = new RelayCommand<int>(OnPicturesListSelectionChangedCommand);
-        }        
+        }
 
-        public string FolderName
+        public string AbsolutePath
         {
-            get { return _folderName; }
+            get { return _absolutePath; }
             set
             {
-                if (value != _folderName)
+                if (value != _absolutePath)
                 {
-                    _folderName = value;
-                    NotifyPropertyChanged(); 
+                    _absolutePath = value;
+                    NotifyPropertyChanged();
+                    NotifyPropertyChanged(() => FolderName);
                 }
             }
         }
+
+        public string FolderName => _absolutePath.ToFoldersName();
+
+        private bool _isOpenFiles;
+
+        public bool IsOpenFiles
+        {
+            get { return _isOpenFiles; }
+            set
+            {
+                if (value != _isOpenFiles)
+                {
+                    _isOpenFiles = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
 
         public bool ArePicturesLoading
         {
@@ -260,22 +280,17 @@ namespace Jw.Vepix.Wpf.ViewModels
         public void Load(List<string> pictureFileNames)
         {
             Pictures = new ObservableCollection<Picture>();
+            AbsolutePath = pictureFileNames.First().ToFilesFolderName();
             ArePicturesLoading = true;
-            // "*" is used to differentiate some pictures in a folder as opposed to all pictures in a folder.
-            FolderName = pictureFileNames.First().ToFilesFolderName() + "*"; 
             TaskRunner.WaitAllOneByOne(pictureFileNames, _pictureRepo.GetPictureAsync, Pictures.Add,
                 () => ArePicturesLoading = false);
         }
 
         public async void Load(string folderPath)
         {
-            Pictures = new ObservableCollection<Picture>();
-            FolderName = folderPath.ToFoldersName();
-
-            ArePicturesLoading = true;
             List<string> fileNames = await _pictureRepo.GetFileNamesAsync(folderPath);
-            TaskRunner.WaitAllOneByOne(fileNames, _pictureRepo.GetPictureAsync, Pictures.Add,
-                () => ArePicturesLoading = false);
+            IsOpenFiles = false;
+            Load(fileNames);
         }
 
         private IPictureRepository _pictureRepo;
@@ -283,7 +298,7 @@ namespace Jw.Vepix.Wpf.ViewModels
         private IMessageDialogService _modalDialog;
         private IFileExplorerDialogService _fileExplorerDialogService;
         private ObservableCollection<Picture> _pictures;
-        private string _folderName;
+        private string _absolutePath;
         private bool _filterOn;
         private string _searchFilter;
         private bool _arePicturesLoading;

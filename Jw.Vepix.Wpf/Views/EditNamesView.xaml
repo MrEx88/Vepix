@@ -127,7 +127,20 @@
                                                               UpdateSourceTrigger=PropertyChanged}"
                                           Command="{Binding Path=DataContext.IsAllPrefixesCheckedCommand,
                                                             RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"
-                                          HorizontalAlignment="Center" />
+                                          Background="Transparent"
+                                          BorderBrush="Black"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center">
+                                    <CheckBox.Style>
+                                        <Style TargetType="CheckBox">
+                                            <Style.Triggers>
+                                                <Trigger Property="IsChecked" Value="True">
+                                                    <Setter Property="BorderBrush" Value="Black" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </CheckBox.Style>
+                                </CheckBox>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -149,9 +162,20 @@
                                                               UpdateSourceTrigger=PropertyChanged}"
                                           Command="{Binding Path=DataContext.IsAllSuffixesCheckedCommand,
                                                             RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"
-                                          HorizontalAlignment="Center"
                                           Background="Transparent"
-                                          Foreground="Black" />
+                                          BorderBrush="Black"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center">
+                                    <CheckBox.Style>
+                                        <Style TargetType="CheckBox">
+                                            <Style.Triggers>
+                                                <Trigger Property="IsChecked" Value="True">
+                                                    <Setter Property="BorderBrush" Value="Black" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </CheckBox.Style>
+                                </CheckBox>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -164,7 +188,8 @@
                         </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
+                                <StackPanel Orientation="Horizontal"
+                                            VerticalAlignment="Center">
                                     <TextBlock Text="{Binding Prefix,
                                                               UpdateSourceTrigger=PropertyChanged,
                                                               Mode=TwoWay}"

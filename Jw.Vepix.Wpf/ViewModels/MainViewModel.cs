@@ -1,4 +1,5 @@
-﻿using Jw.Vepix.Wpf.Events;
+﻿using Jw.Vepix.Core.Extensions;
+using Jw.Vepix.Wpf.Events;
 using Jw.Vepix.Wpf.Payloads;
 using Jw.Vepix.Wpf.Services;
 using Jw.Vepix.Wpf.Utilities;
@@ -48,10 +49,7 @@ namespace Jw.Vepix.Wpf.ViewModels
         public ObservableCollection<IPictureGridViewModel> PictureGridViewModels { get; private set; }
         public IPictureGridViewModel SelectedPictureGridViewModel
         {
-            get
-            {
-                return _selectedPictureGridViewModel;
-            }
+            get { return _selectedPictureGridViewModel; }
             set
             {
                 _selectedPictureGridViewModel = value;
@@ -64,8 +62,11 @@ namespace Jw.Vepix.Wpf.ViewModels
             get { return _userActionText; }
             set
             {
-                _userActionText = value;
-                NotifyPropertyChanged();
+                if (value != _userActionText)
+                {
+                    _userActionText = value;
+                    NotifyPropertyChanged(); 
+                }
             }
         }        
 
@@ -74,8 +75,11 @@ namespace Jw.Vepix.Wpf.ViewModels
             get { return _helpInfoText; }
             set
             {
-                _helpInfoText = value;
-                NotifyPropertyChanged();
+                if (value != _helpInfoText)
+                {
+                    _helpInfoText = value;
+                    NotifyPropertyChanged(); 
+                }
             }
         }
 
@@ -91,7 +95,6 @@ namespace Jw.Vepix.Wpf.ViewModels
             {
                 if (option == SearchOption.AllDirectories)
                 {
-                    //may want to also add a single folder to the tree; need to think about it more
                     PictureFolderTreeViewModel.Load(selectedPath);
                 }
 
@@ -101,7 +104,16 @@ namespace Jw.Vepix.Wpf.ViewModels
 
         private IPictureGridViewModel CreateAndLoadPictureGridViewModel(List<string> pictureFileNames)
         {
-            var pictureGridViewModel = _pictureGridViewModelCreator();
+            // Check if folder is already opened.
+            var pictureGridViewModel = PictureGridViewModels.ToList().Find(picGrid =>
+                ((PictureGridViewModel)picGrid).AbsolutePath == pictureFileNames.First().ToFilesFolderName());
+            if (pictureGridViewModel != null)
+            {
+                return pictureGridViewModel;
+            }
+
+            pictureGridViewModel = _pictureGridViewModelCreator();
+            
             PictureGridViewModels.Add(pictureGridViewModel);
             pictureGridViewModel.Load(pictureFileNames);
             return pictureGridViewModel;
@@ -109,10 +121,18 @@ namespace Jw.Vepix.Wpf.ViewModels
 
         private IPictureGridViewModel CreateAndLoadPictureGridViewModel(string folderPath)
         {
+            // Check if folder is already opened.
+            var pictureGridViewModel = PictureGridViewModels.ToList().Find(picGrid =>
+                ((PictureGridViewModel)picGrid).AbsolutePath == folderPath);
+            if (pictureGridViewModel != null)
+            {
+                return pictureGridViewModel;
+            }
+
             // todo: think about what to do if a folder does not contain any photos
             // maybe have Load() return false??
             // maybe just display a message in the tab saying no Pictures in this folder??
-            var pictureGridViewModel = _pictureGridViewModelCreator();
+            pictureGridViewModel = _pictureGridViewModelCreator();
             PictureGridViewModels.Add(pictureGridViewModel);
             pictureGridViewModel.Load(folderPath);
             return pictureGridViewModel;
@@ -162,23 +182,23 @@ namespace Jw.Vepix.Wpf.ViewModels
         private void CheckCommandLine()
         {
             // todo: need to pass the searh patterns too
-            var userInputs = VepixConsoleParser.ConsoleInstance();
-            foreach (var allDir in userInputs.AllDirectories)
+            var userInputs = VepixCommandLineParser.ConsoleInstance();
+            foreach (var treeFolder in userInputs.TreeFolders)
             {
-                PictureFolderTreeViewModel.Load(allDir);
+                PictureFolderTreeViewModel.Load(treeFolder);
             }
 
             var firstLoad = true;
-            foreach (var topDir in userInputs.TopDirectories)
+            foreach (var folder in userInputs.Folders)
             {
                 if (firstLoad)
                 {
-                    SelectedPictureGridViewModel = CreateAndLoadPictureGridViewModel(topDir);
+                    SelectedPictureGridViewModel = CreateAndLoadPictureGridViewModel(folder);
                     firstLoad = false;
                 }
                 else
                 {
-                    CreateAndLoadPictureGridViewModel(topDir);
+                    CreateAndLoadPictureGridViewModel(folder);
                 }
             }
         }

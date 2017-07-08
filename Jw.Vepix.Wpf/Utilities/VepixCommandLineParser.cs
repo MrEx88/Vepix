@@ -1,5 +1,4 @@
-﻿using Jw.Vepix.Wpf.Results;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -10,20 +9,20 @@ using System.Text.RegularExpressions;
 
 namespace Jw.Vepix.Wpf.Utilities
 {
-    public class VepixConsoleParser
+    public class VepixCommandLineParser
     {
         // todo: Now I know the difference between file filters and search patterns
         // filefilters = "Image Files|*.jpg;*.jpeg;*.png;*.gif" (filter for image file format types)
         // search patterns = "1*.jpg" or "r*.*"
         // for command line, i will change search patterns to allow something like "*.*"
         // when getting the files here, I still need to do the image file filter 
-        public List<string> TopDirectories { get; private set; }
-        public List<string> AllDirectories { get; private set; }
+        public List<string> Folders { get; private set; }
+        public List<string> TreeFolders { get; private set; }
         public List<string> SearchPatterns { get; private set; }
-        public static string TopDirectoriesHelp =>
-            "-d\t\tDirectories. The directories to search in.";
-        public static string AllDirectoriesHelp =>
-            "-dd\t\tDirectories and Subdirectories to search in.";
+        public static string FoldersHelp =>
+            "-f\t\tFolders. The folders to search in.";
+        public static string TreeFoldersHelp =>
+            "-t\t\tTree Folders.";
         public static string SearchPatternHelp =>
             "-p\t\tSearch Patterns. The pattern to search with (e.g. \"*.jpg\", \"*2*.png\").";
         public static string CommandLineHelp =>
@@ -34,28 +33,25 @@ namespace Jw.Vepix.Wpf.Utilities
             .AppendLine().AppendLine()
             .AppendLine("== Command Line Tool ==")
             .AppendLine("Switches:\tDescription:")
-            .AppendLine(TopDirectoriesHelp)
-            .AppendLine(AllDirectoriesHelp)
+            .AppendLine(FoldersHelp)
+            .AppendLine(TreeFoldersHelp)
             .AppendLine(SearchPatternHelp).ToString();
 
-        public static VepixConsoleResults ConsoleInstance()
+        public static VepixCommandLineResults ConsoleInstance()
         {
             if (_vepixConsole == null)
             {
-                _vepixConsole = new VepixConsoleResults(new List<string>(), new List<string>(), new List<string>());
+                _vepixConsole = new VepixCommandLineResults(new List<string>(), new List<string>(), new List<string>());
             }
 
             return _vepixConsole;
         }
-
-        //private VepixConsoleParser() {}
 
         public bool Parse(string[] args)
         {
             var argsList = new List<string>(args);
             if (IsHelpSwitch(argsList))
             {
-                DisplayHelp();
                 return false;
             }
             else if (!IsValidSwitches(argsList))
@@ -64,11 +60,11 @@ namespace Jw.Vepix.Wpf.Utilities
             }
 
             argsList.Add(SWITCH_TOKEN);
-            var topDirectories = GetArgsOf(TOP_DIRECTORY_SWITCH, argsList, ValidateDirectories);
-            var allDirectories = GetArgsOf(ALL_DIRECTORIES_SWITCH, argsList, ValidateDirectories);
+            var folders = GetArgsOf(FOLDER_SWITCH, argsList, ValidateFolders);
+            var treeFolders = GetArgsOf(FOLDER_TREE_SWITCH, argsList, ValidateFolders);
             var searchPatterns = GetArgsOf(SEARCH_PATTERN_SWITCH, argsList, ValidateSearchPattern);
 
-            _vepixConsole = new VepixConsoleResults(topDirectories, allDirectories, searchPatterns);
+            _vepixConsole = new VepixCommandLineResults(folders, treeFolders, searchPatterns);
 
             return true;
         }
@@ -85,7 +81,7 @@ namespace Jw.Vepix.Wpf.Utilities
 
         private bool IsHelpSwitch(List<string> argsList) => HELP_SWITCHES.Contains(argsList[0]);
 
-        private void DisplayHelp()
+        public void DisplayHelp()
         {
             AttachConsole(-1);
             Console.WriteLine(CommandLineHelp);
@@ -107,13 +103,13 @@ namespace Jw.Vepix.Wpf.Utilities
             {
                 throw new ArgumentException(
                     string.Format("Invalid argument has been used for the {0} switch.", 
-                    vepixSwitch));
+                                  vepixSwitch));
             }
 
             return switchArgs;
         }
 
-        private bool ValidateDirectories(List<string> argsList)
+        private bool ValidateFolders(List<string> argsList)
             => argsList.Count == 0 ? true
                 : argsList.TrueForAll(folder => Directory.Exists(folder));
 
@@ -128,7 +124,7 @@ namespace Jw.Vepix.Wpf.Utilities
             FILE_FORMATS.ForEach(fileFormat => 
                 regularExpression.Append(string.Format("{0}|", fileFormat)));
             regularExpression = regularExpression.Remove(regularExpression.Length - 1, 1)
-                    .Append(")");
+                                                 .Append(")");
 
             return argsList.TrueForAll(fileFilter => 
                 Regex.IsMatch(fileFilter, regularExpression.ToString()));
@@ -142,18 +138,18 @@ namespace Jw.Vepix.Wpf.Utilities
         private static extern bool FreeConsole();
         #endregion
 
-        private static VepixConsoleResults _vepixConsole;
+        private static VepixCommandLineResults _vepixConsole;
         private const string SWITCH_TOKEN = "-";
-        private const string TOP_DIRECTORY_SWITCH = "-d";
-        private const string ALL_DIRECTORIES_SWITCH = "-a";
+        private const string FOLDER_SWITCH = "-f";
+        private const string FOLDER_TREE_SWITCH = "-t";
         private const string SEARCH_PATTERN_SWITCH = "-p";
-        private static readonly string REGEX_FILENAME = @"[\w\d\s\-\\_\*]*\.";
-        private static readonly List<string> FILE_FORMATS = new List<string>() { "gif", "jpg", "png" };
-        private static readonly List<string> HELP_SWITCHES = new List<string>() { "-h", "-?", "-help", "help", "?" };
-        private static readonly List<string> SWITCHES = new List<string>()
+        private const string REGEX_FILENAME = @"[\w\d\s\-\\_\*]*\.";
+        private readonly List<string> FILE_FORMATS = new List<string>() { "bmp", "gif", "jpg", "png", "tiff", "wmp" };
+        private readonly List<string> HELP_SWITCHES = new List<string>() { "-h", "-?", "-help", "help", "?" };
+        private readonly List<string> SWITCHES = new List<string>()
         {
-            TOP_DIRECTORY_SWITCH,
-            ALL_DIRECTORIES_SWITCH,
+            FOLDER_SWITCH,
+            FOLDER_TREE_SWITCH,
             SEARCH_PATTERN_SWITCH
         };
     }

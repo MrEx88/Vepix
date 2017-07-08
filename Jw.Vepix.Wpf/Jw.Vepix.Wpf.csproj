@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Jw.Vepix.Wpf</RootNamespace>
-    <AssemblyName>vepix</AssemblyName>
+    <AssemblyName>Vepix</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -124,10 +124,9 @@
     <Compile Include="Services\IFileExplorerDialogService.cs" />
     <Compile Include="Services\IPictureDialogService.cs" />
     <Compile Include="Services\PicturesFlyoutService.cs" />
-    <Compile Include="Utilities\CmdOptions.cs" />
     <Compile Include="Utilities\RelayCommand.cs" />
-    <Compile Include="Utilities\VepixConsoleParser.cs" />
-    <Compile Include="Utilities\VepixConsoleResults.cs" />
+    <Compile Include="Utilities\VepixCommandLineParser.cs" />
+    <Compile Include="Utilities\VepixCommandLineResults.cs" />
     <Compile Include="Utilities\ViewModelLocator.cs" />
     <Compile Include="Services\MessageDialogService.cs" />
     <Compile Include="Services\IMessageDialogService.cs" />
@@ -266,6 +265,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\vepixLogo.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

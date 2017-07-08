@@ -17,21 +17,19 @@ namespace Jw.Vepix.Wpf
             {
                 try
                 {
-                    var consoleParser = new VepixConsoleParser();
+                    var consoleParser = new VepixCommandLineParser();
                     if (!consoleParser.Parse(e.Args))
-                    { 
-                        VepixConsoleParser.AttachConsole();
-                        Console.WriteLine(VepixConsoleParser.CommandLineHelp);
-                        VepixConsoleParser.DetachConsole();
+                    {
+                        consoleParser.DisplayHelp();
                         this.Shutdown();
                         return;
                     }
                 }
                 catch (ArgumentException ae)
                 {
-                    VepixConsoleParser.AttachConsole();
-                    Console.WriteLine(string.Format("{0}\n{1}", ae.Message, VepixConsoleParser.CommandLineHelp));
-                    VepixConsoleParser.DetachConsole();
+                    VepixCommandLineParser.AttachConsole();
+                    Console.WriteLine(string.Format("{0}\n{1}", ae.Message, VepixCommandLineParser.CommandLineHelp));
+                    VepixCommandLineParser.DetachConsole();
                     this.Shutdown();
                     return;
                 }

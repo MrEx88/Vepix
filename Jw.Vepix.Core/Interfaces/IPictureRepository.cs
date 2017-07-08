@@ -1,7 +1,9 @@
 ﻿using Jw.Vepix.Core.Models;
+using Jw.Vepix.Core.Services;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media.Imaging;
 
 namespace Jw.Vepix.Core.Interfaces
@@ -55,6 +57,14 @@ namespace Jw.Vepix.Core.Interfaces
         Task<List<string>> GetFileNamesAsync(string folderPath, SearchOption option = SearchOption.TopDirectoryOnly);
 
         /// <summary>
+        /// Crops the image and returns it
+        /// </summary>
+        /// <param name="picture">The picture to crop</param>
+        /// <param name="rect">The area to crop to</param>
+        /// <returns>The cropped Bitmap</returns>
+        Picture GetCroppedImage(Picture picture, Int32Rect rect);
+        
+        /// <summary>
         /// Trys to change the name of the picture.
         /// </summary>
         /// <param name="picture">The picture to be changed</param>
@@ -86,13 +96,12 @@ namespace Jw.Vepix.Core.Interfaces
         bool TryDelete(string pictureFileName);
 
         /// <summary>
-        /// Trys to overwrite the specified picture.
+        /// Trys to overwrite the specified picture. Use this when the image has
+        /// been altered in some way.
         /// </summary>
-        /// <param name="croppedPicture">The new picture to overwrite</param>
-        /// <param name="fullFileName">The file name of the picture</param>
-        /// <param name="encoderType">The encoder type</param>
+        /// <param name="picture">The altered picture to overwrite</param>
         /// <returns>True if the picture file has been overwritten</returns>
-        bool TryOverWrite(BitmapImage croppedPicture, string fullFileName, BitmapEncoderType encoderType);
+        bool TryOverwrite(Picture picture);
 
         /// <summary>
         /// Trys to save the Picture as a new picture.

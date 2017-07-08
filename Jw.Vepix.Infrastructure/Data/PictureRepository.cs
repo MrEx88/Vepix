@@ -1,4 +1,4 @@
-﻿using Jw.Vepix.Core;
+﻿using Jw.Vepix.Core.Extensions;
 using Jw.Vepix.Core.Interfaces;
 using Jw.Vepix.Core.Models;
 using Jw.Vepix.Core.Services;
@@ -6,21 +6,23 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media.Imaging;
 
 namespace Jw.Vepix.Infrastructure.Data
 {
     public class PictureRepository : IPictureRepository
     {
-        public PictureRepository(IFileService fileService)
+        public PictureRepository(IFileService fileService, IBitmapService bitmapService)
         {
             _fileService = fileService;
+            _bitmapService = bitmapService;
         }
 
         //todo do I need to put async/await keywords here; what is the difference
         public Task<Picture> GetPictureAsync(string pictureFileName) =>
             Task.Factory.StartNew(() =>
-                new Picture(BitmapService.ConvertByteArrayToBitmapImage(
+                new Picture(_bitmapService.CreateBitmapImage(
                     _fileService.GetFileBytes(pictureFileName)), pictureFileName));
 
         public Task<List<Picture>> GetPicturesAsync(string[] pictureFileNames) =>
@@ -49,6 +51,12 @@ namespace Jw.Vepix.Infrastructure.Data
             SearchOption option = SearchOption.TopDirectoryOnly) =>
                 await _fileService.GetFileNamesFromDirectoryAsync(folderPath,
                                             _supportedImagesFilterList, option);
+
+        public Picture GetCroppedImage(Picture picture, Int32Rect rect)
+        {
+            var bitmap = _bitmapService.Crop(picture.BitmapImage, rect, picture.FileExtension.ToEncoderType());
+            return new Picture(bitmap, picture.FullFileName);
+        }
 
         public bool TryChangePictureName(Picture picture, string newName)
         {
@@ -81,16 +89,15 @@ namespace Jw.Vepix.Infrastructure.Data
             return result;
         }
 
-        public bool TryOverWrite(BitmapImage croppedImage, string fullFileName,
-            BitmapEncoderType encoderType)
+        public bool TryOverwrite(Picture picture)
         {
             //todo: handle exceptions
             //todo: overwriting is not working
             bool result = true;
-            if (TryDelete(fullFileName))
+            if (TryDelete(picture.FullFileName))
             {
-                var bitmap = Bitmapper.ConvertBitmapImageToBitmap(croppedImage, encoderType);
-                bitmap.Save(fullFileName);
+                var bitmap = _bitmapService.ConvertBitmapImageToBitmap(picture.BitmapImage, picture.FileExtension.ToEncoderType());
+                bitmap.Save(picture.FullFileName);
                 //_fileService.SaveImage(croppedImage, fullFileName, encoderType);
             }
 
@@ -104,7 +111,7 @@ namespace Jw.Vepix.Infrastructure.Data
                 List<Picture> pictures = new List<Picture>();
                 Parallel.ForEach(fileBytes, file =>
                 {
-                    pictures.Add(new Picture(BitmapService.ConvertByteArrayToBitmapImage(file.Bytes),
+                    pictures.Add(new Picture(_bitmapService.CreateBitmapImage(file.Bytes),
                                              file.FullFileName));
                 });
                 return pictures;
@@ -115,6 +122,7 @@ namespace Jw.Vepix.Infrastructure.Data
             _fileService.SaveImageAs(image, encoderType);
 
         private IFileService _fileService;
+        private IBitmapService _bitmapService;
         private readonly List<string> _supportedImagesFilterList = new List<string>
         {
             "*.jpg", "*.png", "*.gif", "*.bmp", "*.wmp", "*.tiff"

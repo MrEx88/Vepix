@@ -1,5 +1,4 @@
-﻿using Jw.Vepix.Wpf.Results;
-using Jw.Vepix.Wpf.Utilities;
+﻿using Jw.Vepix.Wpf.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
@@ -13,8 +12,8 @@ namespace Jw.Vepix.Wpf.Tests
         // Act.
         // Assert.
 
-        VepixConsoleParser _consoleParser = new VepixConsoleParser();
-        VepixConsoleResults _console = VepixConsoleParser.ConsoleInstance();
+        VepixCommandLineParser _consoleParser = new VepixCommandLineParser();
+        VepixCommandLineResults _console = VepixCommandLineParser.ConsoleInstance();
         string _validPath = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
         string validSearchPattern = "*.jpg";
 
@@ -32,7 +31,7 @@ namespace Jw.Vepix.Wpf.Tests
             
             _consoleParser.Parse(args);
 
-            Assert.IsTrue(_validPath == _console.TopDirectories[0]
+            Assert.IsTrue(_validPath == _console.Folders[0]
                 && validSearchPattern == _console.SearchPatterns[0]);
         }
 
@@ -44,8 +43,8 @@ namespace Jw.Vepix.Wpf.Tests
 
             _consoleParser.Parse(args);
 
-            Assert.IsTrue(_validPath == _console.TopDirectories[0]
-                && docsFolder == _console.AllDirectories[0]
+            Assert.IsTrue(_validPath == _console.Folders[0]
+                && docsFolder == _console.TreeFolders[0]
                 && validSearchPattern == _console.SearchPatterns[0]);
         }
 
@@ -56,11 +55,11 @@ namespace Jw.Vepix.Wpf.Tests
             
             _consoleParser.Parse(args);
 
-            Assert.IsTrue(_validPath == _console.TopDirectories[0]
-                && "C:\\" == _console.TopDirectories[1]
+            Assert.IsTrue(_validPath == _console.Folders[0]
+                && "C:\\" == _console.Folders[1]
                 && validSearchPattern == _console.SearchPatterns[0]
                 && "1*.png" == _console.SearchPatterns[1]
-                && _console.AllDirectories.Count == 0);
+                && _console.TreeFolders.Count == 0);
         }
 
         [TestMethod]
@@ -70,11 +69,11 @@ namespace Jw.Vepix.Wpf.Tests
             
             _consoleParser.Parse(args);
 
-            Assert.IsTrue(_validPath == _console.AllDirectories[0]
-                && "C:\\" == _console.AllDirectories[1]
+            Assert.IsTrue(_validPath == _console.TreeFolders[0]
+                && "C:\\" == _console.TreeFolders[1]
                 && validSearchPattern == _console.SearchPatterns[0]
                 && "1*.png" == _console.SearchPatterns[1]
-                && _console.TopDirectories.Count == 0);
+                && _console.Folders.Count == 0);
         }
 
         [TestMethod]

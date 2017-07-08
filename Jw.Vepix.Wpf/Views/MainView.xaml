@@ -91,7 +91,7 @@
             <!-- Navigation Tree View -->
             <view:PictureFolderTreeView DataContext="{Binding PictureFolderTreeViewModel}"
                                         Grid.Column="0"
-                                        Margin="0 10 0 0" />
+                                        Margin="0 10 5 0" />
 
             <GridSplitter VerticalAlignment="Stretch"
                           Width="6"
@@ -119,11 +119,18 @@
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="{Binding FolderName}"
-                                       Margin="5 0 20 0" />
+                                       ToolTip="{Binding AbsolutePath}"
+                                       Margin="5 0 0 0" />
+                            <!-- "*" is used to know that Open Files was used. -->
+                            <TextBlock Text="*"
+                                       Visibility="{Binding IsOpenFiles,
+                                                            Converter={StaticResource boolToVisibilityConverter}}"
+                                       Margin="0 0 20 0" />
                             <controls:ProgressRing Width="20"
                                                    Height="20"
                                                    Margin="0 0 10 0"
-                                                   Visibility="{Binding ArePicturesLoading, Converter={StaticResource boolToVisibilityConverter}}" />
+                                                   Visibility="{Binding ArePicturesLoading,
+                                                                        Converter={StaticResource boolToVisibilityConverter}}" />
                             <Button Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabControl}},
                                                       Path=DataContext.CloseFolderTabCommand}"
                                     CommandParameter="{Binding}"

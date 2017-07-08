@@ -6,7 +6,7 @@
                       xmlns:io="clr-namespace:System.IO;assembly=mscorlib"
                       xmlns:view="clr-namespace:Jw.Vepix.Wpf.Views"
                       xmlns:vm="clr-namespace:Jw.Vepix.Wpf.ViewModels"
-                      Title="vepix" Height="630" Width="1120"
+                      Title="Vepix" Height="630" Width="1120"
                       TitleCaps="False"
                       Icon="Resources/vepixLogo.ico"
                       GlowBrush="Red"
@@ -49,7 +49,9 @@
                              Width="600"
                              Position="Right"
                              AreAnimationsEnabled="True"
-                             IsOpen="False">
+                             IsOpen="False"
+                             BorderBrush="White"
+                             BorderThickness="2 0 0 0">
                 <view:EditNamesView />
             </controls:Flyout>
         </controls:FlyoutsControl>

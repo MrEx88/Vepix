@@ -56,9 +56,11 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bitmapper.cs" />
+    <Compile Include="Extensions\ObservableCollectionsExtensions.cs" />
+    <Compile Include="Services\EncoderService.cs" />
     <Compile Include="Extensions\NavigationExtensions.cs" />
     <Compile Include="Interfaces\IFileService.cs" />
+    <Compile Include="Interfaces\IBitmapService.cs" />
     <Compile Include="Interfaces\IPictureRepository.cs" />
     <Compile Include="Models\AffixedName.cs" />
     <Compile Include="Models\FileBytes.cs" />

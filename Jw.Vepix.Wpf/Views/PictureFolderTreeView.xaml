@@ -8,14 +8,14 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <!-- find out how to do a tooltip to show absolute folder path -->
-        <TreeView ItemsSource="{Binding PictureFolderItemViewModels}">
+        <TreeView ItemsSource="{Binding PictureFolderItemViewModels}"
+                  Style="{StaticResource VirtualisedMetroTreeView}">
             <TreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type TreeViewItem}">
-                    <Setter Property="IsExpanded" 
-                            Value="{Binding IsExpanded, Mode=TwoWay}" />
-                    <Setter Property="IsSelected"
-                            Value="{Binding IsSelected, Mode=TwoWay}" />
+                    <Setter Property="IsExpanded" Value="{Binding IsExpanded,
+                                                                  Mode=TwoWay}" />
+                    <Setter Property="IsSelected" Value="{Binding IsSelected,
+                                                                  Mode=TwoWay}" />
                     <Style.Triggers>
                         <Trigger Property="IsSelected" Value="True">
                             <Setter Property="FontWeight" Value="Bold" />
@@ -26,12 +26,16 @@
 
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                    <Button Content="{Binding FolderName}"
-                            Command="{Binding OpenPicturesInFolderCommand}"
-                            CommandParameter="{Binding}" />
+                    <TextBlock Text="{Binding FolderName}"
+                               ToolTip="{Binding AbsolutePath}">
+                        <TextBlock.InputBindings>
+                            <MouseBinding Gesture="LeftDoubleClick"
+                                          Command="{Binding OpenPicturesInFolderCommand}"
+                                          CommandParameter="{Binding}" />
+                        </TextBlock.InputBindings>
+                    </TextBlock>
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
-
     </Grid>
 </UserControl>

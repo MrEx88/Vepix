@@ -30,8 +30,7 @@ namespace Jw.Vepix.Wpf.ViewModels
             _children = new ObservableCollection<IPictureFolderTreeItemViewModel>(
                 (from child in dirInfo.GetDirectories()
                  select new PictureFolderTreeItemViewModel(child, parent: this, eventAggregator: eventAggregator)).ToList());
-
-            _fileFilter = "Image Files|*.jpg;*.jpeg;*.png;*.gif;*.bmp;*.tiff";
+            
             _filePattern = "*.*";
             NotifyPropertyChanged("Children");
             NotifyPropertyChanged("FolderName");
@@ -39,14 +38,12 @@ namespace Jw.Vepix.Wpf.ViewModels
             OpenPicturesInFolderCommand = new RelayCommand<object>(OnOpenPicturesInFolder);
         }
 
-        // todo: figure out how to change parent of tree
         public IPictureFolderTreeItemViewModel Parent
         {
             get { return _parent; }
             set { _parent = value; }
         }
 
-        //todo: figure out how to update a tree
         public ObservableCollection<IPictureFolderTreeItemViewModel> Children
         {
             get { return _children; }
@@ -58,6 +55,18 @@ namespace Jw.Vepix.Wpf.ViewModels
                     NotifyPropertyChanged();
                 }
             }
+        }
+
+        public bool TreeItemAlreadyExists(string absolutePath)
+        {
+            var directories = new DirectoryInfo(AbsolutePath).GetDirectories().ToList();
+            return directories.Exists(dic => dic.FullName == absolutePath);
+        }
+
+        public bool IsAParentTo(PictureFolderTreeItemViewModel treeItem)
+        {
+            var parent = new DirectoryInfo(AbsolutePath).Parent;
+            return parent.FullName == treeItem.AbsolutePath;
         }
 
         public string FolderName => new DirectoryInfo(AbsolutePath).Name;
@@ -76,14 +85,7 @@ namespace Jw.Vepix.Wpf.ViewModels
             }
         }
 
-        //todo: implment by adding filter in constructor parameter. default is "Image Files|*.jpg;*.jpeg;*.png;*.gif;*.bmp;*.tiff"
-        public string FileFilter
-        {
-            get { return _fileFilter; }
-            set { _fileFilter = value; }
-        }
-
-        //not sure if i want to keep this
+        //not sure if i want to keep this; i think I will  just have a textbox in the mainview (or foldertreeview) for this
         public string FilePattern
         {
             get { return _filePattern; }
@@ -132,7 +134,6 @@ namespace Jw.Vepix.Wpf.ViewModels
             _eventAggregator.GetEvent<OpenPicturesFromFolderEvent>().Publish(new PicturesFolderPayload()
             {
                 AbsolutePath = _absolutePath,
-                FileFilter = _fileFilter,
                 FilePattern = _filePattern
             });
         }
@@ -143,7 +144,6 @@ namespace Jw.Vepix.Wpf.ViewModels
         private string _absolutePath;
         private bool _isExpanded;
         private bool _isSelected;
-        private string _fileFilter; // ex: "Image Files|*.jpg;*.jpeg;*.png;*.gif;*.bmp;*.tiff"
         private string _filePattern; // ex: "*12.jpg, *.bmp"
     }
 }

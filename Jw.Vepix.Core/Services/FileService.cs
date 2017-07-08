@@ -91,7 +91,7 @@ namespace Jw.Vepix.Core.Services
             using (var saveDialog = new SaveFileDialog())
             {
                 saveDialog.FileName = fullFileName;
-                var encoder = BitmapService.CreateBitmapEncoder(encoderType);
+                var encoder = EncoderService.CreateEncoder(encoderType);
                 encoder.Frames.Add(BitmapFrame.Create(bitmapImage));
                 using (var fileStream = (FileStream)saveDialog.OpenFile())
                 {
@@ -110,7 +110,7 @@ namespace Jw.Vepix.Core.Services
                 saveDialog.ShowDialog();
                 if (saveDialog.FileName != null && saveDialog.FileName != "")
                 {
-                    var encoder = BitmapService.CreateBitmapEncoder(encoderType);
+                    var encoder = EncoderService.CreateEncoder(encoderType);
                     encoder.Frames.Add(BitmapFrame.Create(bitmapImage));
                     using (var fileStream = (FileStream)saveDialog.OpenFile())
                     {
