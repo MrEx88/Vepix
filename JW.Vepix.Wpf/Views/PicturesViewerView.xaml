@@ -1,0 +1,140 @@
+﻿<UserControl x:Class="JW.Vepix.Wpf.Views.PicturesViewerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:JW.Vepix.Wpf.Views"
+             xmlns:custom="clr-namespace:JW.Vepix.Wpf.Controls"
+             xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:conv="clr-namespace:JW.Vepix.Wpf.Converters"
+             xmlns:util="clr-namespace:JW.Vepix.Wpf.Utilities"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <conv:BoolToVisibilityConverter x:Key="boolToVisibilityConverter" />
+        <conv:BoolToCursorConverter x:Key="boolToCursorConverter" />
+    </UserControl.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="35" />
+        </Grid.RowDefinitions>
+        
+        <!-- Edit buttons -->
+        <StackPanel Grid.Row="0"
+                    Orientation="Horizontal"
+                    Margin="10 0 0 5">
+            <ToggleButton x:Name="tglBtnCrop"
+                          Content="Crop"
+                          FontSize="10" />
+            <!-- <ToggleButton x:Name="tglBtnScale"
+                          Content="Crop"
+                          FontSize="10" /> -->
+        </StackPanel>
+        
+        <!-- Zoom control -->
+        <Slider x:Name="sliderZoom"
+                Grid.Row="1"
+                Value="{Binding ZoomFactor}"
+                ValueChanged="sliderZoom_ValueChanged"
+                Width="200"
+                HorizontalAlignment="Left"
+                Margin="10 5 0 5"
+                Minimum="1"
+                Maximum="3"
+                TickFrequency="0.1" />
+
+        <!-- Viewing Picture. This gets added to CropCanvas in VM -->
+        <Border x:Name="borderViewer"
+                BorderBrush="White" 
+                BorderThickness="1"
+                Grid.Row="2"
+                Margin="5 0 5 0"
+                Cursor="{Binding ElementName=tglBtnCrop,
+                                 Path=IsChecked,
+                                 Converter={StaticResource boolToCursorConverter}}">
+            <controls:FlipView x:Name="flipViewImages"
+                               ItemsSource="{Binding Pictures}"
+                               IsVisibleChanged="flipViewImages_IsVisibleChanged"
+                               SelectionChanged="flipViewImages_SelectionChanged"
+                               IsBannerEnabled="False"
+                               MouseOverGlowEnabled="False">
+                <controls:FlipView.ItemTemplate>
+                    <DataTemplate>
+                        <ScrollViewer x:Name="scrollForImage"
+                                      VerticalScrollBarVisibility="Auto"
+                                      HorizontalScrollBarVisibility="Auto"
+                                      ScrollChanged="scrollForImage_ScrollChanged">
+                            <!--<Grid RenderTransformOrigin="0.5,0.5" Name="adfk">
+                                <Grid.LayoutTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform x:Name="scaleTransform"/>
+                                    </TransformGroup>
+                                </Grid.LayoutTransform>-->
+                            <custom:CropSelectionCanvas x:Name="canvasCustom"
+                                                        CropArea="{Binding Path=DataContext.CropArea,
+                                                                           RelativeSource={RelativeSource AncestorType={x:Type Window}},
+                                                                           Mode=TwoWay}"
+                                                        CropEnabled="{Binding ElementName=tglBtnCrop,
+                                                                              Path=IsChecked}"
+                                                        Height="{Binding ElementName=scrollForImage, Path=ActualHeight}"
+                                                        Width="{Binding ElementName=scrollForImage, Path=ActualWidth}"
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center">
+                                <!--Height="{Binding Path=DataContext.CropHeight, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                                            Width="{Binding Path=DataContext.CropWidth, RelativeSource={RelativeSource AncestorType={x:Type Window}}}">-->
+                                <custom:CropSelectionCanvas.LayoutTransform>
+                                    <ScaleTransform x:Name="scaleTransformCanvas" />
+                                </custom:CropSelectionCanvas.LayoutTransform>
+                                <Image x:Name="imageBeingViewed"
+                                       Source="{Binding BitmapImage,
+                                                        NotifyOnTargetUpdated=True}"
+                                       Height="{Binding Height}"
+                                       Width="{Binding Width}"
+                                       TargetUpdated="imageBeingViewed_TargetUpdated"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       IsVisibleChanged="imageBeingViewed_IsVisibleChanged" />
+                            </custom:CropSelectionCanvas>
+                            <!--</Grid>-->
+                        </ScrollViewer>
+                    </DataTemplate>
+                </controls:FlipView.ItemTemplate>
+            </controls:FlipView>
+        </Border>
+        
+        <!-- Save buttons -->
+        <Grid Grid.Row="3"
+              Margin="0 5 0 5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="50" />
+                <ColumnDefinition Width="60" />
+                <ColumnDefinition Width="15" />
+            </Grid.ColumnDefinitions>
+
+            <Button Content="Save"
+                    Command="{Binding SaveCommand}"
+                    Style="{DynamicResource AccentedSquareButtonStyle}"
+                    Visibility="{Binding ElementName=tglBtnCrop,
+                                         Path=IsChecked,
+                                         Converter={StaticResource boolToVisibilityConverter}}"
+                    controls:ButtonHelper.PreserveTextCase="True"
+                    Grid.Column="1" 
+                    FontSize="10"
+                    Margin="0 0 10 0" />
+            <Button Content="Save As"
+                    Command="{Binding SaveAsCommand}"
+                    Style="{DynamicResource SquareButtonStyle}"
+                    Visibility="{Binding ElementName=tglBtnCrop,
+                                         Path=IsChecked,
+                                         Converter={StaticResource boolToVisibilityConverter}}"
+                    controls:ButtonHelper.PreserveTextCase="True"
+                    Grid.Column="2"
+                    FontSize="10" />
+        </Grid>
+    </Grid>
+</UserControl>
