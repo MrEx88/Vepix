@@ -9,6 +9,7 @@ namespace JW.Vepix.Core.Models
         public Guid Guid { get; }
         public BitmapImage BitmapImage { get; set; }
         public string FullFileName { get; set; } //? should this be set publically. Also what about moving the file to another folder??
+        public string FileName => Path.GetFileName(FullFileName);
         public string ImageName => Path.GetFileNameWithoutExtension(FullFileName);
         public string FolderPath => Path.GetDirectoryName(FullFileName) + "\\";
         public string FolderName => new DirectoryInfo(FolderPath).Name;

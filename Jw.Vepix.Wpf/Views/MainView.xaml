@@ -121,11 +121,10 @@
                             <TextBlock Text="{Binding FolderName}"
                                        ToolTip="{Binding AbsolutePath}"
                                        Margin="5 0 0 0" />
-                            <!-- "*" is used to know that Open Files was used. -->
+                            <!-- "*" is used to know that Open File(s) was used. -->
                             <TextBlock Text="*"
                                        Visibility="{Binding IsOpenFiles,
-                                                            Converter={StaticResource boolToVisibilityConverter}}"
-                                       Margin="0 0 20 0" />
+                                                            Converter={StaticResource boolToVisibilityConverter}}" />
                             <controls:ProgressRing Width="20"
                                                    Height="20"
                                                    Margin="0 0 10 0"
@@ -140,6 +139,7 @@
                                     Height="20"
                                     BorderThickness="0"
                                     Background="Transparent"
+                                    Margin="10 0 0 0"
                                     Padding="0">
                                 <Rectangle Height="10" 
                                            Width="8"

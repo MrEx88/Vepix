@@ -71,15 +71,10 @@
                       Grid.Row="1"
                       Margin="0 10 0 0">
             <Grid>
-                <TextBlock Text="There are no pictures in this folder."
-                           Height="Auto"
-                           Margin="5 5 0 0" />
 
                 <ListView x:Name="pictureList"
                           ItemsSource="{Binding Path=Pictures}"
-                          BorderBrush="Red"
-                          Visibility="{Binding Path=HasPictures,
-                                               Converter={StaticResource boolToVisibilityConverter}}">
+                          BorderBrush="Red">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="SelectionChanged">
                             <i:InvokeCommandAction Command="{Binding PicturesListSelectionChangedCommand}"
@@ -265,6 +260,12 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
+
+                <TextBlock Text="There are no pictures in this folder."
+                           Height="Auto"
+                           Margin="5 5 0 0"
+                           Visibility="{Binding Path=HasNoPictures,
+                                               Converter={StaticResource boolToVisibilityConverter}}" />
             </Grid>
         </ScrollViewer>
     </Grid>

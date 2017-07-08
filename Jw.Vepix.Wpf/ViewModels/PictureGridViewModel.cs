@@ -100,7 +100,7 @@ namespace JW.Vepix.Wpf.ViewModels
             }
         }
 
-        public bool HasPictures => Pictures.Count > 0;
+        public bool HasNoPictures => !(Pictures.Count > 0 || ArePicturesLoading);
 
         public ObservableCollection<Picture> Pictures
         {
@@ -113,9 +113,12 @@ namespace JW.Vepix.Wpf.ViewModels
             }
             set
             {
-                _pictures = value;
-                NotifyPropertyChanged();
-                NotifyPropertyChanged(() => HasPictures);
+                if (value != _pictures)
+                {
+                    _pictures = value;
+                    NotifyPropertyChanged();
+                    NotifyPropertyChanged(() => HasNoPictures); 
+                }
             }
         }
 
