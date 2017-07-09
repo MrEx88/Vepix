@@ -26,7 +26,7 @@ namespace JW.Vepix.Wpf.ViewModels
             if (DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
                 return;
 
-            _pictureRepo = pictureRepository;
+            _pictureRepository = pictureRepository;
 
             _modalDialog = modalDialog;
 
@@ -36,7 +36,6 @@ namespace JW.Vepix.Wpf.ViewModels
             //_eventAggregator.GetEvent<PictureNameChangedEvent>().Subscribe(OnPictureNameChanged);
             _eventAggregator.GetEvent<PictureOverwrittenEvent>().Subscribe(OnPictureOverwritten);
 
-            IsOpenFiles = true;
             ArePicturesLoading = false;
 
             _pictures = new ObservableCollection<Picture>();
@@ -70,22 +69,6 @@ namespace JW.Vepix.Wpf.ViewModels
         }
 
         public string FolderName => _absolutePath.ToFoldersName();
-
-        private bool _isOpenFiles;
-
-        public bool IsOpenFiles
-        {
-            get { return _isOpenFiles; }
-            set
-            {
-                if (value != _isOpenFiles)
-                {
-                    _isOpenFiles = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
-
 
         public bool ArePicturesLoading
         {
@@ -177,7 +160,7 @@ namespace JW.Vepix.Wpf.ViewModels
                 // todo: how to handle when some pictures copy and some don't
                 // maybe refactor TryCopy to return picture name if it failed.
                 // same goes for TryMove, TryDelete, TryChangeName, 
-                if (_pictures.All(pic => _pictureRepo.TryCopy(pic, folderPath)))
+                if (_pictures.All(pic => _pictureRepository.TryCopy(pic, folderPath)))
                 {
                     System.Threading.Tasks.Task.Factory.StartNew(() =>
                     {
@@ -199,7 +182,7 @@ namespace JW.Vepix.Wpf.ViewModels
             if (_fileExplorerDialogService.ShowFolderBrowserDialog(out folderPath) == DialogResult.OK)
             {
                 // todo: how to handle when some pictures copy and some don't
-                if (_pictures.All(pic => _pictureRepo.TryMove(pic, folderPath)))
+                if (_pictures.All(pic => _pictureRepository.TryMove(pic, folderPath)))
                 {
                     System.Threading.Tasks.Task.Factory.StartNew(() =>
                     {
@@ -226,7 +209,7 @@ namespace JW.Vepix.Wpf.ViewModels
                 pictures.ForEach(pic =>
                 {
                     Pictures.Remove(pic);
-                    _pictureRepo.TryDelete(pic.FullFileName);
+                    _pictureRepository.TryDelete(pic.FullFileName);
                 });
             }
         }
@@ -278,7 +261,7 @@ namespace JW.Vepix.Wpf.ViewModels
         private void OnPictureOverwritten(Guid guid)
         {
             var picture = Pictures.First(pic => pic.Guid == guid);
-            var reloadedPicture = _pictureRepo.GetPicturesAsync(new string[] { picture.FullFileName }).Result;
+            var reloadedPicture = _pictureRepository.GetPicturesAsync(new string[] { picture.FullFileName }).Result;
             Pictures.Remove(picture);
             Pictures.Add(reloadedPicture.First());
         }
@@ -287,26 +270,11 @@ namespace JW.Vepix.Wpf.ViewModels
         {
             AbsolutePath = pictureFileNames.First().ToParentFolderPath();
             ArePicturesLoading = true;
-            TaskRunner.WaitAllOneByOne(pictureFileNames, _pictureRepo.GetPictureAsync, Pictures.Add,
+            TaskRunner.WaitAllOneByOne(pictureFileNames, _pictureRepository.GetPictureAsync, Pictures.Add,
                 () => ArePicturesLoading = false);
         }
 
-        public async void Load(string folderPath)
-        {
-            List<string> fileNames = await _pictureRepo.GetFileNamesAsync(folderPath);
-            IsOpenFiles = false;
-
-            if (fileNames.Count == 0)
-            {
-                AbsolutePath = folderPath;
-
-                return;
-            }
-
-            Load(fileNames);
-        }
-
-        private IPictureRepository _pictureRepo;
+        private IPictureRepository _pictureRepository;
         private IEventAggregator _eventAggregator;
         private IMessageDialogService _modalDialog;
         private IFileExplorerDialogService _fileExplorerDialogService;

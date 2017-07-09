@@ -132,13 +132,13 @@
     <Compile Include="Services\IMessageDialogService.cs" />
     <Compile Include="ViewModels\EditNamesViewModel.cs" />
     <Compile Include="ViewModels\ICollectionViewModel.cs" />
-    <Compile Include="ViewModels\IPictureFolderTreeItemViewModel.cs" />
+    <Compile Include="ViewModels\IFolderTreeItemViewModel.cs" />
     <Compile Include="ViewModels\IPictureGridViewModel.cs" />
-    <Compile Include="ViewModels\IPictureFolderTreeViewModel.cs" />
+    <Compile Include="ViewModels\IFolderTreeViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="ViewModels\PictureFolderTreeItemViewModel.cs" />
+    <Compile Include="ViewModels\FolderTreeItemViewModel.cs" />
     <Compile Include="ViewModels\PictureGridViewModel.cs" />
-    <Compile Include="ViewModels\PictureFolderTreeViewModel.cs" />
+    <Compile Include="ViewModels\FolderTreeViewModel.cs" />
     <Compile Include="ViewModels\PicturesViewerViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\EditNamesView.xaml.cs">
@@ -181,7 +181,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\PictureFolderTreeView.xaml">
+    <Page Include="Views\FolderTreeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -193,8 +193,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Views\PictureFolderTreeView.xaml.cs">
-      <DependentUpon>PictureFolderTreeView.xaml</DependentUpon>
+    <Compile Include="Views\FolderTreeView.xaml.cs">
+      <DependentUpon>FolderTreeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="VepixWindow.xaml.cs">
       <DependentUpon>VepixWindow.xaml</DependentUpon>

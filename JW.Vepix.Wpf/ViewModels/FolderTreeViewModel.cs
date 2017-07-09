@@ -7,24 +7,24 @@ using System.Linq;
 
 namespace JW.Vepix.Wpf.ViewModels
 {
-    public class PictureFolderTreeViewModel : ViewModelBase, IPictureFolderTreeViewModel
+    public class FolderTreeViewModel : ViewModelBase, IFolderTreeViewModel
     {
-        public PictureFolderTreeViewModel(IEventAggregator eventAggregator)
+        public FolderTreeViewModel(IEventAggregator eventAggregator)
         {
             if (DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
                 return;
 
             _eventAggregator = eventAggregator;
 
-            _pictureFolderItemViewModels = new ObservableCollection<IPictureFolderTreeItemViewModel>();
+            _folderTreeItemViewModels = new ObservableCollection<IFolderTreeItemViewModel>();
         }
 
-        public ObservableCollection<IPictureFolderTreeItemViewModel> PictureFolderItemViewModels
+        public ObservableCollection<IFolderTreeItemViewModel> FolderItemViewModels
         {
-            get { return _pictureFolderItemViewModels; }
+            get { return _folderTreeItemViewModels; }
             set
             {
-                _pictureFolderItemViewModels = value;
+                _folderTreeItemViewModels = value;
                 NotifyPropertyChanged();
             }
         }
@@ -33,31 +33,31 @@ namespace JW.Vepix.Wpf.ViewModels
         {
             var dirInfo = new DirectoryInfo(folder);
 
-            var treeItem = new PictureFolderTreeItemViewModel(dirInfo, _eventAggregator);
+            var treeItem = new FolderTreeItemViewModel(dirInfo, _eventAggregator);
             return TryAdd(treeItem);
         }
 
-        private bool TryAdd(PictureFolderTreeItemViewModel treeItem)
+        private bool TryAdd(FolderTreeItemViewModel treeItem)
         {
-            if (PictureFolderItemViewModels.Count != 0)
+            if (FolderItemViewModels.Count != 0)
             {
                 // Check if folder already exists.
-                if (PictureFolderItemViewModels.ToList().Exists(folderTreeItem => 
+                if (FolderItemViewModels.ToList().Exists(folderTreeItem => 
                         folderTreeItem.TreeItemAlreadyExists(treeItem.AbsolutePath)))
                 {
                     return false;
                 }
 
                 // Remove if folder is Parent to existing folder(s).
-                PictureFolderItemViewModels.RemoveAll(folderItem => folderItem.IsAParentTo(treeItem));
+                FolderItemViewModels.RemoveAll(folderItem => folderItem.IsAParentTo(treeItem));
             }
 
-            PictureFolderItemViewModels.Add(treeItem);
+            FolderItemViewModels.Add(treeItem);
 
             return true;
         }
 
-        private ObservableCollection<IPictureFolderTreeItemViewModel> _pictureFolderItemViewModels;
+        private ObservableCollection<IFolderTreeItemViewModel> _folderTreeItemViewModels;
         private IEventAggregator _eventAggregator;
     }
 }

@@ -44,17 +44,9 @@ namespace JW.Vepix.Core.Interfaces
         /// </summary>
         /// <param name="folderPath">The folder to search pictures for</param>
         /// <param name="option">The SearchOption enum to use</param>
-        /// <param name="searchPattern">File filters to use (e.g "*.jpg")</param>
+        /// <param name="searchPatterns">File filters to use (e.g "*.jpg")</param>
         /// <returns>A List of Picture</returns>
-        Task<List<Picture>> GetPicturesFromFolderAsync(string folderPath, SearchOption option = SearchOption.TopDirectoryOnly, params string[] searchPattern);
-
-        /// <summary>
-        /// Gets pictures from the selected files in windows explorer.
-        /// </summary>
-        /// <param name="folderPath">The folder to search pictures for</param>
-        /// <param name="option">The SearchOption enum to use</param>
-        /// <returns>A List of picture file names</returns>
-        Task<List<string>> GetFileNamesAsync(string folderPath, SearchOption option = SearchOption.TopDirectoryOnly);
+        Task<List<Picture>> GetPicturesFromFolderAsync(string folderPath, SearchOption option = SearchOption.TopDirectoryOnly, params string[] searchPatterns);
 
         /// <summary>
         /// Crops the image and returns it

@@ -3,11 +3,11 @@
 namespace JW.Vepix.Wpf.Views
 {
     /// <summary>
-    /// Interaction logic for PictureFolderTreeView.xaml
+    /// Interaction logic for FolderTreeView.xaml
     /// </summary>
-    public partial class PictureFolderTreeView : UserControl
+    public partial class FolderTreeView : UserControl
     {
-        public PictureFolderTreeView()
+        public FolderTreeView()
         {
             InitializeComponent();
         }

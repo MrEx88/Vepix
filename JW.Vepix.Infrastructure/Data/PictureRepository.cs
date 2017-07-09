@@ -37,7 +37,7 @@ namespace JW.Vepix.Infrastructure.Data
         public async Task<List<Picture>> GetPicturesFromFolderAsync(string folderPath,
             SearchOption option = SearchOption.TopDirectoryOnly) =>
                 await GetPicturesFromFolderAsync(folderPath, option,
-                    _supportedImagesFilterList.ToArray());
+                    _supportedPicturesPatterns.ToArray());
 
         public async Task<List<Picture>> GetPicturesFromFolderAsync(string folderPath,
             SearchOption option = SearchOption.TopDirectoryOnly, params string[] searchPattern)
@@ -46,11 +46,6 @@ namespace JW.Vepix.Infrastructure.Data
                 searchPattern.ToList(), option);
             return await LoadPicturesAsync(fileBytes);
         }
-
-        public async Task<List<string>> GetFileNamesAsync(string folderPath, 
-            SearchOption option = SearchOption.TopDirectoryOnly) =>
-                await _fileService.GetFileNamesFromDirectoryAsync(folderPath,
-                                            _supportedImagesFilterList, option);
 
         public Picture GetCroppedImage(Picture picture, Int32Rect rect)
         {
@@ -123,7 +118,7 @@ namespace JW.Vepix.Infrastructure.Data
 
         private IFileService _fileService;
         private IBitmapService _bitmapService;
-        private readonly List<string> _supportedImagesFilterList = new List<string>
+        private readonly List<string> _supportedPicturesPatterns = new List<string>
         {
             "*.jpg", "*.png", "*.gif", "*.bmp", "*.wmp", "*.tiff"
         };

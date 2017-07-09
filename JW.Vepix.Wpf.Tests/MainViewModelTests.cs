@@ -23,7 +23,8 @@ namespace JW.Vepix.Wpf.Tests
         // Act.
         // Assert.
 
-        private Mock<IPictureFolderTreeViewModel> _mockPictureFolderTreeViewModel;
+        private Mock<IFolderTreeViewModel> _mockPictureFolderTreeViewModel;
+        private Mock<IFileService> _mockFileService;
         private Mock<IFileExplorerDialogService> _mockFileExplorerDialogService;
         private List<Mock<IPictureGridViewModel>> _mockPictureGridViewModels;
         private Mock<IEventAggregator> _mockEventAggregator;
@@ -34,7 +35,8 @@ namespace JW.Vepix.Wpf.Tests
         [TestInitialize]
         public void Initialize()
         {
-            _mockPictureFolderTreeViewModel = new Mock<IPictureFolderTreeViewModel>();
+            _mockPictureFolderTreeViewModel = new Mock<IFolderTreeViewModel>();
+            _mockFileService = new Mock<IFileService>();
             _mockFileExplorerDialogService = new Mock<IFileExplorerDialogService>();
             _mockPictureGridViewModels = new List<Mock<IPictureGridViewModel>>();
             _mockEventAggregator = new Mock<IEventAggregator>();
@@ -43,7 +45,8 @@ namespace JW.Vepix.Wpf.Tests
                 Returns(_openPicturesFromFolderEvent);
              _mockPictureRepo = new Mock<IPictureRepository>();
             _mockMainViewModel = new MainViewModel(_mockPictureFolderTreeViewModel.Object,
-                CreatePictureGridViewModel, _mockFileExplorerDialogService.Object, _mockEventAggregator.Object);
+                CreatePictureGridViewModel, _mockFileService.Object, 
+                _mockFileExplorerDialogService.Object, _mockEventAggregator.Object);
         }
 
         private IPictureGridViewModel CreatePictureGridViewModel()

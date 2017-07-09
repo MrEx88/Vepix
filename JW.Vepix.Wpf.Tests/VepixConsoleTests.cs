@@ -13,7 +13,7 @@ namespace JW.Vepix.Wpf.Tests
         // Assert.
 
         VepixCommandLineParser _consoleParser = new VepixCommandLineParser();
-        VepixCommandLineResults _console = VepixCommandLineParser.ConsoleInstance();
+        VepixCommandLineResults _console = VepixCommandLineParser.ResultsInstance();
         string _validPath = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
         string validSearchPattern = "*.jpg";
 

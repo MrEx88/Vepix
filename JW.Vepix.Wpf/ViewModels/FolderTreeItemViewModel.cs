@@ -9,14 +9,14 @@ using System.Linq;
 
 namespace JW.Vepix.Wpf.ViewModels
 {
-    public class PictureFolderTreeItemViewModel : ViewModelBase, IPictureFolderTreeItemViewModel
+    public class FolderTreeItemViewModel : ViewModelBase, IFolderTreeItemViewModel
     {
-        public PictureFolderTreeItemViewModel(DirectoryInfo dirInfo, IEventAggregator eventAggregator)
+        public FolderTreeItemViewModel(DirectoryInfo dirInfo, IEventAggregator eventAggregator)
             : this(dirInfo, parent: null, eventAggregator: eventAggregator)
         {
         }
 
-        private PictureFolderTreeItemViewModel(DirectoryInfo dirInfo, PictureFolderTreeItemViewModel parent,
+        private FolderTreeItemViewModel(DirectoryInfo dirInfo, FolderTreeItemViewModel parent,
             IEventAggregator eventAggregator)
         {
             if (DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
@@ -27,24 +27,23 @@ namespace JW.Vepix.Wpf.ViewModels
 
             _eventAggregator = eventAggregator;
 
-            _children = new ObservableCollection<IPictureFolderTreeItemViewModel>(
+            _children = new ObservableCollection<IFolderTreeItemViewModel>(
                 (from child in dirInfo.GetDirectories()
-                 select new PictureFolderTreeItemViewModel(child, parent: this, eventAggregator: eventAggregator)).ToList());
+                 select new FolderTreeItemViewModel(child, parent: this, eventAggregator: eventAggregator)).ToList());
             
-            _filePattern = "*.*";
             NotifyPropertyChanged("Children");
             NotifyPropertyChanged("FolderName");
 
             OpenPicturesInFolderCommand = new RelayCommand<object>(OnOpenPicturesInFolder);
         }
 
-        public IPictureFolderTreeItemViewModel Parent
+        public IFolderTreeItemViewModel Parent
         {
             get { return _parent; }
             set { _parent = value; }
         }
 
-        public ObservableCollection<IPictureFolderTreeItemViewModel> Children
+        public ObservableCollection<IFolderTreeItemViewModel> Children
         {
             get { return _children; }
             set
@@ -63,7 +62,7 @@ namespace JW.Vepix.Wpf.ViewModels
             return absolutePath == AbsolutePath || directories.Exists(dic => dic.FullName == absolutePath);
         }
 
-        public bool IsAParentTo(PictureFolderTreeItemViewModel treeItem)
+        public bool IsAParentTo(FolderTreeItemViewModel treeItem)
         {
             var parent = new DirectoryInfo(AbsolutePath).Parent;
             return parent.FullName == treeItem.AbsolutePath;
@@ -83,13 +82,6 @@ namespace JW.Vepix.Wpf.ViewModels
                     NotifyPropertyChanged("FolderName");
                 }
             }
-        }
-
-        //not sure if i want to keep this; i think I will  just have a textbox in the mainview (or foldertreeview) for this
-        public string FilePattern
-        {
-            get { return _filePattern; }
-            set { _filePattern = value; }
         }
 
         public bool IsParent => _parent == null;
@@ -130,20 +122,18 @@ namespace JW.Vepix.Wpf.ViewModels
 
         private void OnOpenPicturesInFolder(object folder)
         {
-            var folderName = ((PictureFolderTreeItemViewModel)folder).AbsolutePath;
+            var folderName = ((FolderTreeItemViewModel)folder).AbsolutePath;
             _eventAggregator.GetEvent<OpenPicturesFromFolderEvent>().Publish(new PicturesFolderPayload()
             {
-                AbsolutePath = _absolutePath,
-                FilePattern = _filePattern
+                AbsolutePath = _absolutePath
             });
         }
 
-        private IPictureFolderTreeItemViewModel _parent;
-        private ObservableCollection<IPictureFolderTreeItemViewModel> _children;
+        private IFolderTreeItemViewModel _parent;
+        private ObservableCollection<IFolderTreeItemViewModel> _children;
         private IEventAggregator _eventAggregator;
         private string _absolutePath;
         private bool _isExpanded;
         private bool _isSelected;
-        private string _filePattern; // ex: "*12.jpg, *.bmp"
     }
 }

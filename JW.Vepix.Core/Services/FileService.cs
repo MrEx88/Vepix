@@ -2,6 +2,7 @@
 using JW.Vepix.Core.Models;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -23,14 +24,14 @@ namespace JW.Vepix.Core.Services
         }
 
         public async Task<List<string>> GetFileNamesFromDirectoryAsync(string folderPath,
-            List<string> searchPattern, SearchOption option)
+            List<string> searchPatterns, SearchOption option = SearchOption.TopDirectoryOnly)
         {
             var files = new List<string>();
             if (Directory.Exists(folderPath))
             {
                 await Task.Factory.StartNew(() =>
-                    searchPattern.ForEach(sp =>
-                       files.AddRange(Directory.GetFiles(folderPath, sp, option))));
+                    files.AddRange(searchPatterns.SelectMany(searchPattern =>
+                        Directory.EnumerateFiles(folderPath, searchPattern, option).ToList())));
             }
 
             return files;
@@ -42,18 +43,8 @@ namespace JW.Vepix.Core.Services
             Task.Factory.StartNew(() => File.ReadAllBytes(fileName));
 
         public async Task<List<FileBytes>> GetFilesBytesFromDirectoryAsync(string folderPath,
-            List<string> searchPattern, SearchOption option)
-        {
-            var files = new List<string>();
-            if (Directory.Exists(folderPath))
-            {
-                await Task.Factory.StartNew(() =>
-                    searchPattern.ForEach(sp =>
-                       files.AddRange(Directory.GetFiles(folderPath, sp, option))));
-            }
-
-            return await GetFilesBytesAsync(files);
-        }
+            List<string> searchPatterns, SearchOption option = SearchOption.TopDirectoryOnly) =>
+                await GetFilesBytesAsync(await GetFileNamesFromDirectoryAsync(folderPath, searchPatterns, option));
 
         public bool ChangeFileName(string sourceFileName, string destinationFileName)
         {
@@ -61,15 +52,17 @@ namespace JW.Vepix.Core.Services
             return true;
         }
 
-        public bool CopyTo(string folderName, string file)
+        public bool CopyTo(string folderPath, string fileName)
         {
-            File.Copy(file, "{folderName}\\{fileName}");
+            var name = Path.GetFileName(fileName);
+            File.Copy(fileName, $"{folderPath}\\{name}");
             return true;
         }
 
-        public bool MoveTo(string folderName, string file)
+        public bool MoveTo(string folderPath, string fileName)
         {
-            File.Move(file, "{folderName}\\{fileName}");
+            var name = Path.GetFileName(fileName);
+            File.Move(fileName, $"{folderPath}\\{name}");
             return true;
         }
 

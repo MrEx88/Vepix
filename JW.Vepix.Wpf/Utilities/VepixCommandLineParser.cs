@@ -37,7 +37,7 @@ namespace JW.Vepix.Wpf.Utilities
             .AppendLine(TreeFoldersHelp)
             .AppendLine(SearchPatternHelp).ToString();
 
-        public static VepixCommandLineResults ConsoleInstance()
+        public static VepixCommandLineResults ResultsInstance()
         {
             if (_vepixConsole == null)
             {

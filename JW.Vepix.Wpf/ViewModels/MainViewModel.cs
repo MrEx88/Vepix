@@ -1,4 +1,5 @@
 ﻿using JW.Vepix.Core.Extensions;
+using JW.Vepix.Core.Interfaces;
 using JW.Vepix.Wpf.Events;
 using JW.Vepix.Wpf.Payloads;
 using JW.Vepix.Wpf.Services;
@@ -10,22 +11,26 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace JW.Vepix.Wpf.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
-        public MainViewModel(IPictureFolderTreeViewModel pictureFolderTreeViewModel,
+        public MainViewModel(IFolderTreeViewModel folderTreeViewModel,
                              Func<IPictureGridViewModel> pictureGridViewModelCreator,
+                             IFileService fileService,
                              IFileExplorerDialogService fileExplorerDialogService,
                              IEventAggregator eventAggregator)
         {
             if (DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
                 return;
 
-            PictureFolderTreeViewModel = pictureFolderTreeViewModel;
+            FolderTreeViewModel = folderTreeViewModel;
             _pictureGridViewModelCreator = pictureGridViewModelCreator;
+
+            _fileService = fileService;
             _fileExplorerDialogService = fileExplorerDialogService;
 
             _helpInfoText = "";
@@ -45,8 +50,10 @@ namespace JW.Vepix.Wpf.ViewModels
             CheckCommandLine();
         }
 
-        public IPictureFolderTreeViewModel PictureFolderTreeViewModel { get; private set; }
+        public IFolderTreeViewModel FolderTreeViewModel { get; private set; }
+
         public ObservableCollection<IPictureGridViewModel> PictureGridViewModels { get; private set; }
+
         public IPictureGridViewModel SelectedPictureGridViewModel
         {
             get { return _selectedPictureGridViewModel; }
@@ -86,31 +93,18 @@ namespace JW.Vepix.Wpf.ViewModels
             }
         }
 
-        public RelayCommand<SearchOption> OpenFolderCommand { get; private set; }
-        public RelayCommand<object> OpenFilesCommand { get; private set; }
-        public RelayCommand<IPictureGridViewModel> CloseFolderTabCommand { get; private set; }
-        public RelayCommand<object> AboutCommand { get; private set; }
-
-        private void OnOpenFolderCommand(SearchOption option)
-        {
-            string selectedPath;
-            if (_fileExplorerDialogService.ShowFolderBrowserDialog(out selectedPath) == DialogResult.OK)
-            {
-                if (option == SearchOption.AllDirectories)
-                {
-                    PictureFolderTreeViewModel.TryLoad(selectedPath);
-                }
-
-                SelectedPictureGridViewModel = CreateAndLoadPictureGridViewModel(selectedPath);
-            }
-        }
-
-        private IPictureGridViewModel CreateAndLoadPictureGridViewModel(List<string> pictureFileNames)
+        public IPictureGridViewModel LoadAPictureGridViewModel(List<string> pictureFileNames)
         {
             // Check if folder is already opened.
             var pictureGridViewModel = PictureGridViewModels.ToList().Find(picGrid =>
                 ((PictureGridViewModel)picGrid).AbsolutePath == pictureFileNames.First().ToParentFolderPath());
-            if (pictureGridViewModel != null)
+            if (pictureGridViewModel == null)
+            {
+                pictureGridViewModel = _pictureGridViewModelCreator();
+                PictureGridViewModels.Add(pictureGridViewModel);
+                pictureGridViewModel.Load(pictureFileNames);
+            }
+            else
             {
                 // Remove any duplicates.
                 pictureFileNames.RemoveAll(fileName => PictureGridViewModels.ToList()
@@ -118,30 +112,49 @@ namespace JW.Vepix.Wpf.ViewModels
                                 .Exists(pic => pic.FullFileName == fileName)));
 
                 pictureGridViewModel.Load(pictureFileNames);
-                return pictureGridViewModel;
             }
 
-            pictureGridViewModel = _pictureGridViewModelCreator();
-            
-            PictureGridViewModels.Add(pictureGridViewModel);
-            pictureGridViewModel.Load(pictureFileNames);
             return pictureGridViewModel;
         }
 
-        private IPictureGridViewModel CreateAndLoadPictureGridViewModel(string folderPath)
+        public async Task<IPictureGridViewModel> LoadAPictureGridViewModel(string folderPath) =>
+            await LoadAPictureGridViewModel(folderPath, _supportedPicturesPatterns);
+
+        public async Task<IPictureGridViewModel> LoadAPictureGridViewModel(string folderPath, List<string> searchPatterns)
         {
+
             // Check if folder is already opened.
+            //todo: think about if user opens the same folder but with different search patterns
             var pictureGridViewModel = PictureGridViewModels.ToList().Find(picGrid =>
                 ((PictureGridViewModel)picGrid).AbsolutePath == folderPath);
-            if (pictureGridViewModel != null)
+            if (pictureGridViewModel == null)
             {
-                return pictureGridViewModel;
+                var pictureFileNames = await _fileService.GetFileNamesFromDirectoryAsync(folderPath, searchPatterns);
+                pictureGridViewModel = _pictureGridViewModelCreator();
+                PictureGridViewModels.Add(pictureGridViewModel);
+                pictureGridViewModel.Load(pictureFileNames);
             }
-            
-            pictureGridViewModel = _pictureGridViewModelCreator();
-            PictureGridViewModels.Add(pictureGridViewModel);
-            pictureGridViewModel.Load(folderPath);
+
             return pictureGridViewModel;
+        }
+
+        public RelayCommand<SearchOption> OpenFolderCommand { get; private set; }
+        public RelayCommand<object> OpenFilesCommand { get; private set; }
+        public RelayCommand<IPictureGridViewModel> CloseFolderTabCommand { get; private set; }
+        public RelayCommand<object> AboutCommand { get; private set; }
+
+        private async void OnOpenFolderCommand(SearchOption option)
+        {
+            string selectedPath;
+            if (_fileExplorerDialogService.ShowFolderBrowserDialog(out selectedPath) == DialogResult.OK)
+            {
+                if (option == SearchOption.AllDirectories)
+                {
+                    FolderTreeViewModel.TryLoad(selectedPath);
+                }
+
+                SelectedPictureGridViewModel = await LoadAPictureGridViewModel(selectedPath);
+            }
         }
 
         private void OnOpenFilesCommand()
@@ -149,7 +162,7 @@ namespace JW.Vepix.Wpf.ViewModels
             string[] fileNames;
             if (_fileExplorerDialogService.ShowOpenFileDialog(out fileNames) == DialogResult.OK)
             {
-                SelectedPictureGridViewModel = CreateAndLoadPictureGridViewModel(fileNames.ToList());
+                SelectedPictureGridViewModel = LoadAPictureGridViewModel(fileNames.ToList());
             }
         }
 
@@ -170,9 +183,9 @@ namespace JW.Vepix.Wpf.ViewModels
             new MessageDialogService().ShowMessage("vepix - About", message);
         }
 
-        private void OnOpenPicturesFromFolder(PicturesFolderPayload picturesFolder)
+        private async void OnOpenPicturesFromFolder(PicturesFolderPayload picturesFolder)
         {
-            SelectedPictureGridViewModel = CreateAndLoadPictureGridViewModel(picturesFolder.AbsolutePath);
+            SelectedPictureGridViewModel = await LoadAPictureGridViewModel(picturesFolder.AbsolutePath);
         }
 
         private void OnStatusTextHelpInfo(string text)
@@ -185,35 +198,41 @@ namespace JW.Vepix.Wpf.ViewModels
             UserActionText = text;
         }
 
-        private void CheckCommandLine()
+        private async void CheckCommandLine()
         {
-            // todo: need to pass the search patterns too
-            var userInputs = VepixCommandLineParser.ConsoleInstance();
+            var userInputs = VepixCommandLineParser.ResultsInstance();
             foreach (var treeFolder in userInputs.TreeFolders)
             {
-                PictureFolderTreeViewModel.TryLoad(treeFolder);
+                FolderTreeViewModel.TryLoad(treeFolder);
             }
 
+            var searchPatterns = userInputs.SearchPatterns;
             var firstLoad = true;
             foreach (var folder in userInputs.Folders)
             {
                 if (firstLoad)
                 {
-                    SelectedPictureGridViewModel = CreateAndLoadPictureGridViewModel(folder);
+                    SelectedPictureGridViewModel = await LoadAPictureGridViewModel(folder, searchPatterns);
                     firstLoad = false;
                 }
                 else
                 {
-                    CreateAndLoadPictureGridViewModel(folder);
+                    await LoadAPictureGridViewModel(folder, searchPatterns);
                 }
             }
         }
 
-        private IEventAggregator _eventAggregator;
         private Func<IPictureGridViewModel> _pictureGridViewModelCreator;
         private IPictureGridViewModel _selectedPictureGridViewModel;
+        private IFileService _fileService;
         private IFileExplorerDialogService _fileExplorerDialogService;
+        private IEventAggregator _eventAggregator;
         private string _userActionText;
         private string _helpInfoText;
+        // todo: need to figure out where i can put this globally
+        private readonly List<string> _supportedPicturesPatterns = new List<string>
+        {
+            "*.jpg", "*.png", "*.gif", "*.bmp", "*.wmp", "*.tiff"
+        };
     }
 }

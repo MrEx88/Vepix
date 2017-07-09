@@ -34,19 +34,21 @@ namespace JW.Vepix.Core.Interfaces
         /// Gets the image file paths that have matched the criteria of the parameters.
         /// </summary>
         /// <param name="folderPath">The path to search in</param>
-        /// <param name="searchPattern">The file filters to use (i.e. "*.jpg")</param>
+        /// <param name="searchPatterns">The file filters to use (i.e. "*.jpg")</param>
         /// <param name="option">The SearchOption Enum to use</param>
         /// <returns>A List of FileBytes</returns>
-        Task<List<FileBytes>> GetFilesBytesFromDirectoryAsync(string folderPath, List<string> searchPattern, SearchOption option);
+        Task<List<FileBytes>> GetFilesBytesFromDirectoryAsync(string folderPath, List<string> searchPatterns,
+                                                              SearchOption option = SearchOption.TopDirectoryOnly);
 
         /// <summary>
         /// Gets the image file paths that have matched the criteria of the parameters.
         /// </summary>
         /// <param name="folderPath">The path to search in</param>
-        /// <param name="searchPattern">The file pattern to use (i.e. "*.jpg")</param>
+        /// <param name="searchPatterns">The file pattern to use (i.e. "*.jpg")</param>
         /// <param name="option">The SearchOption Enum to use</param>
         /// <returns>A List of the image file paths</returns>
-        Task<List<string>> GetFileNamesFromDirectoryAsync(string folderPath, List<string> searchPattern, SearchOption option);
+        Task<List<string>> GetFileNamesFromDirectoryAsync(string folderPath, List<string> searchPatterns,
+                                                          SearchOption option = SearchOption.TopDirectoryOnly);
 
         /// <summary>
         /// Changes the name of the file.
@@ -59,18 +61,18 @@ namespace JW.Vepix.Core.Interfaces
         /// <summary>
         /// Copies the file to another location.
         /// </summary>
-        /// <param name="sourceFileName">The name of the file to copy</param>
-        /// <param name="destinationFileName">The name of the file to copy to</param>
+        /// <param name="folderPath">The folder to copy to</param>
+        /// <param name="fileName">The name of the file to copy</param>
         /// <returns>True if copied successfully</returns>
-        bool CopyTo(string folderName, string file);
+        bool CopyTo(string folderPath, string fileName);
 
         /// <summary>
         /// Changes the name of the file.
         /// </summary>
-        /// <param name="sourceFileName">The name of the file to move</param>
-        /// <param name="newName">The name to move to file to</param>
+        /// <param name="folderPath">The name of the folder to move to</param>
+        /// <param name="fileName">The name to move to file</param>
         /// <returns>True if name moved successfully</returns>
-        bool MoveTo(string folderName, string file);
+        bool MoveTo(string folderPath, string fileName);
 
         /// <summary>
         /// Checks if the string has a valid file name.

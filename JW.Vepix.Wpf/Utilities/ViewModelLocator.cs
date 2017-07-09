@@ -12,7 +12,7 @@ namespace JW.Vepix.Wpf.Utilities
     {
         //public PictureGridViewModel PictureGridViewModel { get; }
         public MainViewModel MainViewModel { get; }
-        public PictureFolderTreeViewModel TreePictureFolderViewModel { get; }
+        public FolderTreeViewModel TreePictureFolderViewModel { get; }
 
         public ViewModelLocator()
         {
@@ -26,14 +26,14 @@ namespace JW.Vepix.Wpf.Utilities
             container.RegisterType<IPictureRepository, PictureRepository>();
 
             container.RegisterType<IPictureGridViewModel, PictureGridViewModel>();
-            container.RegisterType<IPictureFolderTreeViewModel, PictureFolderTreeViewModel>();
+            container.RegisterType<IFolderTreeViewModel, FolderTreeViewModel>();
 
             container.RegisterType<ICollectionViewModel, EditNamesViewModel>();
             container.RegisterType<ICollectionViewModel, PicturesViewerViewModel>();
             
             //PictureGridViewModel = container.Resolve<PictureGridViewModel>();
             MainViewModel = container.Resolve<MainViewModel>();
-            TreePictureFolderViewModel = container.Resolve<PictureFolderTreeViewModel>();
+            TreePictureFolderViewModel = container.Resolve<FolderTreeViewModel>();
 
             Container = container;
         }
