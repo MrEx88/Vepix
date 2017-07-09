@@ -26,58 +26,8 @@ namespace JW.Vepix.Wpf.ViewModels
             IsAllSuffixesCheckedCommand = new RelayCommand<object>(OnIsAllSuffixesCheckedCommand);
             OverwriteNamesCommand = new RelayCommand<object>(OnOverwriteNamesCommand, OnCanOverwriteNamesCommand);
         }
-        
-        private void OnRemovePictureCommand(int index)
-        {
-            Pictures.RemoveAt(index);
-            EditPictureNames.RemoveAt(index);
-        }
 
-        private void OnIsAllPrefixesCheckedCommand()
-        {
-            var val = _editPictureNames.All(name => name.IsPrefixChecked);
-            if (val != _isAllPrefixChecked)
-            {
-                _isAllPrefixChecked = val;
-                NotifyPropertyChanged("IsAllPrefixChecked");
-            }
-        }
-
-        private void OnIsAllSuffixesCheckedCommand()
-        {
-            var val = _editPictureNames.All(name => name.IsSuffixChecked);
-            if (val != _isAllSuffixChecked)
-            {
-                _isAllSuffixChecked = val;
-                NotifyPropertyChanged("IsAllSuffixChecked");
-            }
-        }
-
-        private void OnOverwriteNamesCommand()
-        {
-            for (int i = 0; i < Pictures.Count; i ++)
-            {
-                if (_pictureRepository.TryChangePictureName(Pictures[i], EditPictureNames[i].ToString()))
-                {
-                    _eventAggregator.GetEvent<PictureNameChangedEvent>().Publish(new PictureNameChangePayload()
-                    {
-                        Guid = Pictures[i].Guid,
-                        NewPictureName = EditPictureNames[i].ToString()
-                    });
-                }
-                else
-                {
-                    //todo: maybe display a list of failed filenames
-                    //      and remove the successfully overwritten names from the list
-                } 
-            }
-        }
-        private bool OnCanOverwriteNamesCommand()
-        {
-            //todo also check for valid file names
-            return EditPictureNames.Count > 0;
-        }
-
+        public string ViewTitle => "Edit Picture Names";
 
         public string Prefix
         {
@@ -113,8 +63,6 @@ namespace JW.Vepix.Wpf.ViewModels
             }
         }
 
-        private bool _isAllSuffixChecked;
-
         public bool IsAllSuffixChecked
         {
             get { return _isAllSuffixChecked; }
@@ -131,8 +79,6 @@ namespace JW.Vepix.Wpf.ViewModels
                 }
             }
         }
-
-        private bool _isAllPrefixChecked;
 
         public bool IsAllPrefixChecked
         {
@@ -177,13 +123,6 @@ namespace JW.Vepix.Wpf.ViewModels
             }
         }
 
-        public string ViewTitle => "Edit Picture Names";
-
-        public RelayCommand<int> RemovePictureCommand { get; private set; }
-        public RelayCommand<object> IsAllPrefixesCheckedCommand { get; private set; }
-        public RelayCommand<object> IsAllSuffixesCheckedCommand { get; private set; }
-        public RelayCommand<object> OverwriteNamesCommand { get; private set; }
-
         public void Load(List<Picture> pictures)
         {
             Pictures = new ObservableCollection<Picture>(pictures);
@@ -193,6 +132,63 @@ namespace JW.Vepix.Wpf.ViewModels
                 EditPictureNames.Add(new AffixedName(pic.ImageName)));
         }
 
+        public RelayCommand<int> RemovePictureCommand { get; private set; }
+        public RelayCommand<object> IsAllPrefixesCheckedCommand { get; private set; }
+        public RelayCommand<object> IsAllSuffixesCheckedCommand { get; private set; }
+        public RelayCommand<object> OverwriteNamesCommand { get; private set; }
+
+        private void OnRemovePictureCommand(int index)
+        {
+            Pictures.RemoveAt(index);
+            EditPictureNames.RemoveAt(index);
+        }
+
+        private void OnIsAllPrefixesCheckedCommand()
+        {
+            var val = _editPictureNames.All(name => name.IsPrefixChecked);
+            if (val != _isAllPrefixChecked)
+            {
+                _isAllPrefixChecked = val;
+                NotifyPropertyChanged("IsAllPrefixChecked");
+            }
+        }
+
+        private void OnIsAllSuffixesCheckedCommand()
+        {
+            var val = _editPictureNames.All(name => name.IsSuffixChecked);
+            if (val != _isAllSuffixChecked)
+            {
+                _isAllSuffixChecked = val;
+                NotifyPropertyChanged("IsAllSuffixChecked");
+            }
+        }
+
+        private void OnOverwriteNamesCommand()
+        {
+            for (int i = 0; i < Pictures.Count; i ++)
+            {
+                if (_pictureRepository.TryChangePictureName(Pictures[i], EditPictureNames[i].ToString()).Success.HasValue)
+                {
+                    _eventAggregator.GetEvent<PictureNameChangedEvent>().Publish(new PictureNameChangePayload()
+                    {
+                        Guid = Pictures[i].Guid,
+                        NewPictureName = EditPictureNames[i].ToString()
+                    });
+                }
+                else
+                {
+                    //todo: maybe display a list of failed filenames
+                    //      and remove the successfully overwritten names from the list
+                } 
+            }
+        }
+
+        private bool OnCanOverwriteNamesCommand()
+        {
+            //todo also check for valid file names
+            return EditPictureNames.Count > 0;
+        }
+
         private IPictureRepository _pictureRepository;
         private IMessageDialogService _messageDialogService;
         private IEventAggregator _eventAggregator;
@@ -200,5 +196,7 @@ namespace JW.Vepix.Wpf.ViewModels
         private ObservableCollection<AffixedName> _editPictureNames;
         private string _prefix;
         private string _suffix;
+        private bool _isAllPrefixChecked;
+        private bool _isAllSuffixChecked;
     }
 }

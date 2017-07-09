@@ -30,6 +30,19 @@ namespace JW.Vepix.Wpf.ViewModels
 
         }
 
+        public string ViewTitle
+        {
+            get { return _viewTitle; }
+            private set
+            {
+                if (value != _viewTitle)
+                {
+                    _viewTitle = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
         public Picture ViewingPicture
         {
             get { return _viewingPicture; }
@@ -43,7 +56,8 @@ namespace JW.Vepix.Wpf.ViewModels
             }
         }
 
-        // todo: i might not need this
+        // todo: See if I need any of these when I fix the logic for the
+        //       Zooming with the slider.
         public CropSelectionCanvas CropCanvas
         {
             get { return _cropCanvas; }
@@ -52,6 +66,19 @@ namespace JW.Vepix.Wpf.ViewModels
                 if (value != _cropCanvas)
                 {
                     _cropCanvas = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public double ZoomFactor
+        {
+            get { return _zoomFactor; }
+            set
+            {
+                if (value != _zoomFactor)
+                {
+                    _zoomFactor = value;
                     NotifyPropertyChanged();
                 }
             }
@@ -97,6 +124,7 @@ namespace JW.Vepix.Wpf.ViewModels
                 }
             }
         }
+        // END
 
         public ObservableCollection<Picture> Pictures
         {
@@ -111,34 +139,17 @@ namespace JW.Vepix.Wpf.ViewModels
             }
         }
 
+        public void Load(List<Picture> pictures)
+        {
+            Pictures = new ObservableCollection<Picture>(pictures);
+            ViewingPicture = pictures[0];
+            ViewTitle = ViewingPicture.ImageName;
+
+            SetupCanvas(ViewingPicture);
+        }
+
         public RelayCommand<object> SaveCommand { get; set; }
         public RelayCommand<object> SaveAsCommand { get; set; }
-
-        public string ViewTitle
-        {
-            get { return _viewTitle; }
-            private set
-            {
-                if (value != _viewTitle)
-                {
-                    _viewTitle = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
-
-        public double ZoomFactor
-        {
-            get { return _zoomFactor; }
-            set
-            {
-                if (value != _zoomFactor)
-                {
-                    _zoomFactor = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
 
         private void OnSaveExecute()
         {
@@ -171,15 +182,6 @@ namespace JW.Vepix.Wpf.ViewModels
             _cropArea = rect;
             SaveAsCommand.RaiseCanExecuteChanged();
             SaveCommand.RaiseCanExecuteChanged();
-        }
-
-        public void Load(List<Picture> pictures)
-        {
-            Pictures = new ObservableCollection<Picture>(pictures);
-            ViewingPicture = pictures[0];
-            ViewTitle = ViewingPicture.ImageName;
-
-            SetupCanvas(ViewingPicture);
         }
 
         private IPictureRepository _pictureRepository;

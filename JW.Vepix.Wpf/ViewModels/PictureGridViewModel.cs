@@ -106,7 +106,20 @@ namespace JW.Vepix.Wpf.ViewModels
         }
 
         public Picture SelectedPicture { get; private set; }
-        
+
+        public void Load(List<string> pictureFileNames)
+        {
+            AbsolutePath = pictureFileNames.First().ToParentFolderPath();
+            ArePicturesLoading = true;
+            TaskRunner.WaitAllOneByOne(pictureFileNames, _pictureRepository.GetPictureAsync, Pictures.Add,
+                () => ArePicturesLoading = false);
+        }
+
+        public void LoadEmptyFolder(string folderPath)
+        {
+            AbsolutePath = folderPath;
+        }
+
         public RelayCommand<string> SearchCommand { get; private set; }
         public RelayCommand<Picture> EditPictureNameCommand { get; private set; }
         public RelayCommand<List<Picture>> EditSelectedPictureNamesCommand { get; private set; }
@@ -160,7 +173,7 @@ namespace JW.Vepix.Wpf.ViewModels
                 // todo: how to handle when some pictures copy and some don't
                 // maybe refactor TryCopy to return picture name if it failed.
                 // same goes for TryMove, TryDelete, TryChangeName, 
-                if (_pictures.All(pic => _pictureRepository.TryCopy(pic, folderPath)))
+                if (_pictures.All(pic => _pictureRepository.TryCopy(pic, folderPath).Success.Value))
                 {
                     System.Threading.Tasks.Task.Factory.StartNew(() =>
                     {
@@ -182,7 +195,7 @@ namespace JW.Vepix.Wpf.ViewModels
             if (_fileExplorerDialogService.ShowFolderBrowserDialog(out folderPath) == DialogResult.OK)
             {
                 // todo: how to handle when some pictures copy and some don't
-                if (_pictures.All(pic => _pictureRepository.TryMove(pic, folderPath)))
+                if (_pictures.All(pic => _pictureRepository.TryMove(pic, folderPath).Success.Value))
                 {
                     System.Threading.Tasks.Task.Factory.StartNew(() =>
                     {
@@ -264,14 +277,6 @@ namespace JW.Vepix.Wpf.ViewModels
             var reloadedPicture = _pictureRepository.GetPicturesAsync(new string[] { picture.FullFileName }).Result;
             Pictures.Remove(picture);
             Pictures.Add(reloadedPicture.First());
-        }
-
-        public void Load(List<string> pictureFileNames)
-        {
-            AbsolutePath = pictureFileNames.First().ToParentFolderPath();
-            ArePicturesLoading = true;
-            TaskRunner.WaitAllOneByOne(pictureFileNames, _pictureRepository.GetPictureAsync, Pictures.Add,
-                () => ArePicturesLoading = false);
         }
 
         private IPictureRepository _pictureRepository;

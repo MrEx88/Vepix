@@ -55,24 +55,24 @@ namespace JW.Vepix.Core.Interfaces
         /// </summary>
         /// <param name="oldFileName">The name of the old file</param>
         /// <param name="newFileName">The new file name</param>
-        /// <returns>True if file name changed successfully</returns>
-        bool ChangeFileName(string oldFileName, string newFileName);
+        /// <returns>A TryResult instance</returns>
+        TryResult ChangeFileName(string oldFileName, string newFileName);
 
         /// <summary>
         /// Copies the file to another location.
         /// </summary>
-        /// <param name="folderPath">The folder to copy to</param>
-        /// <param name="fileName">The name of the file to copy</param>
-        /// <returns>True if copied successfully</returns>
-        bool CopyTo(string folderPath, string fileName);
+        /// <param name="sourceFileName">The name of the file to copy</param>
+        /// <param name="destinationFolderPath">The folder to copy to</param>
+        /// <returns>A TryResult instance</returns>
+        TryResult CopyTo(string sourceFileName, string destinationFolderPath);
 
         /// <summary>
         /// Changes the name of the file.
         /// </summary>
-        /// <param name="folderPath">The name of the folder to move to</param>
-        /// <param name="fileName">The name to move to file</param>
-        /// <returns>True if name moved successfully</returns>
-        bool MoveTo(string folderPath, string fileName);
+        /// <param name="sourceFileName">The name to move to file</param>
+        /// <param name="destinationFolderPath">The name of the folder to move to</param>
+        /// <returns>A TryResult instance</returns>
+        TryResult MoveTo(string sourceFileName, string destinationFolderPath);
 
         /// <summary>
         /// Checks if the string has a valid file name.
@@ -85,8 +85,8 @@ namespace JW.Vepix.Core.Interfaces
         /// Deletes the specified file.
         /// </summary>
         /// <param name="fileName">The file name to delete</param>
-        /// <returns>True if file deleted successfully</returns>
-        bool DeleteFile(string fileName);
+        /// <returns>A TryResult instance</returns>
+        TryResult DeleteFile(string fileName);
 
         /// <summary>
         /// Saves a bitmap image with a new file name.

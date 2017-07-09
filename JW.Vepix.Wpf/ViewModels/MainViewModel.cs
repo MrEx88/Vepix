@@ -111,7 +111,14 @@ namespace JW.Vepix.Wpf.ViewModels
                                 .Exists(gridViewModel => gridViewModel.Pictures.ToList()
                                 .Exists(pic => pic.FullFileName == fileName)));
 
-                pictureGridViewModel.Load(pictureFileNames);
+                if (pictureFileNames.Count > 0)
+                {
+                    pictureGridViewModel.Load(pictureFileNames);
+                }
+                else
+                {
+                    pictureGridViewModel = SelectedPictureGridViewModel;
+                }
             }
 
             return pictureGridViewModel;
@@ -132,7 +139,14 @@ namespace JW.Vepix.Wpf.ViewModels
                 var pictureFileNames = await _fileService.GetFileNamesFromDirectoryAsync(folderPath, searchPatterns);
                 pictureGridViewModel = _pictureGridViewModelCreator();
                 PictureGridViewModels.Add(pictureGridViewModel);
-                pictureGridViewModel.Load(pictureFileNames);
+                if (pictureFileNames.Count > 0)
+                {
+                    pictureGridViewModel.Load(pictureFileNames);
+                }
+                else
+                {
+                    pictureGridViewModel.LoadEmptyFolder(folderPath);
+                }
             }
 
             return pictureGridViewModel;

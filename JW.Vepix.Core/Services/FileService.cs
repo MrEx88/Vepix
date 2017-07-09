@@ -1,5 +1,6 @@
 ﻿using JW.Vepix.Core.Interfaces;
 using JW.Vepix.Core.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -46,30 +47,34 @@ namespace JW.Vepix.Core.Services
             List<string> searchPatterns, SearchOption option = SearchOption.TopDirectoryOnly) =>
                 await GetFilesBytesAsync(await GetFileNamesFromDirectoryAsync(folderPath, searchPatterns, option));
 
-        public bool ChangeFileName(string sourceFileName, string destinationFileName)
+        public TryResult ChangeFileName(string sourceFileName, string destinationFileName)
         {
-            File.Move(sourceFileName, destinationFileName);
-            return true;
+            var tryResult = new TryResult();
+            tryResult.Try(() => File.Move(sourceFileName, destinationFileName));
+            return tryResult;
         }
 
-        public bool CopyTo(string folderPath, string fileName)
+        public TryResult CopyTo(string sourceFileName, string destinationFolderPath)
         {
-            var name = Path.GetFileName(fileName);
-            File.Copy(fileName, $"{folderPath}\\{name}");
-            return true;
+            var tryResult = new TryResult();
+            var fileName = Path.GetFileName(sourceFileName);
+            tryResult.Try(() => File.Copy(sourceFileName, $"{destinationFolderPath}\\{fileName}"));
+            return tryResult;
         }
 
-        public bool MoveTo(string folderPath, string fileName)
+        public TryResult MoveTo(string sourceFileName, string destinationFolderPath)
         {
-            var name = Path.GetFileName(fileName);
-            File.Move(fileName, $"{folderPath}\\{name}");
-            return true;
+            var tryResult = new TryResult();
+            var fileName = Path.GetFileName(sourceFileName);
+            tryResult.Try(() => File.Move(sourceFileName, $"{destinationFolderPath}\\{fileName}"));
+            return tryResult;
         }
 
-        public bool DeleteFile(string fileName)
+        public TryResult DeleteFile(string fileName)
         {
-            File.Delete(fileName);
-            return true;
+            var tryResult = new TryResult();
+            tryResult.Try(() => File.Delete(fileName));
+            return tryResult;
         }
 
         public bool IsValidFileName(string fileName)

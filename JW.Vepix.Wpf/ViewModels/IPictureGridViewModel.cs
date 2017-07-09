@@ -9,5 +9,6 @@ namespace JW.Vepix.Wpf.ViewModels
         string FolderName { get; }
         ObservableCollection<Picture> Pictures { get; }
         void Load(List<string> pictureFileNames);
+        void LoadEmptyFolder(string folderPath);
     }
 }

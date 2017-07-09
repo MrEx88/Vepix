@@ -261,7 +261,7 @@
                     </ListView.ItemTemplate>
                 </ListView>
 
-                <TextBlock Text="There are no pictures in this folder."
+                <TextBlock Text="No pictures exist or have been loaded in this folder."
                            Height="Auto"
                            Margin="5 5 0 0"
                            Visibility="{Binding Path=HasNoPictures,

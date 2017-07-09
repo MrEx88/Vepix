@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\ObservableCollectionsExtensions.cs" />
+    <Compile Include="Models\TryResult.cs" />
     <Compile Include="Services\EncoderService.cs" />
     <Compile Include="Extensions\NavigationExtensions.cs" />
     <Compile Include="Interfaces\IFileService.cs" />

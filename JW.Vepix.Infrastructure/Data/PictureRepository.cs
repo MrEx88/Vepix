@@ -53,50 +53,30 @@ namespace JW.Vepix.Infrastructure.Data
             return new Picture(bitmap, picture.FullFileName);
         }
 
-        public bool TryChangePictureName(Picture picture, string newName)
-        {
-            //todo: handle exceptions
-            bool result = true;
+        public TryResult TryChangePictureName(Picture picture, string newName) =>
             _fileService.ChangeFileName(picture.FullFileName, 
                 picture.FolderPath + newName + picture.FileExtension);
-            return result;
-        }
 
-        public bool TryCopy(Picture picture, string fullFolderPath)
-        {
-            bool result = true;
-            _fileService.CopyTo(fullFolderPath, picture.ImageName);
-            return result;
-        }
+        public TryResult TryCopy(Picture picture, string fullFolderPath) => 
+            _fileService.CopyTo(picture.FullFileName, fullFolderPath);
 
-        public bool TryMove(Picture picture, string fullFolderPath)
-        {
-            bool result = true;
-            _fileService.MoveTo(fullFolderPath, picture.ImageName);
-            return result;
-        }
+        public TryResult TryMove(Picture picture, string fullFolderPath) =>
+            _fileService.MoveTo(picture.FullFileName, fullFolderPath);
 
-        public bool TryDelete(string fileName)
-        {
-            //todo: handle exceptions
-            bool result = true;
-            _fileService.DeleteFile(fileName);
-            return result;
-        }
+        public TryResult TryDelete(string fileName) => _fileService.DeleteFile(fileName);
 
-        public bool TryOverwrite(Picture picture)
+        public TryResult TryOverwrite(Picture picture)
         {
-            //todo: handle exceptions
             //todo: overwriting is not working
-            bool result = true;
-            if (TryDelete(picture.FullFileName))
+            var tryResult = TryDelete(picture.FullFileName);
+            if (tryResult.Success.Value)
             {
                 var bitmap = _bitmapService.ConvertBitmapImageToBitmap(picture.BitmapImage, picture.FileExtension.ToEncoderType());
                 bitmap.Save(picture.FullFileName);
                 //_fileService.SaveImage(croppedImage, fullFileName, encoderType);
             }
 
-            return result;
+            return tryResult;
         }
 
         private Task<List<Picture>> LoadPicturesAsync(List<FileBytes> fileBytes)
@@ -113,6 +93,7 @@ namespace JW.Vepix.Infrastructure.Data
             });
         }
 
+        //todo: shouldn't this return a Picture instance.
         public bool TrySaveAs(BitmapImage image, BitmapEncoderType encoderType) =>
             _fileService.SaveImageAs(image, encoderType);
 

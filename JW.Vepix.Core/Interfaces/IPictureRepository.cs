@@ -55,52 +55,52 @@ namespace JW.Vepix.Core.Interfaces
         /// <param name="rect">The area to crop to</param>
         /// <returns>The cropped Bitmap</returns>
         Picture GetCroppedImage(Picture picture, Int32Rect rect);
-        
+
         /// <summary>
         /// Trys to change the name of the picture.
         /// </summary>
         /// <param name="picture">The picture to be changed</param>
         /// <param name="newName">The new name of the picture</param>
-        /// <returns>True if name has been changed</returns>
-        bool TryChangePictureName(Picture picture, string newName);
+        /// <returns>A TryResult instance</returns>
+        TryResult TryChangePictureName(Picture picture, string newName);
 
         /// <summary>
         /// Trys to copy the picture to another folder.
         /// </summary>
         /// <param name="picture">The picture to copy</param>
         /// <param name="fullFolderPath">The folder to copy to</param>
-        /// <returns>True if picture has been copied</returns>
-        bool TryCopy(Picture picture, string fullFolderPath);
+        /// <returns>A TryResult instance</returns>
+        TryResult TryCopy(Picture picture, string fullFolderPath);
 
         /// <summary>
         /// Trys to move the picture to another folder.
         /// </summary>
         /// <param name="picture">The picture to move</param>
         /// <param name="fullFolderPath">The folder to move to</param>
-        /// <returns>True if picture has been moved</returns>
-        bool TryMove(Picture picture, string fullFolderPath);
+        /// <returns>A TryResult instance</returns>
+        TryResult TryMove(Picture picture, string fullFolderPath);
 
         /// <summary>
         /// Trys to delete the specified picture.
         /// </summary>
         /// <param name="pictureFileName">The picture to delete</param>
-        /// <returns>True if name has been changed</returns>
-        bool TryDelete(string pictureFileName);
+        /// <returns>A TryResult instance</returns>
+        TryResult TryDelete(string pictureFileName);
 
         /// <summary>
         /// Trys to overwrite the specified picture. Use this when the image has
         /// been altered in some way.
         /// </summary>
         /// <param name="picture">The altered picture to overwrite</param>
-        /// <returns>True if the picture file has been overwritten</returns>
-        bool TryOverwrite(Picture picture);
+        /// <returns>A TryResult instance</returns>
+        TryResult TryOverwrite(Picture picture);
 
         /// <summary>
         /// Trys to save the Picture as a new picture.
         /// </summary>
-        /// <param name="picture">The picture to save</param>
+        /// <param name="bitmapImage">The picture to save</param>
         /// <param name="encoderType">The encoder type</param>
         /// <returns>True if the picture file has been created</returns>
-        bool TrySaveAs(BitmapImage picture, BitmapEncoderType encoderType);
+        bool TrySaveAs(BitmapImage bitmapImage, BitmapEncoderType encoderType);
     }
 }
