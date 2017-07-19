@@ -7,17 +7,10 @@ namespace JW.Vepix.Core.Models
         public bool? Success { get; private set; }
         public string Message { get; private set; }
 
-        //public TryResult()
-        //    : this(string.Empty)
-        //{
-
-        //}
-
-        //public TryResult(string message)
-        //{
-        //    Success = message.Length == 0;
-        //    Message = message;
-        //}
+        public TryResult()
+        {
+            Message = string.Empty;
+        }
 
         public void Try(Action action)
         {

@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace JW.Vepix.Wpf.Tests
 {
     [TestClass]
-    public class UnitTest1
+    public class FolderTreeViewModelTests
     {
         [TestMethod]
         public void TestMethod1()

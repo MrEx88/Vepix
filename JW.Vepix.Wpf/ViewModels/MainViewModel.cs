@@ -12,7 +12,6 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace JW.Vepix.Wpf.ViewModels
 {
@@ -129,7 +128,6 @@ namespace JW.Vepix.Wpf.ViewModels
 
         public async Task<IPictureGridViewModel> LoadAPictureGridViewModel(string folderPath, List<string> searchPatterns)
         {
-
             // Check if folder is already opened.
             //todo: think about if user opens the same folder but with different search patterns
             var pictureGridViewModel = PictureGridViewModels.ToList().Find(picGrid =>
@@ -160,7 +158,7 @@ namespace JW.Vepix.Wpf.ViewModels
         private async void OnOpenFolderCommand(SearchOption option)
         {
             string selectedPath;
-            if (_fileExplorerDialogService.ShowFolderBrowserDialog(out selectedPath) == DialogResult.OK)
+            if (_fileExplorerDialogService.ShowFolderBrowserDialog(out selectedPath))
             {
                 if (option == SearchOption.AllDirectories)
                 {
@@ -174,7 +172,7 @@ namespace JW.Vepix.Wpf.ViewModels
         private void OnOpenFilesCommand()
         {
             string[] fileNames;
-            if (_fileExplorerDialogService.ShowOpenFileDialog(out fileNames) == DialogResult.OK)
+            if (_fileExplorerDialogService.ShowOpenFileDialog(out fileNames))
             {
                 SelectedPictureGridViewModel = LoadAPictureGridViewModel(fileNames.ToList());
             }
@@ -205,6 +203,12 @@ namespace JW.Vepix.Wpf.ViewModels
         private void OnStatusTextHelpInfo(string text)
         {
             HelpInfoText = text;
+            Task.Factory.StartNew(() =>
+            {
+                HelpInfoText = text;
+                System.Threading.Thread.Sleep(5000);
+                HelpInfoText = string.Empty;
+            });
         }
 
         private void OnStatusTextUserAction(string text)

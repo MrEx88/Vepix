@@ -4,25 +4,25 @@ namespace JW.Vepix.Wpf.Services
 {
     public class FileExplorerDialogService : IFileExplorerDialogService
     {
-        public DialogResult ShowFolderBrowserDialog(out string folderPath)
+        public bool ShowFolderBrowserDialog(out string folderPath)
         {
-            DialogResult result;
-            FolderBrowserDialog folderDialog = new FolderBrowserDialog();
-            result = folderDialog.ShowDialog();
-            folderPath = result == DialogResult.OK ? folderDialog.SelectedPath : string.Empty;
+            var folderDialog = new FolderBrowserDialog();
+            var result = false;
+            result = folderDialog.ShowDialog() == DialogResult.OK;
+            folderPath = result ? folderDialog.SelectedPath : string.Empty;
             return result;
         }
 
-        public DialogResult ShowOpenFileDialog(out string[] fileNames)
+        public bool ShowOpenFileDialog(out string[] fileNames)
         {
-            DialogResult result;
-            OpenFileDialog fileDialog = new OpenFileDialog()
+            var fileDialog = new OpenFileDialog()
             {
                 Multiselect = true,
                 Filter = "Image Files|*.jpg;*.jpeg;*.png;*.gif;*.bmp;*.tiff;*.wmp"
             };
-            result = fileDialog.ShowDialog();
-            fileNames = result == DialogResult.OK ? fileDialog.FileNames : new string[] { };
+            var result = false;
+            result = fileDialog.ShowDialog() == DialogResult.OK;
+            fileNames = result ? fileDialog.FileNames : new string[] { };
             return result;
         }
     }

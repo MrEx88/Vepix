@@ -4,11 +4,47 @@ using System.Windows.Media.Imaging;
 
 namespace JW.Vepix.Core.Models
 {
-    public class Picture
+    public class Picture : ObjectBase
     {
         public Guid Guid { get; }
-        public BitmapImage BitmapImage { get; set; }
-        public string FullFileName { get; set; } //? should this be set publically. Also what about moving the file to another folder??
+
+        public BitmapImage BitmapImage
+        {
+            get { return _bitmapImage; }
+            set
+            {
+                if (value != _bitmapImage)
+                {
+                    _bitmapImage = value;
+
+                    NotifyPropertyChanged();
+                    NotifyPropertyChanged(() => Width);
+                    NotifyPropertyChanged(() => Height);
+                    NotifyPropertyChanged(() => Dimensions);
+                }
+            }
+        }
+
+        public string FullFileName
+        {
+            get { return _fullFileName; }
+            set
+            {
+                if(value != _fullFileName)
+                {
+                    _fullFileName = value;
+
+                    NotifyPropertyChanged();
+                    NotifyPropertyChanged(() => FileName);
+                    NotifyPropertyChanged(() => ImageName);
+                    NotifyPropertyChanged(() => FolderPath);
+                    //todo: how to deal with FileSize; maybe bitmapimage has a filesize property
+                    NotifyPropertyChanged(() => FolderName);
+                    NotifyPropertyChanged(() => FileExtension);
+                }
+            }
+        } 
+
         public string FileName => Path.GetFileName(FullFileName);
         public string ImageName => Path.GetFileNameWithoutExtension(FullFileName);
         public string FolderPath => Path.GetDirectoryName(FullFileName) + "\\";
@@ -25,5 +61,8 @@ namespace JW.Vepix.Core.Models
             BitmapImage = bitmapImage;
             FullFileName = fullFileName;
         }
+
+        private BitmapImage _bitmapImage;
+        private string _fullFileName;
     }
 }

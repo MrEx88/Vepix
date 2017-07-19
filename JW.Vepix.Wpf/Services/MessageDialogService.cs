@@ -1,5 +1,6 @@
 ﻿using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace JW.Vepix.Wpf.Services
@@ -28,7 +29,7 @@ namespace JW.Vepix.Wpf.Services
         public async void ShowMessage(string title, string message) => await _metroWindow.ShowMessageAsync(
             title, message, MessageDialogStyle.Affirmative);
 
-        public async void ShowInput(string title, string message) => await _metroWindow.ShowInputAsync(
+        public async Task<string> ShowInput(string title, string message) => await _metroWindow.ShowInputAsync(
             title, message, new MetroDialogSettings());
 
         private Window _modalDialog;

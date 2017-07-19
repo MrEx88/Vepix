@@ -12,7 +12,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows.Forms;
 
 namespace JW.Vepix.Wpf.ViewModels
 {
@@ -43,7 +42,6 @@ namespace JW.Vepix.Wpf.ViewModels
             _searchFilter = string.Empty;
 
             SearchCommand = new RelayCommand<string>(OnSearchCommand);
-            EditPictureNameCommand = new RelayCommand<Picture>(OnEditPictureNameCommand);
             EditSelectedPictureNamesCommand = new RelayCommand<List<Picture>>(OnEditSelectedPictureNamesCommand);
             CopyPicturesCommand = new RelayCommand<List<Picture>>(OnCopyPicturesCommand);
             MovePicturesCommand = new RelayCommand<List<Picture>>(OnMovePicturesCommand);
@@ -121,7 +119,6 @@ namespace JW.Vepix.Wpf.ViewModels
         }
 
         public RelayCommand<string> SearchCommand { get; private set; }
-        public RelayCommand<Picture> EditPictureNameCommand { get; private set; }
         public RelayCommand<List<Picture>> EditSelectedPictureNamesCommand { get; private set; }
         public RelayCommand<List<Picture>> CopyPicturesCommand { get; private set; }
         public RelayCommand<List<Picture>> MovePicturesCommand { get; private set; }
@@ -146,16 +143,13 @@ namespace JW.Vepix.Wpf.ViewModels
             }
         }
 
-        private void OnEditPictureNameCommand(Picture picture)
-        {
-            new MessageDialogService().ShowInput("Edit Picture Name", picture.ImageName);
-        }
-
-        private void OnEditSelectedPictureNamesCommand(List<Picture> pictures)
+        private async void OnEditSelectedPictureNamesCommand(List<Picture> pictures)
         {
             if (pictures.Count == 1)
             {
-                new MessageDialogService().ShowInput("Edit Picture Name", pictures.First().ImageName);
+                var picture = pictures.First();
+                var newName = await new MessageDialogService().ShowInput("Edit Picture Name", picture.ImageName);
+                picture.FullFileName = picture.FolderPath + newName + picture.FileExtension;
             }
             else
             {
@@ -168,23 +162,25 @@ namespace JW.Vepix.Wpf.ViewModels
         private void OnCopyPicturesCommand(List<Picture> pictures)
         {
             string folderPath;
-            if (_fileExplorerDialogService.ShowFolderBrowserDialog(out folderPath) == DialogResult.OK)
-            {
-                // todo: how to handle when some pictures copy and some don't
-                // maybe refactor TryCopy to return picture name if it failed.
-                // same goes for TryMove, TryDelete, TryChangeName, 
-                if (_pictures.All(pic => _pictureRepository.TryCopy(pic, folderPath).Success.Value))
+            if (_fileExplorerDialogService.ShowFolderBrowserDialog(out folderPath))
+            { 
+                var uncopiedPictures = new List<string>();
+                pictures.ToList().ForEach(pic =>
                 {
-                    System.Threading.Tasks.Task.Factory.StartNew(() =>
+                    if (!_pictureRepository.TryCopy(pic, folderPath).Success.Value)
                     {
-                        _eventAggregator.GetEvent<StatusTextHelpInfoEvent>().Publish("Pictures have successfully copied");
-                        System.Threading.Thread.Sleep(5000);
-                        _eventAggregator.GetEvent<StatusTextHelpInfoEvent>().Publish(string.Empty);
-                    });
+                        uncopiedPictures.Add(pic.FullFileName);
+                    }
+                });
+
+                if (uncopiedPictures.Count > 0)
+                {
+                    var fileNames = string.Join("\n", uncopiedPictures);
+                    _modalDialog.ShowMessage("Failed to copy these pictures", fileNames);
                 }
                 else
                 {
-                    _modalDialog.ShowMessage("Failed to move all pictures", "Make sure those names don't already exist in new location");
+                    _eventAggregator.GetEvent<StatusTextHelpInfoEvent>().Publish("All Pictures have successfully copied");
                 }
             }
         }
@@ -192,21 +188,29 @@ namespace JW.Vepix.Wpf.ViewModels
         private void OnMovePicturesCommand(List<Picture> pictures)
         {
             string folderPath;
-            if (_fileExplorerDialogService.ShowFolderBrowserDialog(out folderPath) == DialogResult.OK)
+            if (_fileExplorerDialogService.ShowFolderBrowserDialog(out folderPath))
             {
-                // todo: how to handle when some pictures copy and some don't
-                if (_pictures.All(pic => _pictureRepository.TryMove(pic, folderPath).Success.Value))
+                var unmovedPictures = new List<string>();
+                pictures.ToList().ForEach(pic =>
                 {
-                    System.Threading.Tasks.Task.Factory.StartNew(() =>
+                    if (!_pictureRepository.TryMove(pic, folderPath).Success.Value)
                     {
-                        _eventAggregator.GetEvent<StatusTextHelpInfoEvent>().Publish("Pictures have successfully moved");
-                        System.Threading.Thread.Sleep(5000);
-                        _eventAggregator.GetEvent<StatusTextHelpInfoEvent>().Publish(string.Empty);
-                    });
+                        unmovedPictures.Add(pic.FullFileName);
+                    }
+                    else
+                    {
+                        Pictures.Remove(pic);
+                    }
+                });
+
+                if (unmovedPictures.Count > 0)
+                {
+                    var fileNames = string.Join("\n", unmovedPictures);
+                    _modalDialog.ShowMessage("Failed to move these pictures", fileNames);
                 }
                 else
                 {
-                    _modalDialog.ShowMessage("Failed to move all pictures", "Make sure those names don't already exist in new location");
+                    _eventAggregator.GetEvent<StatusTextHelpInfoEvent>().Publish("All Pictures have successfully moved");
                 }
             }
         }
@@ -221,8 +225,10 @@ namespace JW.Vepix.Wpf.ViewModels
             {
                 pictures.ForEach(pic =>
                 {
-                    Pictures.Remove(pic);
-                    _pictureRepository.TryDelete(pic.FullFileName);
+                    if (_pictureRepository.TryDelete(pic.FullFileName).Success.Value)
+                    {
+                        Pictures.Remove(pic);
+                    };
                 });
             }
         }
@@ -260,12 +266,8 @@ namespace JW.Vepix.Wpf.ViewModels
             var changedPicture = Pictures.FirstOrDefault(pic => pic.Guid == payload.Guid);
             if (changedPicture != null)
             {
-                var index = Pictures.IndexOf(changedPicture);
-                Pictures.RemoveAt(index);
                 changedPicture.FullFileName = changedPicture.FolderPath + payload.NewPictureName + 
                                               changedPicture.FileExtension;
-                Pictures.Insert(index, changedPicture);
-                NotifyPropertyChanged(() => Pictures);
             }
 
             _eventAggregator.GetEvent<PictureNameChangedEvent>().Unsubscribe(OnPictureNameChanged);

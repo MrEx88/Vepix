@@ -69,8 +69,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PictureViewModelTests.cs" />
     <Compile Include="MainViewModelTests.cs" />
-    <Compile Include="UnitTest1.cs" />
-    <Compile Include="VepixConsoleTests.cs" />
+    <Compile Include="FolderTreeViewModelTests.cs" />
+    <Compile Include="VepixCommandLineTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\JW.Vepix.Core\JW.Vepix.Core.csproj">
