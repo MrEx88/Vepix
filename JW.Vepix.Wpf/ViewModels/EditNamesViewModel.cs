@@ -27,7 +27,7 @@ namespace JW.Vepix.Wpf.ViewModels
             OverwriteNamesCommand = new RelayCommand<object>(OnOverwriteNamesCommand, OnCanOverwriteNamesCommand);
         }
 
-        public string ViewTitle => "Edit Picture Names";
+        public override string ViewTitle => "Edit Picture Names";
 
         public string Prefix
         {

@@ -117,7 +117,7 @@
                 <TabControl.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding FolderName}"
+                            <TextBlock Text="{Binding ViewTitle}"
                                        ToolTip="{Binding AbsolutePath}"
                                        Margin="5 0 0 0" />
                             

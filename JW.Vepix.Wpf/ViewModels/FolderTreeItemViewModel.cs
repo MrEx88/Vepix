@@ -68,7 +68,7 @@ namespace JW.Vepix.Wpf.ViewModels
             return parent.FullName == treeItem.AbsolutePath;
         }
 
-        public string FolderName => new DirectoryInfo(AbsolutePath).Name;
+        public override string ViewTitle => new DirectoryInfo(AbsolutePath).Name;
 
         public string AbsolutePath
         {
@@ -79,7 +79,7 @@ namespace JW.Vepix.Wpf.ViewModels
                 {
                     _absolutePath = value;
                     NotifyPropertyChanged();
-                    NotifyPropertyChanged("FolderName");
+                    NotifyPropertyChanged(() => ViewTitle);
                 }
             }
         }

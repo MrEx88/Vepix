@@ -6,7 +6,6 @@ namespace JW.Vepix.Wpf.ViewModels
     {
         IFolderTreeItemViewModel Parent { get; set; }
         ObservableCollection<IFolderTreeItemViewModel> Children { get; set; }
-        string FolderName { get; }
         bool IsExpanded { get; set; }
         bool TreeItemAlreadyExists(string absolutePath);
         bool IsAParentTo(FolderTreeItemViewModel treeItem);

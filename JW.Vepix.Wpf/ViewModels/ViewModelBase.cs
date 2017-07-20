@@ -1,4 +1,5 @@
-﻿using Prism.Mvvm;
+﻿using JW.Vepix.Core;
+using Prism.Mvvm;
 using System;
 using System.ComponentModel;
 using System.Linq.Expressions;
@@ -6,22 +7,12 @@ using System.Runtime.CompilerServices;
 
 namespace JW.Vepix.Wpf.ViewModels
 {
-    public class ViewModelBase : INotifyPropertyChanged
+    public class ViewModelBase : ObjectBase
     {
-        public event PropertyChangedEventHandler PropertyChanged = delegate { };
-
-        protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        public virtual string ViewTitle
         {
-            if (propertyName != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
-
-        protected void NotifyPropertyChanged<T>(Expression<Func<T>> propertyExpression)
-        {
-            string propertyName = PropertySupport.ExtractPropertyName(propertyExpression);
-            PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            get { return string.Empty; }
+            protected set { }
         }
     }
 }

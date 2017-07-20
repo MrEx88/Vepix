@@ -60,6 +60,7 @@ namespace JW.Vepix.Core.Models
             Guid = Guid.NewGuid();
             BitmapImage = bitmapImage;
             FullFileName = fullFileName;
+            IsDirty = false;
         }
 
         private BitmapImage _bitmapImage;

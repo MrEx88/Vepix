@@ -1,9 +1,7 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
-
+﻿
 namespace JW.Vepix.Core.Models
 {
-    public class AffixedName : INotifyPropertyChanged
+    public class AffixedName : ObjectBase
     {
         public AffixedName(string name)
         {
@@ -22,6 +20,7 @@ namespace JW.Vepix.Core.Models
                 }
             }
         }
+
         public string Name
         {
             get { return _name; }
@@ -61,6 +60,7 @@ namespace JW.Vepix.Core.Models
                 }
             }
         }
+
         public bool IsSuffixChecked
         {
             get { return _isSuffixChecked; }
@@ -75,12 +75,6 @@ namespace JW.Vepix.Core.Models
             }
         }
 
-        private string _prefix;
-        private string _name;
-        private string _suffix;
-        private bool _isPrefixChecked;
-        private bool _isSuffixChecked;
-
         public override string ToString()
         {
             var prefix = IsPrefixChecked ? Prefix : string.Empty;
@@ -88,14 +82,10 @@ namespace JW.Vepix.Core.Models
             return prefix + _name + suffix;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged = delegate { };
-
-        protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            if (propertyName != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
+        private string _prefix;
+        private string _name;
+        private string _suffix;
+        private bool _isPrefixChecked;
+        private bool _isSuffixChecked;
     }
 }

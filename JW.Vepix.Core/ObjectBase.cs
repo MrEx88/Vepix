@@ -15,18 +15,23 @@ namespace JW.Vepix.Core
     {
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
-        protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "", bool makeDirty = true)
         {
             if (propertyName != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
+
+            if (makeDirty)
+            {
+                _isDirty = true;
+            }
         }
 
-        protected void NotifyPropertyChanged<T>(Expression<Func<T>> propertyExpression)
+        protected void NotifyPropertyChanged<T>(Expression<Func<T>> propertyExpression, bool makeDirty = true)
         {
             string propertyName = PropertySupport.ExtractPropertyName(propertyExpression);
-            PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            NotifyPropertyChanged(propertyName);
         }
 
         public bool IsDirty
@@ -34,6 +39,7 @@ namespace JW.Vepix.Core
             get { return _isDirty; }
             set { _isDirty = value; }
         }
+
         public List<ObjectBase> GetDirtyObjects()
         {
             List<ObjectBase> dirtyObjects = new List<ObjectBase>();

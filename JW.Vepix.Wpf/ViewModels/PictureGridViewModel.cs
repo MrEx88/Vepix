@@ -61,12 +61,12 @@ namespace JW.Vepix.Wpf.ViewModels
                 {
                     _absolutePath = value;
                     NotifyPropertyChanged();
-                    NotifyPropertyChanged(() => FolderName);
+                    NotifyPropertyChanged(() => ViewTitle);
                 }
             }
         }
 
-        public string FolderName => _absolutePath.ToFoldersName();
+        public override string ViewTitle => _absolutePath.ToFoldersName();
 
         public bool ArePicturesLoading
         {
@@ -145,6 +145,7 @@ namespace JW.Vepix.Wpf.ViewModels
 
         private async void OnEditSelectedPictureNamesCommand(List<Picture> pictures)
         {
+            var b = pictures[0].IsAnythingDirty();
             if (pictures.Count == 1)
             {
                 var picture = pictures.First();
