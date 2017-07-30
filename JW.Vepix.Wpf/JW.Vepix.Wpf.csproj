@@ -120,7 +120,7 @@
     <Compile Include="Payloads\PictureNameChangePayload.cs" />
     <Compile Include="Payloads\PicturesFolderPayload.cs" />
     <Compile Include="Services\FileExplorerDialogService.cs" />
-    <Compile Include="Services\ICollectionDialogService.cs" />
+    <Compile Include="Services\ICollectionFlyoutService.cs" />
     <Compile Include="Services\IFileExplorerDialogService.cs" />
     <Compile Include="Services\IPictureDialogService.cs" />
     <Compile Include="Services\PicturesFlyoutService.cs" />

@@ -20,7 +20,9 @@ namespace JW.Vepix.Wpf.ViewModels
             IEventAggregator eventAggregator)
         {
             if (DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
+            {
                 return;
+            }
 
             _absolutePath = dirInfo.FullName;
             _parent = parent;

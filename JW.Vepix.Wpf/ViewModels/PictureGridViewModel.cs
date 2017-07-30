@@ -23,7 +23,9 @@ namespace JW.Vepix.Wpf.ViewModels
                                     IFileExplorerDialogService fileExplorerDialogService)
         {
             if (DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
+            {
                 return;
+            }
 
             _pictureRepository = pictureRepository;
 
@@ -42,12 +44,13 @@ namespace JW.Vepix.Wpf.ViewModels
             _searchFilter = string.Empty;
 
             SearchCommand = new RelayCommand<string>(OnSearchCommand);
+            EditPictureNameCommand = new RelayCommand<Picture>(OnEditPictureNameCommand);
             EditSelectedPictureNamesCommand = new RelayCommand<List<Picture>>(OnEditSelectedPictureNamesCommand);
+            ClosePictureCommand = new RelayCommand<Picture>(OnClosePictureCommand);
+            ClosePicturesCommand = new RelayCommand<List<Picture>>(OnClosePicturesCommand);
             CopyPicturesCommand = new RelayCommand<List<Picture>>(OnCopyPicturesCommand);
             MovePicturesCommand = new RelayCommand<List<Picture>>(OnMovePicturesCommand);
             DeletePicturesCommand = new RelayCommand<List<Picture>>(OnDeletePicturesCommand);
-            ClosePictureCommand = new RelayCommand<Picture>(OnClosePictureCommand);
-            ClosePicturesCommand = new RelayCommand<List<Picture>>(OnClosePicturesCommand);
             ViewEditPicturesCommand = new RelayCommand<List<Picture>>(OnViewEditPicturesCommand);
             PicturesListSelectionChangedCommand = new RelayCommand<int>(OnPicturesListSelectionChangedCommand);
         }
@@ -119,12 +122,13 @@ namespace JW.Vepix.Wpf.ViewModels
         }
 
         public RelayCommand<string> SearchCommand { get; private set; }
+        public RelayCommand<Picture> EditPictureNameCommand { get; private set; }
         public RelayCommand<List<Picture>> EditSelectedPictureNamesCommand { get; private set; }
+        public RelayCommand<Picture> ClosePictureCommand { get; private set; }
+        public RelayCommand<List<Picture>> ClosePicturesCommand { get; private set; }
         public RelayCommand<List<Picture>> CopyPicturesCommand { get; private set; }
         public RelayCommand<List<Picture>> MovePicturesCommand { get; private set; }
         public RelayCommand<List<Picture>> DeletePicturesCommand { get; private set; }
-        public RelayCommand<Picture> ClosePictureCommand { get; private set; }
-        public RelayCommand<List<Picture>> ClosePicturesCommand { get; private set; }
         public RelayCommand<List<Picture>> ViewEditPicturesCommand { get; private set; }
         public RelayCommand<int> PicturesListSelectionChangedCommand { get; private set; }
 
@@ -139,18 +143,37 @@ namespace JW.Vepix.Wpf.ViewModels
             {
                 _filterOn = true;
                 _searchFilter = searchFilter;
-                NotifyPropertyChanged("Pictures");
+                NotifyPropertyChanged(() => Pictures);
             }
         }
 
-        private async void OnEditSelectedPictureNamesCommand(List<Picture> pictures)
+        private async void OnEditPictureNameCommand(Picture picture)
         {
-            var b = pictures[0].IsAnythingDirty();
+            var newName = await _modalDialog.ShowInput("Edit Picture Name",
+                                                       picture.ImageName,
+                                                       picture.ImageName);
+
+            if (string.IsNullOrWhiteSpace(newName))
+            {
+                return;
+            }
+
+            if (_pictureRepository.TryChangePictureName(picture, newName).Success.Value)
+            {
+                picture.FullFileName = newName;
+            }
+            else
+            {
+                _modalDialog.ShowMessage("Invalid File name", "Name was either invalid or already exists.");
+            }
+        }
+
+        private void OnEditSelectedPictureNamesCommand(List<Picture> pictures)
+        {
+            //var b = pictures[0].IsAnythingDirty(); //just testing it out
             if (pictures.Count == 1)
             {
-                var picture = pictures.First();
-                var newName = await new MessageDialogService().ShowInput("Edit Picture Name", picture.ImageName);
-                picture.FullFileName = picture.FolderPath + newName + picture.FileExtension;
+                OnEditPictureNameCommand(pictures.First());
             }
             else
             {
@@ -158,6 +181,16 @@ namespace JW.Vepix.Wpf.ViewModels
                 new PicturesFyloutService(FlyoutViewType.EditNames)
                     .ShowVepixFlyout<EditNamesViewModel>(pictures);
             }
+        }
+
+        private void OnClosePictureCommand(Picture picture)
+        {
+            RemovePicture(picture);
+        }
+
+        private void OnClosePicturesCommand(List<Picture> pictures)
+        {
+            pictures.ForEach(pic => RemovePicture(pic));
         }
 
         private void OnCopyPicturesCommand(List<Picture> pictures)
@@ -200,7 +233,7 @@ namespace JW.Vepix.Wpf.ViewModels
                     }
                     else
                     {
-                        Pictures.Remove(pic);
+                        RemovePicture(pic);
                     }
                 });
 
@@ -234,16 +267,6 @@ namespace JW.Vepix.Wpf.ViewModels
             }
         }
 
-        private void OnClosePictureCommand(Picture picture)
-        {
-            Pictures.Remove(picture);
-        }
-
-        private void OnClosePicturesCommand(List<Picture> pictures)
-        {
-            pictures.ForEach(pic => Pictures.Remove(pic));
-        }
-
         private void OnViewEditPicturesCommand(List<Picture> pictures)
         {
             new PicturesFyloutService(FlyoutViewType.Viewer)
@@ -254,6 +277,12 @@ namespace JW.Vepix.Wpf.ViewModels
         {
             _eventAggregator.GetEvent<StatusTextUserActionEvent>()
                 .Publish(UserActionStatusTextBuilder(count));
+        }
+
+        private void RemovePicture(Picture picture)
+        {
+            Pictures.Remove(picture);
+            NotifyPropertyChanged(() => HasNoPictures);
         }
 
         private string UserActionStatusTextBuilder(int count)

@@ -9,6 +9,7 @@ using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows;
 
 namespace JW.Vepix.Wpf.ViewModels
@@ -19,6 +20,11 @@ namespace JW.Vepix.Wpf.ViewModels
                                        IMessageDialogService messageDialogService,
                                        IEventAggregator eventAggregator)
         {
+            if (DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
+            {
+                return;
+            }
+
             _pictureRepository = pictureRepository;
             _messageDialogService = messageDialogService;
 
@@ -30,10 +36,10 @@ namespace JW.Vepix.Wpf.ViewModels
 
         }
 
-        public string ViewTitle
+        public override string ViewTitle
         {
             get { return _viewTitle; }
-            private set
+            protected set
             {
                 if (value != _viewTitle)
                 {

@@ -12,7 +12,9 @@ namespace JW.Vepix.Wpf.ViewModels
         public FolderTreeViewModel(IEventAggregator eventAggregator)
         {
             if (DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
+            {
                 return;
+            }
 
             _eventAggregator = eventAggregator;
 

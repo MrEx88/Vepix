@@ -72,7 +72,7 @@ namespace JW.Vepix.Wpf.Tests
         {
             string test = "C:\\";
             _mockFileExplorerDialogService.Setup(dialog => dialog.ShowFolderBrowserDialog(out test))
-                .Returns(DialogResult.OK);
+                .Returns(true);
             _mockPictureRepo.Setup(repo => repo.GetPicturesFromFolderAsync(It.IsAny<string>(), SearchOption.AllDirectories))
                 .Returns(It.IsAny<Task<List<Picture>>>());
 

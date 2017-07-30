@@ -261,11 +261,11 @@
                     </ListView.ItemTemplate>
                 </ListView>
 
-                <TextBlock Text="No pictures exist or have been loaded in this folder."
+                <TextBlock Text="No pictures loaded."
                            Height="Auto"
                            Margin="5 5 0 0"
                            Visibility="{Binding Path=HasNoPictures,
-                                               Converter={StaticResource boolToVisibilityConverter}}" />
+                                                Converter={StaticResource boolToVisibilityConverter}}" />
             </Grid>
         </ScrollViewer>
     </Grid>

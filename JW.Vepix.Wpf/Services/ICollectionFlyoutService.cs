@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace JW.Vepix.Wpf.Services
 {
-    interface ICollectionFlyoutService
+    public interface ICollectionFlyoutService
     {
         void ShowVepixFlyout<T>(List<Picture> pictures) where T : ICollectionViewModel;
         void CloseVepixFlyout();

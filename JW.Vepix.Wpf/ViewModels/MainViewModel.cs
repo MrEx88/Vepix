@@ -24,7 +24,9 @@ namespace JW.Vepix.Wpf.ViewModels
                              IEventAggregator eventAggregator)
         {
             if (DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
+            {
                 return;
+            }
 
             FolderTreeViewModel = folderTreeViewModel;
             _pictureGridViewModelCreator = pictureGridViewModelCreator;
@@ -192,7 +194,7 @@ namespace JW.Vepix.Wpf.ViewModels
                 .AppendLine()
                 .AppendLine("Author: Jon Wesneski").ToString();
 
-            new MessageDialogService().ShowMessage("vepix - About", message);
+            new MessageDialogService().ShowMessage("Vepix - About", message);
         }
 
         private async void OnOpenPicturesFromFolder(PicturesFolderPayload picturesFolder)
