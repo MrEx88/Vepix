@@ -14,7 +14,7 @@ using System.Windows;
 
 namespace JW.Vepix.Wpf.ViewModels
 {
-    public class PicturesViewerViewModel : ViewModelBase, ICollectionViewModel
+    public class PicturesViewerViewModel : ViewModelBase, IFlyoutViewModel
     {
         public PicturesViewerViewModel(IPictureRepository pictureRepository,
                                        IMessageDialogService messageDialogService,

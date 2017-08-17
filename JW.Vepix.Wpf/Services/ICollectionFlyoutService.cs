@@ -6,7 +6,7 @@ namespace JW.Vepix.Wpf.Services
 {
     public interface ICollectionFlyoutService
     {
-        void ShowVepixFlyout<T>(List<Picture> pictures) where T : ICollectionViewModel;
+        void ShowVepixFlyout<T>(List<Picture> pictures) where T : IFlyoutViewModel;
         void CloseVepixFlyout();
     }
 }

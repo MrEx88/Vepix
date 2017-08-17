@@ -23,21 +23,23 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid Margin="5 5 5 5">
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="35" />
+            <RowDefinition Height="55" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <!-- Open Picture Buttons Bar -->
         <StackPanel Grid.Row="0"
-                    Orientation="Horizontal">
+                    Orientation="Horizontal"
+                    Background="LightGray"
+                    Margin="0 0 0 5">
             <Button x:Name="btnOpenContainingDirectory"
                     Command="{Binding OpenFolderCommand}" 
                     CommandParameter="{x:Static io:SearchOption.AllDirectories}"
                     Style="{DynamicResource AccentedSquareButtonStyle}"
                     ToolTip="Open Folder Tree"
-                    Margin="0 0 5 0">
+                    Margin="15 5 5 10">
                 <Rectangle Width="20"
                            Height="20"
                            Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
@@ -52,7 +54,7 @@
                     CommandParameter="{x:Static io:SearchOption.TopDirectoryOnly}"
                     Style="{DynamicResource SquareButtonStyle}"
                     ToolTip="Open Folder"
-                    Margin="0 0 5 0">
+                    Margin="0 5 5 10">
                 <Rectangle Width="20"
                            Height="20"
                            Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
@@ -65,7 +67,8 @@
             <Button x:Name="btnOpenFiles"
                     Command="{Binding OpenFilesCommand}"
                     Style="{DynamicResource SquareButtonStyle}"
-                    ToolTip="Open File(s)">
+                    ToolTip="Open File(s)"
+                    Margin="0 5 0 10">
                 <Rectangle Width="20"
                            Height="20"
                            Fill="{Binding Path=Foreground,
@@ -77,9 +80,9 @@
                 </Rectangle>
             </Button>
         </StackPanel>
-        
+
         <Grid Grid.Row="1"
-              Margin="5 5 5 5">
+              Margin="10 5 10 5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"
                                   MinWidth="100" />

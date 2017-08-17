@@ -1,16 +1,19 @@
 ﻿
 namespace JW.Vepix.Core.Models
 {
-    public class AffixedName : ObjectBase
+    public class AffixedPictureName : ObjectBase
     {
-        public AffixedName(string name)
+        public AffixedPictureName(Picture picture)
         {
-            _name = name;
+            Picture = picture;
+            _name = picture.ImageName;
         }
+
+        public Picture Picture { get; }
 
         public string Prefix
         {
-            get { return IsPrefixChecked ? _prefix : string.Empty; }
+            get { return IsPrefixOn ? _prefix : string.Empty; }
             set
             {
                 if(value != _prefix)
@@ -36,7 +39,7 @@ namespace JW.Vepix.Core.Models
 
         public string Suffix
         {
-            get { return IsSuffixChecked ? _suffix : string.Empty; }
+            get { return IsSuffixOn ? _suffix : string.Empty; }
             set
             {
                 if (value != _suffix)
@@ -47,45 +50,45 @@ namespace JW.Vepix.Core.Models
             }
         }
 
-        public bool IsPrefixChecked
+        public bool IsPrefixOn
         {
-            get { return _isPrefixChecked; }
+            get { return _isPrefixOn; }
             set
             {
-                if (value != _isPrefixChecked)
+                if (value != _isPrefixOn)
                 {
-                    _isPrefixChecked = value;
+                    _isPrefixOn = value;
                     NotifyPropertyChanged();
-                    NotifyPropertyChanged("Prefix");
+                    NotifyPropertyChanged(() => Prefix);
                 }
             }
         }
 
-        public bool IsSuffixChecked
+        public bool IsSuffixOn
         {
-            get { return _isSuffixChecked; }
+            get { return _isSuffixOn; }
             set
             {
-                if (value != _isSuffixChecked)
+                if (value != _isSuffixOn)
                 {
-                    _isSuffixChecked = value;
+                    _isSuffixOn = value;
                     NotifyPropertyChanged();
-                    NotifyPropertyChanged("Suffix");
+                    NotifyPropertyChanged(() => Suffix);
                 }
             }
         }
 
         public override string ToString()
         {
-            var prefix = IsPrefixChecked ? Prefix : string.Empty;
-            var suffix = IsSuffixChecked ? Suffix : string.Empty;
+            var prefix = IsPrefixOn ? Prefix : string.Empty;
+            var suffix = IsSuffixOn ? Suffix : string.Empty;
             return prefix + _name + suffix;
         }
 
         private string _prefix;
         private string _name;
         private string _suffix;
-        private bool _isPrefixChecked;
-        private bool _isSuffixChecked;
+        private bool _isPrefixOn;
+        private bool _isSuffixOn;
     }
 }

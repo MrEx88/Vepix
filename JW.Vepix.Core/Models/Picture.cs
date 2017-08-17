@@ -55,6 +55,13 @@ namespace JW.Vepix.Core.Models
         public int Height => BitmapImage.PixelHeight;
         public string Dimensions => string.Format("W:{0}xH:{1}", Width.ToString(), Height.ToString());
 
+        // For unit testing purposes only.
+        public Picture()
+        {
+            BitmapImage = new BitmapImage();
+            FullFileName = string.Empty;
+        }
+
         public Picture(BitmapImage bitmapImage, string fullFileName)
         {
             Guid = Guid.NewGuid();

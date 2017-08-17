@@ -6,12 +6,9 @@ using JW.Vepix.Wpf.ViewModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Prism.Events;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace JW.Vepix.Wpf.Tests
 {

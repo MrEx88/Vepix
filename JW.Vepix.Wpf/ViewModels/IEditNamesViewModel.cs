@@ -4,10 +4,9 @@ using System.Collections.ObjectModel;
 
 namespace JW.Vepix.Wpf.ViewModels
 {
-    public interface ICollectionViewModel
+    public interface IEditNamesViewModel
     {
-        ObservableCollection<Picture> Pictures { get; set; }
-        string ViewTitle { get; }
+        ObservableCollection<AffixedPictureName> EditPictureNames { get; set; }
         void Load(List<Picture> pictures);
     }
 }

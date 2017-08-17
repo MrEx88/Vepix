@@ -131,7 +131,8 @@
     <Compile Include="Services\MessageDialogService.cs" />
     <Compile Include="Services\IMessageDialogService.cs" />
     <Compile Include="ViewModels\EditNamesViewModel.cs" />
-    <Compile Include="ViewModels\ICollectionViewModel.cs" />
+    <Compile Include="ViewModels\IFlyoutViewModel.cs" />
+    <Compile Include="ViewModels\IEditNamesViewModel.cs" />
     <Compile Include="ViewModels\IFolderTreeItemViewModel.cs" />
     <Compile Include="ViewModels\IPictureGridViewModel.cs" />
     <Compile Include="ViewModels\IFolderTreeViewModel.cs" />

@@ -37,7 +37,7 @@ namespace JW.Vepix.Core.Extensions
             => new DirectoryInfo(path).Parent.FullName;
 
         public static bool IsValidFileNameAndDoesntExist(this string fileName)
-            => new FileService().IsValidFileName(fileName) && !File.Exists(fileName);
+            => (new FileService().IsValidFileName(fileName) && !File.Exists(fileName));
 
         public static BitmapEncoderType ToEncoderType(this string fileExtension)
         {

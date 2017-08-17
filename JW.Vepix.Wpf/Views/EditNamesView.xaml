@@ -38,43 +38,12 @@
                                         Mode=TwoWay}" />
             </StackPanel>
         </StackPanel>
-        
+
         <Grid Grid.Row="1"
               Margin="10 10 10 10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="40" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
 
-            <!-- List of Pictures -->
-            <DataGrid Grid.Column="0"
-                      ItemsSource="{Binding Pictures}"
-                      Margin="0 10 0 0 "
-                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                      AutoGenerateColumns="False"
-                      RowBackground="#DDFFFFFF"
-                      AlternatingRowBackground="#DDFFAAAA"
-                      AlternationCount="2">
-                <DataGrid.Columns>
-                    <DataGridTemplateColumn CanUserResize="False">
-                        <DataGridTemplateColumn.HeaderTemplate>
-                            <DataTemplate>
-                                <Label Content="" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.HeaderTemplate>
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Image Source="{Binding BitmapImage}"
-                                       Height="38" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
-            
-            <!-- Edit Name Data Grid -->
-            <DataGrid Grid.Column="1"
-                      x:Name="dataGrid"
+            <!-- Edit Picture Name Data Grid -->
+            <DataGrid x:Name="dataGrid"
                       ItemsSource="{Binding EditPictureNames,
                                             UpdateSourceTrigger=PropertyChanged,
                                             Mode=TwoWay}"
@@ -99,7 +68,8 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock HorizontalAlignment="Center"
-                                           VerticalAlignment="Center">
+                                           VerticalAlignment="Center"
+                                           Margin="5 0 5 0">
                                     <Hyperlink Command="{Binding Path=DataContext.RemovePictureCommand,
                                                                  RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid }}}"
                                                CommandParameter="{Binding ElementName=dataGrid,
@@ -107,6 +77,15 @@
                                         Remove
                                     </Hyperlink>
                                 </TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn CanUserResize="False">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image Source="{Binding Picture.BitmapImage}"
+                                       Height="38"
+                                       Margin="0 3 0 3" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -123,7 +102,7 @@
                         </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsPrefixChecked,
+                                <CheckBox IsChecked="{Binding IsPrefixOn,
                                                               UpdateSourceTrigger=PropertyChanged}"
                                           Command="{Binding Path=DataContext.IsAllPrefixesCheckedCommand,
                                                             RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"
@@ -158,7 +137,7 @@
                         </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsSuffixChecked,
+                                <CheckBox IsChecked="{Binding IsSuffixOn,
                                                               UpdateSourceTrigger=PropertyChanged}"
                                           Command="{Binding Path=DataContext.IsAllSuffixesCheckedCommand,
                                                             RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"

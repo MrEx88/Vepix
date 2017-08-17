@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 
 namespace JW.Vepix.Core.Extensions
 {
-    public static class ObservableCollectionsExtensions
+    public static class ObservableCollectionExtensions
     {
         public static bool RemoveAll<T>(this ObservableCollection<T> collection,
                                         Func<T, bool> condition)

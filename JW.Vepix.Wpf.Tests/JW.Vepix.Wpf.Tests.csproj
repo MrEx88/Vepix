@@ -71,6 +71,7 @@
     <Compile Include="PictureViewModelTests.cs" />
     <Compile Include="MainViewModelTests.cs" />
     <Compile Include="FolderTreeViewModelTests.cs" />
+    <Compile Include="EditNamesViewModelTests.cs" />
     <Compile Include="VepixCommandLineTests.cs" />
   </ItemGroup>
   <ItemGroup>

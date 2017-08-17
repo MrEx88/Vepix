@@ -29,7 +29,7 @@ namespace JW.Vepix.Wpf.Services
             _flyout.IsOpen = false;
         }
 
-        public void ShowVepixFlyout<T>(List<Picture> pictures) where T : ICollectionViewModel
+        public void ShowVepixFlyout<T>(List<Picture> pictures) where T : IFlyoutViewModel
         {
             var viewModel = ViewModelLocator.Container.Resolve<T>();
             viewModel.Load(pictures);

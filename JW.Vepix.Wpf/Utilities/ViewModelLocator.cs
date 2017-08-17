@@ -28,8 +28,8 @@ namespace JW.Vepix.Wpf.Utilities
             container.RegisterType<IPictureGridViewModel, PictureGridViewModel>();
             container.RegisterType<IFolderTreeViewModel, FolderTreeViewModel>();
 
-            container.RegisterType<ICollectionViewModel, EditNamesViewModel>();
-            container.RegisterType<ICollectionViewModel, PicturesViewerViewModel>();
+            container.RegisterType<IFlyoutViewModel, EditNamesViewModel>();
+            container.RegisterType<IFlyoutViewModel, PicturesViewerViewModel>();
             
             //PictureGridViewModel = container.Resolve<PictureGridViewModel>();
             MainViewModel = container.Resolve<MainViewModel>();

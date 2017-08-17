@@ -79,8 +79,8 @@ namespace JW.Vepix.Core.Services
 
         public bool IsValidFileName(string fileName)
         {
-            string invalidCharacters = "[" + Regex.Escape(new string(Path.GetInvalidPathChars())) + "]";
-            return !(new Regex(invalidCharacters).IsMatch(fileName));
+            return !string.IsNullOrEmpty(fileName)
+                   && fileName.IndexOfAny(Path.GetInvalidFileNameChars()) < 0;
         }
 
         public bool OverwriteImage(BitmapImage bitmapImage, string fullFileName,

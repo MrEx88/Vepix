@@ -65,7 +65,7 @@
 
         <view:MainView x:Name="mainView"
                        Grid.Row="0"
-                       Margin="5 5 5 5" />
+                       Margin="0 0 0 5" />
 
         <StatusBar Grid.Row="1">
             <StatusBarItem Content="{Binding ElementName=mainView,
