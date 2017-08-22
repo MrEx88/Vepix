@@ -13,6 +13,8 @@ namespace JW.Vepix.Core
 {
     public class ObjectBase : INotifyPropertyChanged
     {
+        private bool _isDirty;
+
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "", bool makeDirty = true)
@@ -140,7 +142,5 @@ namespace JW.Vepix.Core
 
             walk(this);
         }
-
-        private bool _isDirty;
     }
 }

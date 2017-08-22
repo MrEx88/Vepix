@@ -1,6 +1,5 @@
 ﻿using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
-using System;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -8,6 +7,9 @@ namespace JW.Vepix.Wpf.Services
 {
     public class MessageDialogService : IMessageDialogService
     {
+        private Window _modalDialog;
+        private MetroWindow _metroWindow;
+
         public MessageDialogService()
         {
             _metroWindow = (MetroWindow)Application.Current.MainWindow;
@@ -37,8 +39,5 @@ namespace JW.Vepix.Wpf.Services
             
             return result;
         }
-
-        private Window _modalDialog;
-        private MetroWindow _metroWindow;
     }
 }

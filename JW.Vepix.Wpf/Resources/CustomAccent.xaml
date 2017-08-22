@@ -10,11 +10,11 @@
     <!--80%-->
     <Color x:Key="AccentColor">#FF2B2B2B</Color>
     <!--60%-->
-    <Color x:Key="AccentColor2">#FFB2B2B2</Color><!-- OnSelected -->
+    <Color x:Key="AccentColor2">#FFB2B2B2</Color> <!-- OnSelected -->
     <!--40%-->
     <Color x:Key="AccentColor3">#66B2B2B2</Color> <!-- OnMouseOver -->
     <!--20%-->
-    <Color x:Key="AccentColor4">#33D80073</Color> <!-- ??Don't know?? -->
+    <Color x:Key="AccentColor4">#AAFF0000</Color> <!-- ??Don't know?? -->
 
     <!-- re-set brushes too -->
     <SolidColorBrush x:Key="HighlightBrush" Color="{StaticResource HighlightColor}" options:Freeze="True" />

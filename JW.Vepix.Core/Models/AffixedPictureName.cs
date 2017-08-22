@@ -3,6 +3,12 @@ namespace JW.Vepix.Core.Models
 {
     public class AffixedPictureName : ObjectBase
     {
+        private string _prefix;
+        private string _name;
+        private string _suffix;
+        private bool _isPrefixOn;
+        private bool _isSuffixOn;
+
         public AffixedPictureName(Picture picture)
         {
             Picture = picture;
@@ -84,11 +90,5 @@ namespace JW.Vepix.Core.Models
             var suffix = IsSuffixOn ? Suffix : string.Empty;
             return prefix + _name + suffix;
         }
-
-        private string _prefix;
-        private string _name;
-        private string _suffix;
-        private bool _isPrefixOn;
-        private bool _isSuffixOn;
     }
 }

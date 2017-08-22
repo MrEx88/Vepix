@@ -9,6 +9,9 @@ namespace JW.Vepix.Wpf.ViewModels
 {
     public class FolderTreeViewModel : ViewModelBase, IFolderTreeViewModel
     {
+        private ObservableCollection<IFolderTreeItemViewModel> _folderTreeItemViewModels;
+        private IEventAggregator _eventAggregator;
+
         public FolderTreeViewModel(IEventAggregator eventAggregator)
         {
             if (DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
@@ -58,8 +61,5 @@ namespace JW.Vepix.Wpf.ViewModels
 
             return true;
         }
-
-        private ObservableCollection<IFolderTreeItemViewModel> _folderTreeItemViewModels;
-        private IEventAggregator _eventAggregator;
     }
 }

@@ -32,17 +32,20 @@
         <!-- Open Picture Buttons Bar -->
         <StackPanel Grid.Row="0"
                     Orientation="Horizontal"
-                    Background="LightGray"
+                    Background="{DynamicResource AccentColorBrush4}"
                     Margin="0 0 0 5">
             <Button x:Name="btnOpenContainingDirectory"
                     Command="{Binding OpenFolderCommand}" 
                     CommandParameter="{x:Static io:SearchOption.AllDirectories}"
                     Style="{DynamicResource AccentedSquareButtonStyle}"
+                    Background="Transparent"
+                    BorderBrush="White"
                     ToolTip="Open Folder Tree"
                     Margin="15 5 5 10">
                 <Rectangle Width="20"
                            Height="20"
-                           Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                           Fill="{Binding Path=Foreground, 
+                                          RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                     <Rectangle.OpacityMask>
                         <VisualBrush Stretch="Fill"
                                      Visual="{DynamicResource appbar_folder_open}" />
@@ -52,7 +55,9 @@
             <Button x:Name="btnOpenDirectory"
                     Command="{Binding OpenFolderCommand}" 
                     CommandParameter="{x:Static io:SearchOption.TopDirectoryOnly}"
-                    Style="{DynamicResource SquareButtonStyle}"
+                    Style="{DynamicResource AccentedSquareButtonStyle}"
+                    Background="Transparent"
+                    BorderBrush="White"
                     ToolTip="Open Folder"
                     Margin="0 5 5 10">
                 <Rectangle Width="20"
@@ -66,7 +71,9 @@
             </Button>
             <Button x:Name="btnOpenFiles"
                     Command="{Binding OpenFilesCommand}"
-                    Style="{DynamicResource SquareButtonStyle}"
+                    Style="{DynamicResource AccentedSquareButtonStyle}"
+                    Background="Transparent"
+                    BorderBrush="White"
                     ToolTip="Open File(s)"
                     Margin="0 5 0 10">
                 <Rectangle Width="20"

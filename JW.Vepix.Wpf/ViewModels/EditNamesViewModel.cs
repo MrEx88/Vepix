@@ -15,6 +15,15 @@ namespace JW.Vepix.Wpf.ViewModels
 {
     public class EditNamesViewModel : ViewModelBase, IFlyoutViewModel, IEditNamesViewModel
     {
+        private IPictureRepository _pictureRepository;
+        private IMessageDialogService _messageDialogService;
+        private IEventAggregator _eventAggregator;
+        private ObservableCollection<AffixedPictureName> _editPictureNames;
+        private string _prefix;
+        private string _suffix;
+        private bool _isAllPrefixChecked;
+        private bool _isAllSuffixChecked;
+
         public EditNamesViewModel(IPictureRepository pictureRepository,
                                   IMessageDialogService messageDialogService,
                                   IEventAggregator eventAggregator)
@@ -205,14 +214,5 @@ namespace JW.Vepix.Wpf.ViewModels
         }
 
         private bool OnCanOverwriteNamesCommand() => EditPictureNames.Count > 0;
-
-        private IPictureRepository _pictureRepository;
-        private IMessageDialogService _messageDialogService;
-        private IEventAggregator _eventAggregator;
-        private ObservableCollection<AffixedPictureName> _editPictureNames;
-        private string _prefix;
-        private string _suffix;
-        private bool _isAllPrefixChecked;
-        private bool _isAllSuffixChecked;
     }
 }

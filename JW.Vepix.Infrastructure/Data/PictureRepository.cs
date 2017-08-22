@@ -13,6 +13,13 @@ namespace JW.Vepix.Infrastructure.Data
 {
     public class PictureRepository : IPictureRepository
     {
+        private IFileService _fileService;
+        private IBitmapService _bitmapService;
+        private readonly List<string> _supportedPicturesPatterns = new List<string>
+        {
+            "*.jpg", "*.png", "*.gif", "*.bmp", "*.wmp", "*.tiff"
+        };
+
         public PictureRepository(IFileService fileService, IBitmapService bitmapService)
         {
             _fileService = fileService;
@@ -96,12 +103,5 @@ namespace JW.Vepix.Infrastructure.Data
         //todo: shouldn't this return a Picture instance.
         public bool TrySaveAs(BitmapImage image, BitmapEncoderType encoderType) =>
             _fileService.SaveImageAs(image, encoderType);
-
-        private IFileService _fileService;
-        private IBitmapService _bitmapService;
-        private readonly List<string> _supportedPicturesPatterns = new List<string>
-        {
-            "*.jpg", "*.png", "*.gif", "*.bmp", "*.wmp", "*.tiff"
-        };
     }
 }

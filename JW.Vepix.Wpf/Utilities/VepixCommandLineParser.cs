@@ -11,6 +11,21 @@ namespace JW.Vepix.Wpf.Utilities
 {
     public class VepixCommandLineParser
     {
+        private static VepixCommandLineResults _vepixConsole;
+        private const string SWITCH_TOKEN = "-";
+        private const string FOLDER_SWITCH = "-f";
+        private const string FOLDER_TREE_SWITCH = "-t";
+        private const string SEARCH_PATTERN_SWITCH = "-p";
+        private const string REGEX_FILENAME = @"[\w\d\s\-\\_\*]*\.";
+        private readonly List<string> FILE_FORMATS = new List<string>() { "bmp", "gif", "jpg", "png", "tiff", "wmp" };
+        private readonly List<string> HELP_SWITCHES = new List<string>() { "-h", "-?", "-help", "help", "?" };
+        private readonly List<string> SWITCHES = new List<string>()
+        {
+            FOLDER_SWITCH,
+            FOLDER_TREE_SWITCH,
+            SEARCH_PATTERN_SWITCH
+        };
+
         // todo: Now I know the difference between file filters and search patterns
         // filefilters = "Image Files|*.jpg;*.jpeg;*.png;*.gif" (filter for image file format types)
         // search patterns = "1*.jpg" or "r*.*"
@@ -137,20 +152,5 @@ namespace JW.Vepix.Wpf.Utilities
         [DllImport("kernel32.dll")]
         private static extern bool FreeConsole();
         #endregion
-
-        private static VepixCommandLineResults _vepixConsole;
-        private const string SWITCH_TOKEN = "-";
-        private const string FOLDER_SWITCH = "-f";
-        private const string FOLDER_TREE_SWITCH = "-t";
-        private const string SEARCH_PATTERN_SWITCH = "-p";
-        private const string REGEX_FILENAME = @"[\w\d\s\-\\_\*]*\.";
-        private readonly List<string> FILE_FORMATS = new List<string>() { "bmp", "gif", "jpg", "png", "tiff", "wmp" };
-        private readonly List<string> HELP_SWITCHES = new List<string>() { "-h", "-?", "-help", "help", "?" };
-        private readonly List<string> SWITCHES = new List<string>()
-        {
-            FOLDER_SWITCH,
-            FOLDER_TREE_SWITCH,
-            SEARCH_PATTERN_SWITCH
-        };
     }
 }

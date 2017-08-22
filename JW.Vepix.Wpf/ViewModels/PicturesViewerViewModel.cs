@@ -16,6 +16,16 @@ namespace JW.Vepix.Wpf.ViewModels
 {
     public class PicturesViewerViewModel : ViewModelBase, IFlyoutViewModel
     {
+        private IPictureRepository _pictureRepository;
+        private IMessageDialogService _messageDialogService;
+        private IEventAggregator _eventAggregator;
+        private ObservableCollection<Picture> _pictures;
+        private Int32Rect? _cropArea;
+        private Picture _viewingPicture;
+        private string _viewTitle;
+        private double _zoomFactor;
+        private CropSelectionCanvas _cropCanvas;
+
         public PicturesViewerViewModel(IPictureRepository pictureRepository,
                                        IMessageDialogService messageDialogService,
                                        IEventAggregator eventAggregator)
@@ -58,6 +68,8 @@ namespace JW.Vepix.Wpf.ViewModels
                 {
                     _viewingPicture = value;
                     NotifyPropertyChanged();
+
+                    ViewTitle = value.ImageName;
                 }
             }
         }
@@ -95,9 +107,12 @@ namespace JW.Vepix.Wpf.ViewModels
             get { return _cropArea; }
             set
             {
-                _cropArea = value;
-                SaveAsCommand.RaiseCanExecuteChanged();
-                SaveCommand.RaiseCanExecuteChanged();
+                if (value != _cropArea)
+                {
+                    _cropArea = value;
+                    SaveAsCommand.RaiseCanExecuteChanged();
+                    SaveCommand.RaiseCanExecuteChanged(); 
+                }
             }
         }
 
@@ -189,15 +204,5 @@ namespace JW.Vepix.Wpf.ViewModels
             SaveAsCommand.RaiseCanExecuteChanged();
             SaveCommand.RaiseCanExecuteChanged();
         }
-
-        private IPictureRepository _pictureRepository;
-        private IMessageDialogService _messageDialogService;
-        private IEventAggregator _eventAggregator;
-        private ObservableCollection<Picture> _pictures;
-        private Int32Rect? _cropArea;
-        private Picture _viewingPicture;
-        private string _viewTitle;
-        private double _zoomFactor;
-        private CropSelectionCanvas _cropCanvas;
     }
 }

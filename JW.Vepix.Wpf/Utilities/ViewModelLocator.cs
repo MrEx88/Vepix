@@ -10,6 +10,8 @@ namespace JW.Vepix.Wpf.Utilities
 {
     public class ViewModelLocator
     {
+        public static UnityContainer Container { get; private set; }
+
         //public PictureGridViewModel PictureGridViewModel { get; }
         public MainViewModel MainViewModel { get; }
         public FolderTreeViewModel TreePictureFolderViewModel { get; }
@@ -37,7 +39,5 @@ namespace JW.Vepix.Wpf.Utilities
 
             Container = container;
         }
-
-        public static UnityContainer Container { get; private set; }
     }
 }

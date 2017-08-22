@@ -17,6 +17,12 @@ namespace JW.Vepix.Wpf.Tests
     [TestClass]
     public class PictureGridViewModelTests
     {
+        private PictureGridViewModel _pictureGridViewModel;
+        private Mock<IPictureRepository> _mockPictureRepository;
+        private Mock<IEventAggregator> _mockEventAggregator;
+        private Mock<IMessageDialogService> _mockModalDialog;
+        private Mock<IFileExplorerDialogService> _mockFileExplorerDialogService;
+
         // <MethodNameUnderTest>_Should<ExpectedResult>_When<Condition>()
         // Arrange.
         // Act.
@@ -206,11 +212,5 @@ namespace JW.Vepix.Wpf.Tests
 
             Assert.AreEqual(beforeRemoveCount, _pictureGridViewModel.Pictures.Count);
         }
-
-        private PictureGridViewModel _pictureGridViewModel;
-        private Mock<IPictureRepository> _mockPictureRepository;
-        private Mock<IEventAggregator> _mockEventAggregator;
-        private Mock<IMessageDialogService> _mockModalDialog;
-        private Mock<IFileExplorerDialogService> _mockFileExplorerDialogService;
     }
 }

@@ -17,6 +17,16 @@ namespace JW.Vepix.Wpf.ViewModels
 {
     public class PictureGridViewModel : ViewModelBase, IPictureGridViewModel
     {
+        private IPictureRepository _pictureRepository;
+        private IEventAggregator _eventAggregator;
+        private IMessageDialogService _modalDialog;
+        private IFileExplorerDialogService _fileExplorerDialogService;
+        private ObservableCollection<Picture> _pictures;
+        private string _absolutePath;
+        private bool _filterOn;
+        private string _searchFilter;
+        private bool _arePicturesLoading;
+
         public PictureGridViewModel(IPictureRepository pictureRepository, 
                                     IEventAggregator eventAggregator,
                                     IMessageDialogService modalDialog, 
@@ -310,15 +320,5 @@ namespace JW.Vepix.Wpf.ViewModels
             Pictures.Remove(picture);
             Pictures.Add(reloadedPicture.First());
         }
-
-        private IPictureRepository _pictureRepository;
-        private IEventAggregator _eventAggregator;
-        private IMessageDialogService _modalDialog;
-        private IFileExplorerDialogService _fileExplorerDialogService;
-        private ObservableCollection<Picture> _pictures;
-        private string _absolutePath;
-        private bool _filterOn;
-        private string _searchFilter;
-        private bool _arePicturesLoading;
     }
 }

@@ -14,6 +14,11 @@ namespace JW.Vepix.Wpf.Tests
     [TestClass]
     public class EditNamesViewModelTests
     {
+        private EditNamesViewModel _editNamesViewModel;
+        private Mock<IPictureRepository> _mockPictureRepository;
+        private Mock<IMessageDialogService> _mockMessageDiaglogService;
+        private Mock<IEventAggregator> _mockEventAggregator;
+
         [TestInitialize]
         public void Initialize()
         {
@@ -125,10 +130,5 @@ namespace JW.Vepix.Wpf.Tests
 
             Assert.IsFalse(_editNamesViewModel.IsAllSuffixChecked);
         }
-
-        private EditNamesViewModel _editNamesViewModel;
-        private Mock<IPictureRepository> _mockPictureRepository;
-        private Mock<IMessageDialogService> _mockMessageDiaglogService;
-        private Mock<IEventAggregator> _mockEventAggregator;
     }
 }

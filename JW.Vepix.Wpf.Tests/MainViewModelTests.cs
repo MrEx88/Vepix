@@ -15,6 +15,13 @@ namespace JW.Vepix.Wpf.Tests
     [TestClass]
     public class MainViewModelTests
     {
+        private Mock<IFolderTreeViewModel> _mockFolderTreeViewModel;
+        private Mock<IFileService> _mockFileService;
+        private Mock<IFileExplorerDialogService> _mockFileExplorerDialogService;
+        private List<Mock<IPictureGridViewModel>> _mockPictureGridViewModels;
+        private Mock<IEventAggregator> _mockEventAggregator;
+        private Mock<IPictureRepository> _mockPictureRepo;
+        private MainViewModel _mainViewModel;
         // <[Method/Property]NameUnderTest>_Should<ExpectedResult>_When<Condition>()
         // Arrange.
         // Act.
@@ -78,14 +85,6 @@ namespace JW.Vepix.Wpf.Tests
             _getFileNamesAsync.Wait();
             _mockFolderTreeViewModel.Verify(vm => vm.TryLoad(It.IsAny<string>()), Times.Once);
         }
-
-        private Mock<IFolderTreeViewModel> _mockFolderTreeViewModel;
-        private Mock<IFileService> _mockFileService;
-        private Mock<IFileExplorerDialogService> _mockFileExplorerDialogService;
-        private List<Mock<IPictureGridViewModel>> _mockPictureGridViewModels;
-        private Mock<IEventAggregator> _mockEventAggregator;
-        private Mock<IPictureRepository> _mockPictureRepo;
-        private MainViewModel _mainViewModel;
 
         // Need to use these on when Command are marked with async and awaiting something.
         private Task<List<string>> _getFileNamesAsync = Task<List<string>>.Factory.StartNew(() =>

@@ -10,6 +10,9 @@ namespace JW.Vepix.Wpf.Controls
 {
     public class CropSelectionCanvas : Canvas
     {
+        private Point _mouseDownPoint;
+        private Shape _cropShape;
+
         public CropSelectionCanvas()
         {
         }
@@ -47,6 +50,7 @@ namespace JW.Vepix.Wpf.Controls
                 Children.Remove(_cropShape);
             }
             _cropShape = null;
+            CropArea = null;
         }
 
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
@@ -127,8 +131,5 @@ namespace JW.Vepix.Wpf.Controls
             };
             Children.Add(_cropShape);
         }
-
-        private Point _mouseDownPoint;
-        private Shape _cropShape;
     }
 }

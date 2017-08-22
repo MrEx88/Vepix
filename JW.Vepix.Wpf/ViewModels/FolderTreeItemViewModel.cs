@@ -11,6 +11,13 @@ namespace JW.Vepix.Wpf.ViewModels
 {
     public class FolderTreeItemViewModel : ViewModelBase, IFolderTreeItemViewModel
     {
+        private IFolderTreeItemViewModel _parent;
+        private ObservableCollection<IFolderTreeItemViewModel> _children;
+        private IEventAggregator _eventAggregator;
+        private string _absolutePath;
+        private bool _isExpanded;
+        private bool _isSelected;
+
         public FolderTreeItemViewModel(DirectoryInfo dirInfo, IEventAggregator eventAggregator)
             : this(dirInfo, parent: null, eventAggregator: eventAggregator)
         {
@@ -130,12 +137,5 @@ namespace JW.Vepix.Wpf.ViewModels
                 AbsolutePath = _absolutePath
             });
         }
-
-        private IFolderTreeItemViewModel _parent;
-        private ObservableCollection<IFolderTreeItemViewModel> _children;
-        private IEventAggregator _eventAggregator;
-        private string _absolutePath;
-        private bool _isExpanded;
-        private bool _isSelected;
     }
 }

@@ -17,6 +17,19 @@ namespace JW.Vepix.Wpf.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
+        private Func<IPictureGridViewModel> _pictureGridViewModelCreator;
+        private IPictureGridViewModel _selectedPictureGridViewModel;
+        private IFileService _fileService;
+        private IFileExplorerDialogService _fileExplorerDialogService;
+        private IEventAggregator _eventAggregator;
+        private string _userActionText;
+        private string _helpInfoText;
+        // todo: need to figure out where i can put this globally
+        private readonly List<string> _supportedPicturesPatterns = new List<string>
+        {
+            "*.jpg", "*.png", "*.gif", "*.bmp", "*.wmp", "*.tiff"
+        };
+
         public MainViewModel(IFolderTreeViewModel folderTreeViewModel,
                              Func<IPictureGridViewModel> pictureGridViewModelCreator,
                              IFileService fileService,
@@ -241,18 +254,5 @@ namespace JW.Vepix.Wpf.ViewModels
                 }
             }
         }
-
-        private Func<IPictureGridViewModel> _pictureGridViewModelCreator;
-        private IPictureGridViewModel _selectedPictureGridViewModel;
-        private IFileService _fileService;
-        private IFileExplorerDialogService _fileExplorerDialogService;
-        private IEventAggregator _eventAggregator;
-        private string _userActionText;
-        private string _helpInfoText;
-        // todo: need to figure out where i can put this globally
-        private readonly List<string> _supportedPicturesPatterns = new List<string>
-        {
-            "*.jpg", "*.png", "*.gif", "*.bmp", "*.wmp", "*.tiff"
-        };
     }
 }

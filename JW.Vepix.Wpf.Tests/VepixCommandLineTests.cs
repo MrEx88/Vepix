@@ -7,6 +7,10 @@ namespace JW.Vepix.Wpf.Tests
     [TestClass]
     public class VepixCommandLineTests
     {
+        private VepixCommandLineParser _consoleParser = new VepixCommandLineParser();
+        private string _validPath = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+        private string validSearchPattern = "*.jpg";
+
         // <MethodNameUnderTest>_Should<ExpectedResult>_When<Condition>()
         // Arrange.
         // Act.
@@ -106,9 +110,5 @@ namespace JW.Vepix.Wpf.Tests
 
             _consoleParser.Parse(args);
         }
-
-        private VepixCommandLineParser _consoleParser = new VepixCommandLineParser();
-        private string _validPath = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
-        private string validSearchPattern = "*.jpg";
     }
 }

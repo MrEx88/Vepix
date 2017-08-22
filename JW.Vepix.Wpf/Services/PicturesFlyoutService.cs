@@ -18,6 +18,8 @@ namespace JW.Vepix.Wpf.Services
 
     public class PicturesFyloutService : ICollectionFlyoutService
     {
+        private Flyout _flyout;
+
         public PicturesFyloutService(FlyoutViewType flyoutViewType)
         {
             var parent = Window.GetWindow(App.Current.MainWindow);
@@ -57,7 +59,5 @@ namespace JW.Vepix.Wpf.Services
                     throw new ArgumentException($"Invalid argument: {flyoutViewType}");
             }
         }
-
-        private Flyout _flyout;
     }
 }
