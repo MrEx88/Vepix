@@ -59,7 +59,6 @@
             <controls:FlipView x:Name="flipViewImages"
                                ItemsSource="{Binding Pictures}"
                                SelectedItem="{Binding ViewingPicture}"
-                               IsVisibleChanged="flipViewImages_IsVisibleChanged"
                                SelectionChanged="flipViewImages_SelectionChanged"
                                IsBannerEnabled="False"
                                MouseOverGlowEnabled="False">
@@ -69,11 +68,12 @@
                                       VerticalScrollBarVisibility="Auto"
                                       HorizontalScrollBarVisibility="Auto"
                                       ScrollChanged="scrollForImage_ScrollChanged"
-                                      MouseMove="scrollForImage_MouseMove"
+                                      PreviewMouseWheel="scrollForImage_PreviewMouseWheel">
+                            <!-- not sure if I want to keep these; doing so loses cropping functionality-->
+                            <!--MouseMove="scrollForImage_MouseMove"
                                       MouseLeftButtonUp="scrollForImage_MouseLeftButtonUp"
                                       PreviewMouseLeftButtonUp="scrollForImage_MouseLeftButtonUp"
-                                      PreviewMouseLeftButtonDown="scrollForImage_PreviewMouseLeftButtonDown"
-                                      PreviewMouseWheel="scrollForImage_PreviewMouseWheel">
+                                      PreviewMouseLeftButtonDown="scrollForImage_PreviewMouseLeftButtonDown"-->
                             <Grid  x:Name="gridWithTransform" RenderTransformOrigin="0.5,0.5">
                                 <Grid.LayoutTransform>
                                     <TransformGroup>
@@ -96,7 +96,6 @@
                                                Height="{Binding Height}"
                                                Width="{Binding Width}"
                                                TargetUpdated="imageBeingViewed_TargetUpdated"
-                                               IsVisibleChanged="imageBeingViewed_IsVisibleChanged"
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center" />
                                 </custom:CropSelectionCanvas>
