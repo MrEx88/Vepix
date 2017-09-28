@@ -57,7 +57,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\ObservableCollectionExtensions.cs" />
+    <Compile Include="Global.cs" />
     <Compile Include="Models\TryResult.cs" />
+    <Compile Include="Models\CommandLineArgs.cs" />
     <Compile Include="NotNavigableAttribute.cs" />
     <Compile Include="Services\EncoderService.cs" />
     <Compile Include="Extensions\NavigationExtensions.cs" />

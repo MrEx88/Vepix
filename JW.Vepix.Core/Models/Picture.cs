@@ -6,6 +6,9 @@ namespace JW.Vepix.Core.Models
 {
     public class Picture : ObjectBase
     {
+        private BitmapImage _bitmapImage;
+        private string _fullFileName;
+
         public Guid Guid { get; }
 
         public BitmapImage BitmapImage
@@ -69,8 +72,5 @@ namespace JW.Vepix.Core.Models
             FullFileName = fullFileName;
             IsDirty = false;
         }
-
-        private BitmapImage _bitmapImage;
-        private string _fullFileName;
     }
 }

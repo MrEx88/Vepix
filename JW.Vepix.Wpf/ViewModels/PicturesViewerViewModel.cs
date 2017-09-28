@@ -1,12 +1,10 @@
-﻿using JW.Vepix.Core.Interfaces;
+﻿using JW.Vepix.Core.Extensions;
+using JW.Vepix.Core.Interfaces;
 using JW.Vepix.Core.Models;
-using JW.Vepix.Core.Services;
-using JW.Vepix.Wpf.Controls;
 using JW.Vepix.Wpf.Events;
 using JW.Vepix.Wpf.Services;
 using JW.Vepix.Wpf.Utilities;
 using Prism.Events;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -24,7 +22,6 @@ namespace JW.Vepix.Wpf.ViewModels
         private Picture _viewingPicture;
         private string _viewTitle;
         private double _zoomFactor;
-        private CropSelectionCanvas _cropCanvas;
 
         public PicturesViewerViewModel(IPictureRepository pictureRepository,
                                        IMessageDialogService messageDialogService,
@@ -74,21 +71,6 @@ namespace JW.Vepix.Wpf.ViewModels
             }
         }
 
-        // todo: See if I need any of these when I fix the logic for the
-        //       Zooming with the slider.
-        public CropSelectionCanvas CropCanvas
-        {
-            get { return _cropCanvas; }
-            set
-            {
-                if (value != _cropCanvas)
-                {
-                    _cropCanvas = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
-
         public double ZoomFactor
         {
             get { return _zoomFactor; }
@@ -116,37 +98,6 @@ namespace JW.Vepix.Wpf.ViewModels
             }
         }
 
-        private double _cropHeight;
-
-        public double CropHeight
-        {
-            get { return _cropHeight; }
-            set
-            {
-                if (value != _cropHeight)
-                {
-                    _cropHeight = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
-
-        private double _cropWidth;
-
-        public double CropWidth
-        {
-            get { return _cropWidth; }
-            set
-            {
-                if (value != _cropWidth)
-                {
-                    _cropWidth = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
-        // END
-
         public ObservableCollection<Picture> Pictures
         {
             get { return _pictures; }
@@ -165,8 +116,6 @@ namespace JW.Vepix.Wpf.ViewModels
             Pictures = new ObservableCollection<Picture>(pictures);
             ViewingPicture = pictures[0];
             ViewTitle = ViewingPicture.ImageName;
-
-            SetupCanvas(ViewingPicture);
         }
 
         public RelayCommand<object> SaveCommand { get; set; }
@@ -185,18 +134,10 @@ namespace JW.Vepix.Wpf.ViewModels
         private void OnSaveAsExecute()
         {
             var croppedPicture = _pictureRepository.GetCroppedImage(ViewingPicture, _cropArea.Value);
-            //todo create picturerepository method for this
-            FileService fileService = new FileService();
-            fileService.SaveImageAs(croppedPicture.BitmapImage, BitmapEncoderType.JPEG);
+            _pictureRepository.TrySaveAs(croppedPicture.BitmapImage, croppedPicture.FileExtension.ToEncoderType());
         }
 
         private bool OnSaveCanExecute() => _cropArea.HasValue;
-
-        private void SetupCanvas(Picture picture)
-        {
-            CropHeight = Convert.ToDouble(picture.Height);
-            CropWidth = Convert.ToDouble(picture.Width);
-        }
 
         private void OnCropAreaDrawn(Int32Rect rect)
         {

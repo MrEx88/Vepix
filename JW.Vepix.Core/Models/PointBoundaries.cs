@@ -24,11 +24,9 @@ namespace JW.Vepix.Core.Models
         }
 
         public double GetXPointWithinBoundary(double currentXPoint) 
-            => Math.Min(Math.Max(currentXPoint,MinX),
-                        MaxX);
+            => Math.Min(Math.Max(currentXPoint,MinX), MaxX);
 
         public double GetYPointWithinBoundary(double currentYPoint)
-            => Math.Min(Math.Max(currentYPoint,MinY),
-                        MaxY);
+            => Math.Min(Math.Max(currentYPoint,MinY), MaxY);
     }
 }

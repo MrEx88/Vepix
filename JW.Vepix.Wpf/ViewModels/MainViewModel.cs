@@ -1,4 +1,5 @@
-﻿using JW.Vepix.Core.Extensions;
+﻿using JW.Vepix.Core;
+using JW.Vepix.Core.Extensions;
 using JW.Vepix.Core.Interfaces;
 using JW.Vepix.Wpf.Events;
 using JW.Vepix.Wpf.Payloads;
@@ -24,11 +25,6 @@ namespace JW.Vepix.Wpf.ViewModels
         private IEventAggregator _eventAggregator;
         private string _userActionText;
         private string _helpInfoText;
-        // todo: need to figure out where i can put this globally
-        private readonly List<string> _supportedPicturesPatterns = new List<string>
-        {
-            "*.jpg", "*.png", "*.gif", "*.bmp", "*.wmp", "*.tiff"
-        };
 
         public MainViewModel(IFolderTreeViewModel folderTreeViewModel,
                              Func<IPictureGridViewModel> pictureGridViewModelCreator,
@@ -40,7 +36,7 @@ namespace JW.Vepix.Wpf.ViewModels
             {
                 return;
             }
-
+            
             FolderTreeViewModel = folderTreeViewModel;
             _pictureGridViewModelCreator = pictureGridViewModelCreator;
 
@@ -139,7 +135,7 @@ namespace JW.Vepix.Wpf.ViewModels
         }
 
         public async Task<IPictureGridViewModel> LoadAPictureGridViewModel(string folderPath) =>
-            await LoadAPictureGridViewModel(folderPath, _supportedPicturesPatterns);
+            await LoadAPictureGridViewModel(folderPath, Global.ALL_SUPPORTED_PATTERNS);
 
         public async Task<IPictureGridViewModel> LoadAPictureGridViewModel(string folderPath, List<string> searchPatterns)
         {

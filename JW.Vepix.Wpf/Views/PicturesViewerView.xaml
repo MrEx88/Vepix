@@ -69,11 +69,6 @@
                                       HorizontalScrollBarVisibility="Auto"
                                       ScrollChanged="scrollForImage_ScrollChanged"
                                       PreviewMouseWheel="scrollForImage_PreviewMouseWheel">
-                            <!-- not sure if I want to keep these; doing so loses cropping functionality-->
-                            <!--MouseMove="scrollForImage_MouseMove"
-                                      MouseLeftButtonUp="scrollForImage_MouseLeftButtonUp"
-                                      PreviewMouseLeftButtonUp="scrollForImage_MouseLeftButtonUp"
-                                      PreviewMouseLeftButtonDown="scrollForImage_PreviewMouseLeftButtonDown"-->
                             <Grid  x:Name="gridWithTransform" RenderTransformOrigin="0.5,0.5">
                                 <Grid.LayoutTransform>
                                     <TransformGroup>
@@ -91,13 +86,13 @@
                                                                 HorizontalAlignment="Center"
                                                                 VerticalAlignment="Center">
                                     <Image x:Name="imageBeingViewed"
-                                               Source="{Binding BitmapImage,
-                                                                NotifyOnTargetUpdated=True}"
-                                               Height="{Binding Height}"
-                                               Width="{Binding Width}"
-                                               TargetUpdated="imageBeingViewed_TargetUpdated"
-                                               HorizontalAlignment="Center"
-                                               VerticalAlignment="Center" />
+                                           Source="{Binding BitmapImage,
+                                                            NotifyOnTargetUpdated=True}"
+                                           Height="{Binding Height}"
+                                           Width="{Binding Width}"
+                                           TargetUpdated="imageBeingViewed_TargetUpdated"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center" />
                                 </custom:CropSelectionCanvas>
                             </Grid>
                         </ScrollViewer>

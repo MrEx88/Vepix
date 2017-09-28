@@ -114,11 +114,6 @@ namespace JW.Vepix.Wpf.Controls
                 _cropShape.Height = height;
                 Canvas.SetLeft(_cropShape, left);
                 Canvas.SetTop(_cropShape, top);
-
-                //System.Diagnostics.Debug.WriteLine($"Crop Area{{X={CropArea.Value.X},Y={CropArea.Value.Y},Width={CropArea.Value.Width},Height={CropArea.Value.Height} }}");
-                //System.Diagnostics.Debug.WriteLine($"Canvas{{X={Canvas.GetLeft(_cropShape)},Y={Canvas.GetTop(_cropShape)} }}, CropShape{{Width={_cropShape.Width},Height={_cropShape.Height} }}");
-                //System.Diagnostics.Debug.WriteLine("");
-                //System.Diagnostics.Debug.WriteLine("");
             }
         }
 

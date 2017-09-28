@@ -1,4 +1,5 @@
-﻿using JW.Vepix.Core.Extensions;
+﻿using JW.Vepix.Core;
+using JW.Vepix.Core.Extensions;
 using JW.Vepix.Core.Interfaces;
 using JW.Vepix.Core.Models;
 using JW.Vepix.Core.Services;
@@ -15,10 +16,6 @@ namespace JW.Vepix.Infrastructure.Data
     {
         private IFileService _fileService;
         private IBitmapService _bitmapService;
-        private readonly List<string> _supportedPicturesPatterns = new List<string>
-        {
-            "*.jpg", "*.png", "*.gif", "*.bmp", "*.wmp", "*.tiff"
-        };
 
         public PictureRepository(IFileService fileService, IBitmapService bitmapService)
         {
@@ -44,7 +41,7 @@ namespace JW.Vepix.Infrastructure.Data
         public async Task<List<Picture>> GetPicturesFromFolderAsync(string folderPath,
             SearchOption option = SearchOption.TopDirectoryOnly) =>
                 await GetPicturesFromFolderAsync(folderPath, option,
-                    _supportedPicturesPatterns.ToArray());
+                    Global.ALL_SUPPORTED_PATTERNS.ToArray());
 
         public async Task<List<Picture>> GetPicturesFromFolderAsync(string folderPath,
             SearchOption option = SearchOption.TopDirectoryOnly, params string[] searchPattern)
@@ -100,7 +97,6 @@ namespace JW.Vepix.Infrastructure.Data
             });
         }
 
-        //todo: shouldn't this return a Picture instance.
         public bool TrySaveAs(BitmapImage image, BitmapEncoderType encoderType) =>
             _fileService.SaveImageAs(image, encoderType);
     }

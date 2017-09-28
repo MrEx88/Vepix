@@ -1,5 +1,4 @@
 ﻿using JW.Vepix.Wpf.Controls;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,10 +14,10 @@ namespace JW.Vepix.Wpf.Views
     public partial class PicturesViewerView : UserControl
     {
         private const string GRID_IN_FLIPVIEW = "gridWithTransform";
-        private double _ratio = 1.0;
+
         private Point? _lastCenterPositionOnTarget;
         private Point? _lastMousePositionOnTarget;
-        private Point? _lastDragPoint;
+        private double _ratio = 1.0;
 
         public PicturesViewerView()
         {
@@ -27,34 +26,32 @@ namespace JW.Vepix.Wpf.Views
 
         private void imageBeingViewed_TargetUpdated(object sender, System.Windows.Data.DataTransferEventArgs e)
         {
-            if (((Image)e.Source).Source == null)
+            var image = ((Image)e.Source).Source as BitmapImage;
+            if (image == null)
             {
                 return;
             }
 
             var flipViewWitdth = flipViewImages.ActualWidth;
             var flipViewHeight = flipViewImages.ActualHeight;
-            var imageWidth = (((Image)e.Source).Source as BitmapImage).PixelWidth;
-            var imageHeight = (((Image)e.Source).Source as BitmapImage).PixelHeight;
+            var imageWidth = image.PixelWidth;
+            var imageHeight = image.PixelHeight;
+            var canvasCustom = ControlHelper.RecurseChildren<CropSelectionCanvas>(flipViewImages).First();
 
-            var ratioWidth = flipViewWitdth / (double)imageWidth;
-            var ratioHeight = flipViewHeight / (double)imageHeight;
+            var ratioWidth = flipViewWitdth / imageWidth;
+            var ratioHeight = flipViewHeight / imageHeight;
             _ratio = ratioWidth > ratioHeight ? ratioWidth : ratioHeight;
 
             if (_ratio < 1.0)
             {
                 sliderZoom.Minimum = _ratio;
                 sliderZoom.Value = _ratio;
-                var gridTransform = RecurseChildren<Grid>(flipViewImages).First(grid => grid.Name == GRID_IN_FLIPVIEW);
-                var transformGroup = gridTransform.LayoutTransform as TransformGroup;
-                var scaleTransform = (ScaleTransform)transformGroup.Children[0];
-
-                scaleTransform.ScaleX *= _ratio;
-                scaleTransform.ScaleY *= _ratio;
             }
             else
             {
+                _ratio = 1;
                 sliderZoom.Minimum = 1;
+                sliderZoom.Value = 1;
             }
         }
 
@@ -62,14 +59,15 @@ namespace JW.Vepix.Wpf.Views
         {
             if (flipViewImages != null)
             {
-                var gridTransform = RecurseChildren<Grid>(flipViewImages).First(grid => grid.Name == GRID_IN_FLIPVIEW);
+                var gridTransform = ControlHelper.RecurseChildren<Grid>(flipViewImages)
+                                        .First(grid => grid.Name == GRID_IN_FLIPVIEW);
                 var transformGroup = (TransformGroup)gridTransform.LayoutTransform;
                 var scaleTransform = (ScaleTransform)transformGroup.Children[0];
 
                 scaleTransform.ScaleX = e.NewValue * _ratio;
                 scaleTransform.ScaleY = e.NewValue * _ratio;
 
-                var scrollViewer = RecurseChildren<ScrollViewer>(flipViewImages).First();
+                var scrollViewer = ControlHelper.RecurseChildren<ScrollViewer>(flipViewImages).First();
                 var centerOfViewport = new Point(scrollViewer.ViewportWidth / 2, scrollViewer.ViewportHeight / 2);
                 _lastCenterPositionOnTarget = scrollViewer.TranslatePoint(centerOfViewport, gridTransform);
             }
@@ -79,7 +77,7 @@ namespace JW.Vepix.Wpf.Views
         {
             _lastCenterPositionOnTarget = null;
 
-            var canvasCustom = RecurseChildren<CropSelectionCanvas>(flipViewImages)
+            var canvasCustom = ControlHelper.RecurseChildren<CropSelectionCanvas>(flipViewImages)
                                  .FirstOrDefault(canvas => canvas.IsVisible);
             canvasCustom?.ClearCropShape();
         }              
@@ -91,8 +89,9 @@ namespace JW.Vepix.Wpf.Views
                 Point? targetBefore = null;
                 Point? targetNow = null;
 
-                //                                                         Need to filter because FlipView's have several Grid's.
-                var gridTransform = RecurseChildren<Grid>(flipViewImages).First(grid => grid.Name == GRID_IN_FLIPVIEW);
+                //                       Need to filter because FlipView's have several Grid's.
+                var gridTransform = ControlHelper.RecurseChildren<Grid>(flipViewImages)
+                                        .First(grid => grid.Name == GRID_IN_FLIPVIEW);
 
                 if (!_lastMousePositionOnTarget.HasValue)
                 {
@@ -100,7 +99,7 @@ namespace JW.Vepix.Wpf.Views
                     {
                         targetBefore = _lastCenterPositionOnTarget;
 
-                        var scrollViewer = RecurseChildren<ScrollViewer>(flipViewImages).First();
+                        var scrollViewer = ControlHelper.RecurseChildren<ScrollViewer>(flipViewImages).First();
                         var centerOfViewport = new Point(scrollViewer.ViewportWidth / 2, scrollViewer.ViewportHeight / 2);
 
                         targetNow = scrollViewer.TranslatePoint(centerOfViewport, gridTransform);
@@ -122,7 +121,7 @@ namespace JW.Vepix.Wpf.Views
                     double xMultiplier = e.ExtentWidth / gridTransform.ActualWidth;
                     double yMultiplier = e.ExtentHeight / gridTransform.ActualHeight;
 
-                    var scrollViewer = RecurseChildren<ScrollViewer>(flipViewImages).First();
+                    var scrollViewer = ControlHelper.RecurseChildren<ScrollViewer>(flipViewImages).First();
                     double xNewOffset = scrollViewer.HorizontalOffset - (xTargetPixels * xMultiplier);
                     double yNewOffset = scrollViewer.VerticalOffset - (yTargetPixels * yMultiplier);
 
@@ -135,48 +134,11 @@ namespace JW.Vepix.Wpf.Views
             }
         }
 
-        //private void scrollForImage_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
-        //{
-        //    if (_lastDragPoint.HasValue)
-        //    {
-        //        var scrollViewer = RecurseChildren<ScrollViewer>(flipViewImages).First();
-        //        var positionNow = e.GetPosition(scrollViewer);
-
-        //        var x = positionNow.X - _lastDragPoint.Value.X;
-        //        var y = positionNow.Y - _lastDragPoint.Value.Y;
-
-        //        _lastDragPoint = positionNow;
-
-        //        scrollViewer.ScrollToHorizontalOffset(scrollViewer.HorizontalOffset - x);
-        //        scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - y);
-        //    }
-        //}
-
-        //private void scrollForImage_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        //{
-        //    var scrollViewer = RecurseChildren<ScrollViewer>(flipViewImages).First();
-        //    scrollViewer.Cursor = Cursors.Arrow;
-        //    scrollViewer.ReleaseMouseCapture();
-        //    _lastDragPoint = null;
-        //}
-
-        //private void scrollForImage_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        //{
-        //    var scrollViewer = RecurseChildren<ScrollViewer>(flipViewImages).First();
-        //    var mousePosition = e.GetPosition(scrollViewer);
-        //    if (mousePosition.X <= scrollViewer.ViewportWidth
-        //        && mousePosition.Y < scrollViewer.ViewportHeight) // Makes sure we can still use the scrollbars.
-        //    {
-        //        scrollViewer.Cursor = Cursors.SizeAll;
-        //        _lastDragPoint = mousePosition;
-        //        Mouse.Capture(scrollViewer);
-        //    }
-        //}
-
-        private void scrollForImage_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
+        private void scrollForImage_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
-            //                                                         Need to filter because FlipView's have several Grid's.
-            var gridTransform = RecurseChildren<Grid>(flipViewImages).First(grid => grid.Name == GRID_IN_FLIPVIEW);
+            //                     Need to filter because FlipView's have several Grid's.
+            var gridTransform = ControlHelper.RecurseChildren<Grid>(flipViewImages)
+                                    .First(grid => grid.Name == GRID_IN_FLIPVIEW);
             _lastMousePositionOnTarget = Mouse.GetPosition(gridTransform);
 
             if (e.Delta > 0)
@@ -190,28 +152,6 @@ namespace JW.Vepix.Wpf.Views
             }
 
             e.Handled = true;
-        }
-
-        //todo: find some where to put this
-        public static IEnumerable<T> RecurseChildren<T>(DependencyObject root) where T : UIElement
-        {
-            if (root is T)
-            {
-                yield return root as T;
-            }
-
-            if (root != null)
-            {
-                var count = VisualTreeHelper.GetChildrenCount(root);
-
-                for (var index = 0; index < count; index++)
-                {
-                    foreach (var child in RecurseChildren<T>(VisualTreeHelper.GetChild(root, index)))
-                    {
-                        yield return child;
-                    }
-                }
-            }
         }
     }
 }

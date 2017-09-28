@@ -20,7 +20,7 @@
                     <conv:IntToVisibilityConverter x:Key="intToVisibilityConverter" />
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>        
+        </ResourceDictionary>
     </controls:MetroWindow.Resources>
     
     <controls:MetroWindow.RightWindowCommands>
@@ -35,7 +35,7 @@
     <controls:MetroWindow.Flyouts>
         <controls:FlyoutsControl>
             
-            <!-- Pictures Viewer: Functionality - Crop (todo: add Scale, ...) -->
+            <!-- Pictures Viewer -->
             <controls:Flyout x:Name="picturesViewer"
                              HorizontalContentAlignment="Stretch"
                              Position="Right"

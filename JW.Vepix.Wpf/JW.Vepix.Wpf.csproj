@@ -104,6 +104,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\ControlHelper.cs" />
     <Compile Include="Controls\CropSelectionCanvas.cs" />
     <Compile Include="Converters\BoolToCursorConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
@@ -126,7 +127,6 @@
     <Compile Include="Services\PicturesFlyoutService.cs" />
     <Compile Include="Utilities\RelayCommand.cs" />
     <Compile Include="Utilities\VepixCommandLineParser.cs" />
-    <Compile Include="Utilities\VepixCommandLineResults.cs" />
     <Compile Include="Utilities\ViewModelLocator.cs" />
     <Compile Include="Services\MessageDialogService.cs" />
     <Compile Include="Services\IMessageDialogService.cs" />

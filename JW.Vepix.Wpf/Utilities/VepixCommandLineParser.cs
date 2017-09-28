@@ -1,7 +1,10 @@
-﻿using System;
+﻿using JW.Vepix.Core;
+using JW.Vepix.Core.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -11,13 +14,12 @@ namespace JW.Vepix.Wpf.Utilities
 {
     public class VepixCommandLineParser
     {
-        private static VepixCommandLineResults _vepixConsole;
+        private static CommandLineArgs _commandLineArgs;
         private const string SWITCH_TOKEN = "-";
         private const string FOLDER_SWITCH = "-f";
         private const string FOLDER_TREE_SWITCH = "-t";
         private const string SEARCH_PATTERN_SWITCH = "-p";
         private const string REGEX_FILENAME = @"[\w\d\s\-\\_\*]*\.";
-        private readonly List<string> FILE_FORMATS = new List<string>() { "bmp", "gif", "jpg", "png", "tiff", "wmp" };
         private readonly List<string> HELP_SWITCHES = new List<string>() { "-h", "-?", "-help", "help", "?" };
         private readonly List<string> SWITCHES = new List<string>()
         {
@@ -52,14 +54,14 @@ namespace JW.Vepix.Wpf.Utilities
             .AppendLine(TreeFoldersHelp)
             .AppendLine(SearchPatternHelp).ToString();
 
-        public static VepixCommandLineResults ResultsInstance()
+        public static CommandLineArgs ResultsInstance()
         {
-            if (_vepixConsole == null)
+            if (_commandLineArgs == null)
             {
-                _vepixConsole = new VepixCommandLineResults(new List<string>(), new List<string>(), new List<string>());
+                _commandLineArgs = CommandLineArgs.Create(new List<string>(), new List<string>(), new List<string>());
             }
 
-            return _vepixConsole;
+            return _commandLineArgs;
         }
 
         public bool Parse(string[] args)
@@ -79,7 +81,7 @@ namespace JW.Vepix.Wpf.Utilities
             var treeFolders = GetArgsOf(FOLDER_TREE_SWITCH, argsList, ValidateFolders);
             var searchPatterns = GetArgsOf(SEARCH_PATTERN_SWITCH, argsList, ValidateSearchPattern);
 
-            _vepixConsole = new VepixCommandLineResults(folders, treeFolders, searchPatterns);
+            _commandLineArgs = CommandLineArgs.Create(folders, treeFolders, searchPatterns);
 
             return true;
         }
@@ -135,8 +137,10 @@ namespace JW.Vepix.Wpf.Utilities
                 return true;
             }
 
+            var formats = Global.SUPPORTED_FILE_FORMATS.Select(format =>
+                format.Replace(".", string.Empty)).ToList();
             var regularExpression = new StringBuilder().Append(REGEX_FILENAME).Append("(");
-            FILE_FORMATS.ForEach(fileFormat => 
+            formats.ForEach(fileFormat => 
                 regularExpression.Append(string.Format("{0}|", fileFormat)));
             regularExpression = regularExpression.Remove(regularExpression.Length - 1, 1)
                                                  .Append(")");

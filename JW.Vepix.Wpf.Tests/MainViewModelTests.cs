@@ -22,7 +22,7 @@ namespace JW.Vepix.Wpf.Tests
         private Mock<IEventAggregator> _mockEventAggregator;
         private Mock<IPictureRepository> _mockPictureRepo;
         private MainViewModel _mainViewModel;
-        // <[Method/Property]NameUnderTest>_Should<ExpectedResult>_When<Condition>()
+        // <[Method|Property]NameUnderTest>_Should<ExpectedResult>_When<Condition>()
         // Arrange.
         // Act.
         // Assert.
