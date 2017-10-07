@@ -32,10 +32,9 @@ namespace JW.Vepix.Wpf.Tests
         public void Initialize()
         {
             _mockPictureRepository = new Mock<IPictureRepository>();
-            var onPictureOverwrittenEvent = new PictureOverwrittenEvent();
             _mockEventAggregator = new Mock<IEventAggregator>();
             _mockEventAggregator.Setup(ea => ea.GetEvent<PictureOverwrittenEvent>())
-                .Returns(onPictureOverwrittenEvent);
+                                .Returns(new PictureOverwrittenEvent());
             _mockModalDialog = new Mock<IMessageDialogService>();
             _mockFileExplorerDialogService = new Mock<IFileExplorerDialogService>();
 
@@ -49,7 +48,7 @@ namespace JW.Vepix.Wpf.Tests
         public void Load_ShouldSetFolderName_WhenCalled()
         {
             _mockPictureRepository.Setup(repo => repo.GetPicturesAsync(It.IsAny<string[]>()))
-                .Returns(It.IsAny<Task<List<Picture>>>());
+                                  .Returns(It.IsAny<Task<List<Picture>>>());
 
             _pictureGridViewModel.Load(new List<string>() { "C:\\test.txt" });
             
@@ -103,7 +102,7 @@ namespace JW.Vepix.Wpf.Tests
             var tryResult = new TryResult();
             tryResult.Try(() => { });
             _mockPictureRepository.Setup(repo => repo.TryChangePictureName(It.IsAny<Picture>(), It.IsAny<string>()))
-                .Returns(tryResult);
+                                  .Returns(tryResult);
             _pictureGridViewModel.Pictures.Add(new Picture(new BitmapImage(), string.Empty));
             var testFileName = "C:\\test.jpg";
             _pictureGridViewModel.Pictures.First().FullFileName = testFileName;
@@ -119,11 +118,11 @@ namespace JW.Vepix.Wpf.Tests
         {
             var task = Task<string>.Factory.StartNew(() => It.IsAny<string>());
             _mockModalDialog.Setup(diaog => diaog.ShowInput(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
-                .Returns(Task<string>.Factory.StartNew(() => "C:\\test2.jpg"));
+                            .Returns(Task<string>.Factory.StartNew(() => "C:\\test2.jpg"));
             var tryResult = new TryResult();
             tryResult.Try(() => { throw new System.Exception(); });
             _mockPictureRepository.Setup(repo => repo.TryChangePictureName(It.IsAny<Picture>(), It.IsAny<string>()))
-                .Returns(tryResult);
+                                  .Returns(tryResult);
             _pictureGridViewModel.Pictures.Add(new Picture(new BitmapImage(), string.Empty));
             var testFileName = "C:\\test.jpg";
             _pictureGridViewModel.Pictures.First().FullFileName = "C:\\test.jpg";
@@ -139,7 +138,7 @@ namespace JW.Vepix.Wpf.Tests
         {
             var task = Task<string>.Factory.StartNew(() => It.IsAny<string>());
             _mockModalDialog.Setup(diaog => diaog.ShowInput(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
-                .Returns(It.IsAny<Task<string>>());
+                            .Returns(It.IsAny<Task<string>>());
             _pictureGridViewModel.Pictures.Add(It.IsAny<Picture>());
             _pictureGridViewModel.Pictures.Add(It.IsAny<Picture>());
 
@@ -153,11 +152,11 @@ namespace JW.Vepix.Wpf.Tests
         public void DeletePicturesCommand_ShouldRemovePicture_WhenYesIsPressed()
         {
             _mockModalDialog.Setup(dialog => dialog.ShowQuestion(It.IsAny<string>(), It.IsAny<string>()))
-                .Returns(true);
+                            .Returns(true);
             var tryResult = new TryResult();
             tryResult.Try(() => { });
             _mockPictureRepository.Setup(repo => repo.TryDelete(It.IsAny<string>()))
-                .Returns(tryResult);
+                                  .Returns(tryResult);
             _pictureGridViewModel.Pictures.Add(new Picture(new BitmapImage(), string.Empty));
             var beforeRemoveCount = _pictureGridViewModel.Pictures.Count;
 
@@ -170,11 +169,11 @@ namespace JW.Vepix.Wpf.Tests
         public void DeletePicturesCommand_ShouldOnlyRemoveSelectedPictures_WhenYesIsPressed()
         {
             _mockModalDialog.Setup(dialog => dialog.ShowQuestion(It.IsAny<string>(), It.IsAny<string>()))
-                .Returns(true);
+                            .Returns(true);
             var tryResult = new TryResult();
             tryResult.Try(() => { });
             _mockPictureRepository.Setup(repo => repo.TryDelete(It.IsAny<string>()))
-                .Returns(tryResult);
+                                  .Returns(tryResult);
             var picturesExist = new Dictionary<Guid, bool>();
             for (var i = 0; i < 3; i++)
             {
@@ -186,7 +185,7 @@ namespace JW.Vepix.Wpf.Tests
             var picturesToRemove = _pictureGridViewModel.Pictures.ToList().FindAll(pic =>
             {
                 var picturesThatDontExist = picturesExist.Where(picExist => picExist.Value == false)
-                    .ToDictionary(key => key.Key);
+                                                         .ToDictionary(key => key.Key);
                 return picturesThatDontExist.ContainsKey(pic.Guid);
             });
 
@@ -204,7 +203,7 @@ namespace JW.Vepix.Wpf.Tests
         public void DeletePicturesCommand_ShouldNotRemovePicture_WhenNoIsPressed()
         {
             _mockModalDialog.Setup(dialog => dialog.ShowQuestion(It.IsAny<string>(), It.IsAny<string>()))
-                .Returns(false);
+                            .Returns(false);
             _pictureGridViewModel.Pictures.Add(new Picture(new BitmapImage(), string.Empty));
             var beforeRemoveCount = _pictureGridViewModel.Pictures.Count;
 

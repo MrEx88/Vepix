@@ -40,8 +40,8 @@ namespace JW.Vepix.Wpf.ViewModels
                 (from child in dirInfo.GetDirectories()
                  select new FolderTreeItemViewModel(child, parent: this, eventAggregator: eventAggregator)).ToList());
             
-            NotifyPropertyChanged("Children");
-            NotifyPropertyChanged("FolderName");
+            NotifyPropertyChanged(() => Children);
+            NotifyPropertyChanged(() => ViewTitle);
 
             OpenPicturesInFolderCommand = new RelayCommand<object>(OnOpenPicturesInFolder);
         }
@@ -131,10 +131,10 @@ namespace JW.Vepix.Wpf.ViewModels
 
         private void OnOpenPicturesInFolder(object folder)
         {
-            var folderName = ((FolderTreeItemViewModel)folder).AbsolutePath;
+            var absolutePath = ((FolderTreeItemViewModel)folder).AbsolutePath;
             _eventAggregator.GetEvent<OpenPicturesFromFolderEvent>().Publish(new PicturesFolderPayload()
             {
-                AbsolutePath = _absolutePath
+                AbsolutePath = absolutePath
             });
         }
     }

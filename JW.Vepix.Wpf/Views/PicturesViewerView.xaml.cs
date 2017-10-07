@@ -75,12 +75,27 @@ namespace JW.Vepix.Wpf.Views
 
         private void flipViewImages_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            clearViewingState();
+        }
+
+        private void flipViewImages_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (flipViewImages.IsVisible == false)
+            {
+                clearViewingState();
+            }
+        }
+
+        private void clearViewingState()
+        {
             _lastCenterPositionOnTarget = null;
 
             var canvasCustom = ControlHelper.RecurseChildren<CropSelectionCanvas>(flipViewImages)
                                  .FirstOrDefault(canvas => canvas.IsVisible);
             canvasCustom?.ClearCropShape();
-        }              
+
+            tglBtnCrop.IsChecked = false;
+        }
 
         private void scrollForImage_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
