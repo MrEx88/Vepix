@@ -13,6 +13,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace JW.Vepix.Wpf.ViewModels
 {
@@ -20,6 +21,7 @@ namespace JW.Vepix.Wpf.ViewModels
     {
         private Func<IPictureGridViewModel> _pictureGridViewModelCreator;
         private IPictureGridViewModel _selectedPictureGridViewModel;
+        private IPictureRepository _pictureRepository;
         private IFileService _fileService;
         private IFileExplorerDialogService _fileExplorerDialogService;
         private IEventAggregator _eventAggregator;
@@ -28,6 +30,7 @@ namespace JW.Vepix.Wpf.ViewModels
 
         public MainViewModel(IFolderTreeViewModel folderTreeViewModel,
                              Func<IPictureGridViewModel> pictureGridViewModelCreator,
+                             IPictureRepository pictureRepository,
                              IFileService fileService,
                              IFileExplorerDialogService fileExplorerDialogService,
                              IEventAggregator eventAggregator)
@@ -39,7 +42,7 @@ namespace JW.Vepix.Wpf.ViewModels
             
             FolderTreeViewModel = folderTreeViewModel;
             _pictureGridViewModelCreator = pictureGridViewModelCreator;
-
+            _pictureRepository = pictureRepository;
             _fileService = fileService;
             _fileExplorerDialogService = fileExplorerDialogService;
 
@@ -49,6 +52,7 @@ namespace JW.Vepix.Wpf.ViewModels
             _eventAggregator.GetEvent<OpenPicturesFromFolderEvent>().Subscribe(OnOpenPicturesFromFolder);
             _eventAggregator.GetEvent<StatusTextUserActionEvent>().Subscribe(OnStatusTextUserAction);
             _eventAggregator.GetEvent<StatusTextHelpInfoEvent>().Subscribe(OnStatusTextHelpInfo);
+            _eventAggregator.GetEvent<MovingPicturesEvent>().Subscribe(OnMovingPicturesEvent);
 
             PictureGridViewModels = new ObservableCollection<IPictureGridViewModel>();
 
@@ -225,6 +229,27 @@ namespace JW.Vepix.Wpf.ViewModels
         private void OnStatusTextUserAction(string text)
         {
             UserActionText = text;
+        }
+
+        private void OnMovingPicturesEvent(MovingPicturesPayload payload)
+        {
+            var oldFolderPath = payload.Pictures.Select(pic => pic.FolderPath).First();
+            var oldPictureGridViewModel = PictureGridViewModels.First(viewModel =>
+                ((PictureGridViewModel)viewModel).AbsolutePath == oldFolderPath);
+
+            var newPictureGridViewModel = PictureGridViewModels.First(viewModel =>
+                ((PictureGridViewModel)viewModel).AbsolutePath == payload.NewFolderPath);
+
+            payload.Pictures.ForEach(pic =>
+                {
+                    if (_pictureRepository.TryMove(pic, payload.NewFolderPath).Success.Value)
+                    {
+                        oldPictureGridViewModel.Pictures.Remove(pic);
+
+                        pic.FullFileName = $"{payload.NewFolderPath}\\{pic.FileName}";
+                        newPictureGridViewModel.Pictures.Add(pic);
+                    }
+                });
         }
 
         private async void CheckCommandLine()

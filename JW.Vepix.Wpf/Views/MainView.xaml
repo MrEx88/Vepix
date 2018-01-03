@@ -3,6 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:behavior="clr-namespace:JW.Vepix.Wpf.Behaviors"
              xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:conv="clr-namespace:JW.Vepix.Wpf.Converters"
              xmlns:local="clr-namespace:JW.Vepix.Wpf.Views"
@@ -109,9 +111,11 @@
                           BorderThickness="1 0 1 0" />
 
             <!-- Picture Grid View Tabs -->
-            <TabControl ItemsSource="{Binding PictureGridViewModels}"
+            <TabControl x:Name="tabPictures"
+                        ItemsSource="{Binding PictureGridViewModels}"
                         SelectedItem="{Binding SelectedPictureGridViewModel,
                                                Mode=TwoWay}"
+                        AllowDrop="True"
                         Grid.Column="2"
                         Margin=" 0 10 0 0">
                 <TabControl.ItemContainerStyle>
@@ -122,15 +126,24 @@
                                 <Setter Property="FontWeight" Value="Bold" />
                             </Trigger>
                         </Style.Triggers>
+                        <Setter Property="AllowDrop" Value="True" />
+                        <Setter Property="ToolTip" Value="{Binding AbsolutePath}" />
                     </Style>
                 </TabControl.ItemContainerStyle>
                 <TabControl.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding ViewTitle}"
+                        <StackPanel Orientation="Horizontal"
+                                    behavior:DropBehavior.DropCommand="{Binding DropCommand}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="DragEnter">
+                                    <i:InvokeCommandAction Command="{Binding DragEnterCommand}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <TextBlock x:Name="tabItemName"
+                                       Text="{Binding ViewTitle}"
                                        ToolTip="{Binding AbsolutePath}"
                                        Margin="5 0 0 0" />
-                            
+
                             <controls:ProgressRing Width="20"
                                                    Height="20"
                                                    Margin="10 0 0 0"

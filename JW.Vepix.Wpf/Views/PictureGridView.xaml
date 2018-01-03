@@ -71,9 +71,9 @@
                       Grid.Row="1"
                       Margin="0 10 0 0">
             <Grid>
-
                 <ListView x:Name="pictureList"
                           ItemsSource="{Binding Path=Pictures}"
+                          MouseMove="pictureList_MouseMove"
                           BorderBrush="Red">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="SelectionChanged">

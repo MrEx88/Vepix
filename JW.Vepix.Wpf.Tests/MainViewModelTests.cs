@@ -52,7 +52,7 @@ namespace JW.Vepix.Wpf.Tests
                 .Returns(statusTextHelpInfoEvent);
 
             _mainViewModel = new MainViewModel(_mockFolderTreeViewModel.Object,
-                CreatePictureGridViewModel, _mockFileService.Object, 
+                CreatePictureGridViewModel, _mockPictureRepo.Object, _mockFileService.Object, 
                 _mockFileExplorerDialogService.Object, _mockEventAggregator.Object);
         }
 

@@ -104,6 +104,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Behaviors\DropBehavior.cs" />
     <Compile Include="Controls\ControlHelper.cs" />
     <Compile Include="Controls\CropSelectionCanvas.cs" />
     <Compile Include="Converters\BoolToCursorConverter.cs" />
@@ -115,9 +116,11 @@
     <Compile Include="Events\OpenPicturesFromFolderEvent.cs" />
     <Compile Include="Events\PictureOverwrittenEvent.cs" />
     <Compile Include="Events\PicturesFinishedLoadingEvent.cs" />
+    <Compile Include="Events\MovingPicturesEvent.cs" />
     <Compile Include="Events\StatusTextHelpInfoEvent.cs" />
     <Compile Include="Events\UpdatePictureNameEvent.cs" />
     <Compile Include="Events\StatusTextUserActionEvent.cs" />
+    <Compile Include="Payloads\MovingPicturesPayload.cs" />
     <Compile Include="Payloads\PictureNameChangePayload.cs" />
     <Compile Include="Payloads\PicturesFolderPayload.cs" />
     <Compile Include="Services\FileExplorerDialogService.cs" />

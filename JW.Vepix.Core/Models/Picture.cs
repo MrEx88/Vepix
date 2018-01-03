@@ -50,7 +50,7 @@ namespace JW.Vepix.Core.Models
 
         public string FileName => Path.GetFileName(FullFileName);
         public string ImageName => Path.GetFileNameWithoutExtension(FullFileName);
-        public string FolderPath => Path.GetDirectoryName(FullFileName) + "\\";
+        public string FolderPath => Path.GetDirectoryName(FullFileName);
         public string FolderName => new DirectoryInfo(FolderPath).Name;
         public decimal FileSize => Math.Round((decimal)(new FileInfo(FullFileName).Length / 1024) / 1024, 2);
         public string FileExtension => Path.GetExtension(FullFileName);
