@@ -235,10 +235,10 @@ namespace JW.Vepix.Wpf.ViewModels
         {
             var oldFolderPath = payload.Pictures.Select(pic => pic.FolderPath).First();
             var oldPictureGridViewModel = PictureGridViewModels.First(viewModel =>
-                ((PictureGridViewModel)viewModel).AbsolutePath == oldFolderPath);
+                viewModel.AbsolutePath == oldFolderPath);
 
-            var newPictureGridViewModel = PictureGridViewModels.First(viewModel =>
-                ((PictureGridViewModel)viewModel).AbsolutePath == payload.NewFolderPath);
+            var newPictureGridViewModel = PictureGridViewModels.FirstOrDefault(viewModel =>
+                viewModel.AbsolutePath == payload.NewFolderPath);
 
             payload.Pictures.ForEach(pic =>
                 {
@@ -246,8 +246,11 @@ namespace JW.Vepix.Wpf.ViewModels
                     {
                         oldPictureGridViewModel.Pictures.Remove(pic);
 
-                        pic.FullFileName = $"{payload.NewFolderPath}\\{pic.FileName}";
-                        newPictureGridViewModel.Pictures.Add(pic);
+                        if (newPictureGridViewModel != null)
+                        {
+                            pic.FullFileName = $"{payload.NewFolderPath}\\{pic.FileName}";
+                            newPictureGridViewModel.Pictures.Add(pic);
+                        }
                     }
                 });
         }

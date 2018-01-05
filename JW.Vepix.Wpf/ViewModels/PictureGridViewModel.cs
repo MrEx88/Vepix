@@ -278,16 +278,11 @@ namespace JW.Vepix.Wpf.ViewModels
 
         private void OnDropCommand(object inObject)
         {
-            //todo: need to figure out how to keep index track of what tab I am hovered over.
             IDataObject ido = inObject as IDataObject;
 
             var data = (List<Picture>)ido.GetData(DataFormats.Serializable);
             if (data != null)
             {
-                //var movingPictures = Pictures
-                //                        /*.Where(pic => data.Any(d => d.FullFileName == pic.FullFileName))*/
-                //                        .Select(pic => pic.FullFileName)
-                //                        .ToList();
                 _eventAggregator.GetEvent<MovingPicturesEvent>()
                     .Publish(new MovingPicturesPayload()
                     {

@@ -35,7 +35,7 @@ namespace JW.Vepix.Wpf.Tests
             _mockFileService.Setup(fileService => 
                 fileService.GetFileNamesFromDirectoryAsync(It.IsAny<string>(),
                 It.IsAny<List<string>>(),It.IsAny<SearchOption>()))
-                .Returns(_getFileNamesAsync);
+                  .Returns(_getFileNamesAsync);
             _mockFileExplorerDialogService = new Mock<IFileExplorerDialogService>();
             _mockPictureGridViewModels = new List<Mock<IPictureGridViewModel>>();
             _mockEventAggregator = new Mock<IEventAggregator>();

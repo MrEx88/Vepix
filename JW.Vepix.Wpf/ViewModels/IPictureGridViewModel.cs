@@ -7,6 +7,7 @@ namespace JW.Vepix.Wpf.ViewModels
     public interface IPictureGridViewModel
     {
         ObservableCollection<Picture> Pictures { get; }
+        string AbsolutePath { get; }
         void Load(List<string> pictureFileNames);
         void LoadEmptyFolder(string folderPath);
     }
