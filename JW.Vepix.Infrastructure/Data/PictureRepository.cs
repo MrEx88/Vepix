@@ -59,7 +59,7 @@ namespace JW.Vepix.Infrastructure.Data
 
         public TryResult TryChangePictureName(Picture picture, string newName) =>
             _fileService.ChangeFileName(picture.FullFileName, 
-                picture.FolderPath + newName + picture.FileExtension);
+               $"{picture.FolderPath}\\{newName}{picture.FileExtension}");
 
         public TryResult TryCopy(Picture picture, string fullFolderPath) => 
             _fileService.CopyTo(picture.FullFileName, fullFolderPath);

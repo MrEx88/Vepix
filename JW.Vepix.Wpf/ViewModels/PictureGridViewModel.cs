@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 
 namespace JW.Vepix.Wpf.ViewModels
 {
@@ -32,19 +33,16 @@ namespace JW.Vepix.Wpf.ViewModels
                                     IMessageDialogService modalDialog, 
                                     IFileExplorerDialogService fileExplorerDialogService)
         {
-            if (DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
+            if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))
             {
                 return;
             }
 
             _pictureRepository = pictureRepository;
-
+            _eventAggregator = eventAggregator;
             _modalDialog = modalDialog;
-
             _fileExplorerDialogService = fileExplorerDialogService;
 
-            _eventAggregator = eventAggregator;
-            //_eventAggregator.GetEvent<PictureNameChangedEvent>().Subscribe(OnPictureNameChanged);
             _eventAggregator.GetEvent<PictureOverwrittenEvent>().Subscribe(OnPictureOverwritten);
 
             ArePicturesLoading = false;
@@ -63,6 +61,7 @@ namespace JW.Vepix.Wpf.ViewModels
             DeletePicturesCommand = new RelayCommand<List<Picture>>(OnDeletePicturesCommand);
             ViewEditPicturesCommand = new RelayCommand<List<Picture>>(OnViewEditPicturesCommand);
             PicturesListSelectionChangedCommand = new RelayCommand<int>(OnPicturesListSelectionChangedCommand);
+            DropCommand = new RelayCommand<object>(OnDropCommand);
         }
 
         public string AbsolutePath
@@ -141,6 +140,7 @@ namespace JW.Vepix.Wpf.ViewModels
         public RelayCommand<List<Picture>> DeletePicturesCommand { get; private set; }
         public RelayCommand<List<Picture>> ViewEditPicturesCommand { get; private set; }
         public RelayCommand<int> PicturesListSelectionChangedCommand { get; private set; }
+        public RelayCommand<object> DropCommand { get; private set; }
 
         private void OnSearchCommand(string searchFilter)
         {
@@ -180,7 +180,6 @@ namespace JW.Vepix.Wpf.ViewModels
 
         private void OnEditSelectedPictureNamesCommand(List<Picture> pictures)
         {
-            //var b = pictures[0].IsAnythingDirty(); //just testing it out
             if (pictures.Count == 1)
             {
                 OnEditPictureNameCommand(pictures.First());
@@ -277,6 +276,22 @@ namespace JW.Vepix.Wpf.ViewModels
             }
         }
 
+        private void OnDropCommand(object inObject)
+        {
+            IDataObject ido = inObject as IDataObject;
+
+            var data = (List<Picture>)ido.GetData(DataFormats.Serializable);
+            if (data != null)
+            {
+                _eventAggregator.GetEvent<MovingPicturesEvent>()
+                    .Publish(new MovingPicturesPayload()
+                    {
+                        Pictures = data,
+                        NewFolderPath = AbsolutePath
+                    });
+            }
+        }
+
         private void OnViewEditPicturesCommand(List<Picture> pictures)
         {
             new PicturesFyloutService(FlyoutViewType.Viewer)
@@ -306,8 +321,7 @@ namespace JW.Vepix.Wpf.ViewModels
             var changedPicture = Pictures.FirstOrDefault(pic => pic.Guid == payload.Guid);
             if (changedPicture != null)
             {
-                changedPicture.FullFileName = changedPicture.FolderPath + payload.NewPictureName + 
-                                              changedPicture.FileExtension;
+                changedPicture.FullFileName = $"{changedPicture.FolderPath}\\{payload.NewPictureName}{changedPicture.FileExtension}";
             }
 
             _eventAggregator.GetEvent<PictureNameChangedEvent>().Unsubscribe(OnPictureNameChanged);

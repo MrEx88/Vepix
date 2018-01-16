@@ -6,6 +6,10 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System;
+using System.Windows;
+using JW.Vepix.Core.Models;
+using System.Collections.Generic;
 
 namespace JW.Vepix.Wpf.ViewModels
 {
@@ -44,6 +48,7 @@ namespace JW.Vepix.Wpf.ViewModels
             NotifyPropertyChanged(() => ViewTitle);
 
             OpenPicturesInFolderCommand = new RelayCommand<object>(OnOpenPicturesInFolder);
+            DropCommand = new RelayCommand<object>(OnDropCommand);
         }
 
         public IFolderTreeItemViewModel Parent
@@ -128,6 +133,7 @@ namespace JW.Vepix.Wpf.ViewModels
         }
 
         public RelayCommand<object> OpenPicturesInFolderCommand { get; private set; }
+        public RelayCommand<object> DropCommand { get; private set; }
 
         private void OnOpenPicturesInFolder(object folder)
         {
@@ -136,6 +142,22 @@ namespace JW.Vepix.Wpf.ViewModels
             {
                 AbsolutePath = absolutePath
             });
+        }
+
+        private void OnDropCommand(object inObject)
+        {
+            IDataObject ido = inObject as IDataObject;
+
+            var data = (List<Picture>)ido.GetData(DataFormats.Serializable);
+            if (data != null)
+            {
+                _eventAggregator.GetEvent<MovingPicturesEvent>()
+                    .Publish(new MovingPicturesPayload()
+                    {
+                        Pictures = data,
+                        NewFolderPath = AbsolutePath
+                    });
+            }
         }
     }
 }

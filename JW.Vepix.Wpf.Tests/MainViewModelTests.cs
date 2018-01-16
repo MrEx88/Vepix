@@ -35,24 +35,23 @@ namespace JW.Vepix.Wpf.Tests
             _mockFileService.Setup(fileService => 
                 fileService.GetFileNamesFromDirectoryAsync(It.IsAny<string>(),
                 It.IsAny<List<string>>(),It.IsAny<SearchOption>()))
-                .Returns(_getFileNamesAsync);
+                  .Returns(_getFileNamesAsync);
             _mockFileExplorerDialogService = new Mock<IFileExplorerDialogService>();
             _mockPictureGridViewModels = new List<Mock<IPictureGridViewModel>>();
             _mockEventAggregator = new Mock<IEventAggregator>();
             _mockPictureRepo = new Mock<IPictureRepository>();
-
-            var openPicturesFromFolderEvent = new OpenPicturesFromFolderEvent();
-            var statusTextUserActionEvent = new StatusTextUserActionEvent();
-            var statusTextHelpInfoEvent = new StatusTextHelpInfoEvent();
+            
             _mockEventAggregator.Setup(ea => ea.GetEvent<OpenPicturesFromFolderEvent>())
-                .Returns(openPicturesFromFolderEvent);
+                .Returns(new OpenPicturesFromFolderEvent());
             _mockEventAggregator.Setup(ea => ea.GetEvent<StatusTextUserActionEvent>())
-                .Returns(statusTextUserActionEvent);
+                .Returns(new StatusTextUserActionEvent());
             _mockEventAggregator.Setup(ea => ea.GetEvent<StatusTextHelpInfoEvent>())
-                .Returns(statusTextHelpInfoEvent);
+                .Returns(new StatusTextHelpInfoEvent());
+            _mockEventAggregator.Setup(ea => ea.GetEvent<MovingPicturesEvent>())
+                .Returns(new MovingPicturesEvent());
 
             _mainViewModel = new MainViewModel(_mockFolderTreeViewModel.Object,
-                CreatePictureGridViewModel, _mockFileService.Object, 
+                CreatePictureGridViewModel, _mockPictureRepo.Object, _mockFileService.Object, 
                 _mockFileExplorerDialogService.Object, _mockEventAggregator.Object);
         }
 
